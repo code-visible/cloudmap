@@ -1,8 +1,15 @@
 {
-  "name": "ggggg",
-  "private": true,
-  "version": "0.0.0",
+  "name": "graphy",
+  "private": false,
+  "version": "0.0.1",
   "type": "module",
+  "description": "graphy renderer",
+  "author": "Challen Ai <fengyiai@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/code-visible/graphy.git"
+  },
+  "license": "GPL-3.0-only",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
