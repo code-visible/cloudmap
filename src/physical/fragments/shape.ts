@@ -1,10 +1,11 @@
 import { Options } from "../options/options";
 
-// Shape 是一组线条组成的图形。
+// Shape is a series of meshes, meanningful for huamn.
 export interface Shape {
   mesh: Mesh[];
 };
 
+// mesh is the basic render unit
 export interface Mesh {
   path: string;
   opts: Options;
