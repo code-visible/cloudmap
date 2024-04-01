@@ -1,9 +1,4 @@
-import { Options } from "../options/options";
-
-// Shape is a series of meshes, meanningful for huamn.
-export interface Shape {
-  mesh: Mesh[];
-};
+import { Options } from "./options";
 
 // mesh is the basic render unit
 export interface Mesh {
