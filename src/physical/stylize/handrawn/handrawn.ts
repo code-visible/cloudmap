@@ -1,25 +1,25 @@
 import { RoughCanvas } from "roughjs/bin/canvas";
-import { Drawable } from "roughjs/bin/core";
+import { Drawable, Options } from "roughjs/bin/core";
 import { RoughGenerator } from "roughjs/bin/generator";
-import { Options } from "../../options/options";
-import { Shape } from "../../fragments/shape";
+import { Options as Opts } from "../../fragments/options";
+import { Renderer } from "../renderer";
 
-export class HandrawnRenderer {
+export function generateSeed(): number {
+  return RoughGenerator.newSeed();
+};
+
+export class HandrawnRenderer extends Renderer {
   rc: RoughCanvas;
   gen: RoughGenerator;
+
   constructor(rc: RoughCanvas) {
+    super();
     this.rc = rc;
     this.gen = new RoughGenerator();
   };
 
-  render(shape: Shape) {
-    shape.mesh.forEach(e => {
-      this.drawMesh(e.path, e.opts);
-    });
-  };
-
-  private drawMesh(path: string, opts?: Options) {
-    const genOpts: any = {
+  mesh(path: string, opts?: Opts) {
+    const genOpts: Options = {
       hachureAngle: 60, // angle of hachure,
       hachureGap: 8,
     };
@@ -29,7 +29,10 @@ export class HandrawnRenderer {
     if (opts && opts.stroke) {
       genOpts.stroke = opts.stroke;
     }
-    const shape: Drawable = this.gen.path(path, opts)
+    if (opts && opts.seed) {
+      genOpts.seed = opts.seed;
+    }
+    const shape: Drawable = this.gen.path(path, genOpts)
     this.rc.draw(shape);
   };
 };
