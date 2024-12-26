@@ -5,6 +5,7 @@ export interface SourcePkg {
 };
 
 export interface Pkg {
+  path: string,
   imports: Set<Pkg>,
   exports: Set<Pkg>,
   files: Set<File>,
