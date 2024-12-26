@@ -5,9 +5,3 @@ export interface SourceFile {
   pkg: string;
   deps: string[];
 };
-
-export interface File {
-  callees: Set<File>,
-  callers: Set<File>,
-  ref: SourceFile,
-};

@@ -4,7 +4,3 @@ export interface SourceDep {
   type: string;
   ref: string;
 };
-
-export interface Dep {
-  ref: SourceDep,
-};

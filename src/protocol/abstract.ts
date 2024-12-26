@@ -7,7 +7,3 @@ export interface SourceAbstract {
   comment: string;
   fields: string[];
 };
-
-export interface Abstract {
-  ref: SourceAbstract,
-};

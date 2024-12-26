@@ -8,7 +8,3 @@ export interface SourceCall {
   signature: string;
   dep: string;
 };
-
-export interface Call {
-  ref: SourceCall,
-};

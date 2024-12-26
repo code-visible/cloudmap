@@ -12,7 +12,3 @@ export interface SourceCallable {
   private: boolean;
   orphan: boolean;
 };
-
-export interface Callable {
-  ref: SourceCallable,
-};
