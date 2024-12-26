@@ -1,0 +1,9 @@
+.pannel {
+  box-sizing: border-box;
+  width: 30.9%;
+  min-width: 360px;
+  max-width: 900px;
+  height: 100%;
+  padding: 60px;
+  background-color: bisque;
+}
