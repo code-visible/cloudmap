@@ -1,7 +1,18 @@
-import { CanvasEvent, Graph } from "@pattaya/depict/graph";
+import { GraphMessageType } from "../message";
+import { Painter } from "./painter";
 
-const gw = new Graph();
+const painter = new Painter();
+painter.enableDraggingGraph();
 
 onmessage = (ev: MessageEvent) => {
-  gw.handleMessageEvent(ev);
+  if (painter.graph.handleMessageEvent(ev)) return;
+
+  switch (ev.data.type) {
+    case GraphMessageType.UPDATE_THEME:
+      painter.updateStateTheme(ev.data.msg);
+      break;
+    case GraphMessageType.UPDATE_PKG:
+      painter.updateStatePkg(ev.data.msg);
+      break;
+  }
 };
