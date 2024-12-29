@@ -1,5 +1,6 @@
-export declare enum GraphMessageType {
-  UPDATE_STATE = 1,
+export const enum GraphMessageType {
+  UPDATE_THEME = 1,
+  UPDATE_PKG = 2,
 };
 
 export interface Message {

@@ -1,28 +1,28 @@
 import { useEffect, useRef, useState } from "react";
 import { Depict } from "@pattaya/depict";
-// import { GraphBuilder } from "./builder";
-// import { GraphLayout } from "./layout";
+import { GraphType, StateCall, StateFile, StatePkg, StateTheme } from '../state';
+import { GraphMessageType } from "../message";
 
 import styles from './graph.module.css';
-import { State } from "../state";
 
 export interface GraphProps {
-  state: State;
-  setState: (c: State) => void;
+  theme: StateTheme;
+  graphType: GraphType;
+  setGraphType: (s: GraphType) => void;
+  pkg: StatePkg;
+  setPkg: (s: StatePkg) => void;
 };
-
-// function shouldUpdatePattaya(op: PattayaProps, np: PattayaProps): boolean {
-//   console.log("compare")
-//   return op.width === np.width && op.height === np.height;
-// }
-// const prevState = { graph: "pkg", pkg: { entrance: "", active: "" } };
-// const gb = new GraphBuilder(new GraphLayout());
 
 const worker = new Worker(new URL('../graph/worker.ts', import.meta.url), {
   type: "module"
-})
+});
 
-const Graph = ({ state }: GraphProps) => {
+worker.onerror = (err) => {
+  console.log("fail to start the graph worker! ");
+  if (err.message) console.log(err.message);
+};
+
+const Graph = ({ pkg, theme, graphType, setPkg }: GraphProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const [graph, setGraph] = useState<Depict | undefined>(undefined);
 
@@ -40,16 +40,24 @@ const Graph = ({ state }: GraphProps) => {
       g.start();
     }
 
+    worker.onmessage = ({ data }: MessageEvent) => {
+      switch (data.type) {
+        case GraphMessageType.UPDATE_PKG:
+          setPkg(data.msg.data);
+          break;
+      }
+    };
+
     return () => g?.destory();
   }, []);
 
   useEffect(() => {
-    const stateUpdate = 1;
-    worker.postMessage({ type: stateUpdate, msg: state });
-    worker.onmessage = (ev: MessageEvent) => {
-      console.log(ev.data.type, ev.data.msg);
-    };
-  }, [state]);
+    worker.postMessage({ type: GraphMessageType.UPDATE_PKG, msg: { graph: graphType, data: pkg } });
+  }, [pkg]);
+
+  useEffect(() => {
+    worker.postMessage({ type: GraphMessageType.UPDATE_THEME, msg: theme });
+  }, [theme]);
 
   return (
     <div className={styles.graph}>
@@ -58,7 +66,6 @@ const Graph = ({ state }: GraphProps) => {
           position: "relative",
           width: "100%",
           height: "100%",
-          // boxSizing: "border-box",
           overflow: "hidden",
         }}
         ref={rootRef}

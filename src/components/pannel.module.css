@@ -4,9 +4,36 @@
   min-width: 360px;
   max-width: 900px;
   height: 100%;
-  padding: 60px;
+  padding: 60px 60px 180px 60px;
+  overflow-y: scroll;
 }
 
-.pannel li {
+.pannel::-webkit-scrollbar {
+  width: 2px;
+}
+
+.pannel::-webkit-scrollbar-button {
+  background-color: transparent;
+}
+
+.pannel::-webkit-scrollbar-thumb {
+  background-color: #ddd;
+}
+
+.pannel::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.pannel .pkg {
+  cursor: pointer;
+  height: 20px;
   list-style: none;
+}
+
+.pannel .pkgdef {
+  color: #000;
+}
+
+.pannel .pkghl {
+  color: #f0f;
 }

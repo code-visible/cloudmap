@@ -1,4 +1,7 @@
-export enum GraphType {
+import mayk from "../themes/mayk";
+import { Palette } from "../themes/theme";
+
+export const enum GraphType {
   PKG = 1,
   FILE = 2,
   CALL = 3,
@@ -9,23 +12,21 @@ export interface StatePkg {
   active: string;
 }
 
+export interface StateTheme {
+  palette: Palette;
+}
+
 export interface StateFile { }
 
 export interface StateCall { }
 
-export interface State {
-  graph: GraphType;
-  pkg: StatePkg;
-  file: StateFile;
-  call: StateCall;
+export const InitialStatePkg: StatePkg = {
+  entrance: "",
+  active: ""
 };
 
-export const InitialState = {
-  graph: GraphType.PKG,
-  pkg: {
-    entrance: "",
-    active: ""
-  },
-  file: {},
-  call: {}
+export const InitialStateTheme: StateTheme = {
+  palette: mayk,
 };
+
+export const InitialStateGraph = GraphType.PKG;
