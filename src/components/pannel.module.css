@@ -5,5 +5,8 @@
   max-width: 900px;
   height: 100%;
   padding: 60px;
-  background-color: bisque;
+}
+
+.pannel li {
+  list-style: none;
 }
