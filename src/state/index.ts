@@ -10,6 +10,7 @@ export const enum GraphType {
 export interface StatePkg {
   entrance: string;
   active: string;
+  set: Set<string>;
 }
 
 export interface StateTheme {
@@ -22,7 +23,8 @@ export interface StateCall { }
 
 export const InitialStatePkg: StatePkg = {
   entrance: "",
-  active: ""
+  active: "",
+  set: new Set(),
 };
 
 export const InitialStateTheme: StateTheme = {

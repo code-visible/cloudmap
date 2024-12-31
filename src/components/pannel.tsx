@@ -25,7 +25,18 @@ function Pannel({ pkg, theme, setPkg, setGraphType }: PannelProps) {
 
   const handleSelectPkg = (id: string) => {
     setGraphType(GraphType.PKG);
-    setPkg({ entrance: id, active: "" });
+    const pkgSet = data.getPkgsByRoot(id, 12);
+    setPkg({ entrance: id, active: "", set: pkgSet });
+  };
+
+  const activePkg = data.pkgs.get(pkg.active);
+
+  const getPkgColor = (p: Pkg) => {
+    const pkgID = p.ref.id;
+    if (pkgID === pkg.entrance) return theme.palette.focus;
+    if (pkgID === pkg.active) return theme.palette.highlight;
+    if (pkg.set.has(pkgID) && activePkg && (activePkg.imports.has(p) || activePkg.exports.has(p))) return theme.palette.highlight;
+    return theme.palette.muted;
   };
 
   return (
@@ -37,7 +48,7 @@ function Pannel({ pkg, theme, setPkg, setGraphType }: PannelProps) {
               key={p.ref.id}
               className={styles.pkg}
               style={{
-                color: pkg.entrance === p.ref.id ? theme.palette.focus : (pkg.active === p.ref.id ? theme.palette.highlight : theme.palette.muted),
+                color: getPkgColor(p),
               }}
               onClick={() => handleSelectPkg(p.ref.id)}
             >
