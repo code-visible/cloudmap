@@ -4,7 +4,7 @@
   min-width: 360px;
   max-width: 900px;
   height: 100%;
-  padding: 60px 60px 180px 60px;
+  padding: 48px 24px 120px 24px;
   overflow-y: scroll;
 }
 
@@ -24,10 +24,39 @@
   background-color: transparent;
 }
 
-.pannel .pkg {
+.pannel .dirlist {
+  margin-left: 0;
+  padding-left: 24px;
+}
+
+.pannel .dir {
   cursor: pointer;
-  height: 20px;
   list-style: none;
+}
+
+.pannel .dirname {
+  color: #666;
+  user-select: none;
+  height: 20px;
+}
+
+.pannel .dirname:hover {
+  color: #000;
+}
+
+.pannel .file {
+  cursor: pointer;
+  list-style: none;
+}
+
+.pannel .filename {
+  color: #999;
+  user-select: none;
+  height: 20px;
+}
+
+.pannel .filename:hover {
+  color: #000;
 }
 
 .pannel .pkgdef {
