@@ -17,19 +17,31 @@ export interface StateTheme {
   palette: Palette;
 }
 
-export interface StateFile { }
+export interface StateFile {
+  entrance: string;
+  active: string;
+}
 
 export interface StateCall { }
 
 export interface StatePannel {
   lock: boolean;
   expand: Set<string>,
+  hover: string;
 }
 
 export const InitialStatePkg: StatePkg = {
   entrance: "",
   active: "",
   set: new Set(),
+};
+
+export const InitialStateFile: StateFile = {
+  entrance: "",
+  active: "",
+};
+
+export const InitialStateCall: StateCall = {
 };
 
 export const InitialStateTheme: StateTheme = {
@@ -39,6 +51,7 @@ export const InitialStateTheme: StateTheme = {
 export const InitialStatePannel: StatePannel = {
   lock: false,
   expand: new Set(),
+  hover: "",
 }
 
 export const InitialStateGraph = GraphType.PKG;

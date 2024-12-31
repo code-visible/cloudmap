@@ -1,4 +1,5 @@
 .pannel {
+  user-select: none;
   box-sizing: border-box;
   width: 30.9%;
   min-width: 360px;
@@ -30,33 +31,28 @@
 }
 
 .pannel .dir {
-  cursor: pointer;
   list-style: none;
 }
 
 .pannel .dirname {
-  color: #666;
-  user-select: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   height: 20px;
 }
 
-.pannel .dirname:hover {
-  color: #000;
-}
-
 .pannel .file {
-  cursor: pointer;
   list-style: none;
 }
 
 .pannel .filename {
-  color: #999;
-  user-select: none;
+  /* color: #999; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   height: 20px;
-}
-
-.pannel .filename:hover {
-  color: #000;
 }
 
 .pannel .pkgdef {
@@ -65,4 +61,33 @@
 
 .pannel .pkghl {
   color: #f0f;
+}
+
+.pannel .diritem {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.pannel .diricon {
+  width: 14px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pannel .dirtext {
+  cursor: pointer;
+}
+
+.pannel .filetext {
+  cursor: pointer;
+  color: #666;
+}
+
+.pannel .enter {
+  cursor: pointer;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
 }

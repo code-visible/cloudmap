@@ -43,6 +43,8 @@ export class SourceMap {
   }
 
   parseSource(data: Source) {
+    this.name = data.name;
+    this.directory = data.directory;
     for (const el of data.pkgs) {
       this.pkgs.set(el.id, this.parsePkg(el));
     }

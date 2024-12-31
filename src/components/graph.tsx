@@ -7,6 +7,10 @@ import styles from './graph.module.css';
 import data from "../data";
 
 export interface GraphProps {
+  file: StateFile;
+  setFile: (s: StateFile) => void;
+  call: StateCall;
+  setCall: (s: StateCall) => void;
   theme: StateTheme;
   graphType: GraphType;
   setGraphType: (s: GraphType) => void;
@@ -23,7 +27,7 @@ worker.onerror = (err) => {
   if (err.message) console.log(err.message);
 };
 
-const Graph = ({ pkg, theme, graphType, setPkg }: GraphProps) => {
+const Graph = ({ pkg, file, call, theme, graphType, setPkg }: GraphProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const [graph, setGraph] = useState<Depict | undefined>(undefined);
 
@@ -57,6 +61,14 @@ const Graph = ({ pkg, theme, graphType, setPkg }: GraphProps) => {
   useEffect(() => {
     worker.postMessage({ type: GraphMessageType.UPDATE_PKG, msg: { graph: graphType, data: pkg } });
   }, [pkg]);
+
+  useEffect(() => {
+    worker.postMessage({ type: GraphMessageType.UPDATE_FILE, msg: { graph: graphType, data: file } });
+  }, [file]);
+
+  useEffect(() => {
+    worker.postMessage({ type: GraphMessageType.UPDATE_CALL, msg: { graph: graphType, data: call } });
+  }, [call]);
 
   useEffect(() => {
     worker.postMessage({ type: GraphMessageType.UPDATE_THEME, msg: theme });
