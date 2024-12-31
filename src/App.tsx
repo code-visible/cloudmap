@@ -2,10 +2,10 @@ import { useState } from 'react'
 import Pannel from './components/pannel';
 import Graph from './components/graph';
 import { GraphType, InitialStateGraph, InitialStatePkg, InitialStateTheme, StatePkg, StateTheme } from './state';
-
-import './App.css'
 import mayk from './themes/mayk';
 import chaya from './themes/chaya';
+
+import './App.css'
 
 function App() {
   const [theme, setTheme] = useState<StateTheme>(InitialStateTheme);
@@ -36,7 +36,6 @@ function App() {
         <div className='seperator'></div>
         <Graph
           theme={theme}
-          setTheme={setTheme}
           graphType={graphType}
           setGraphType={setGraphType}
           pkg={pkg}

@@ -187,18 +187,45 @@ export class SourceMap {
     // TODO
   }
 
-  getPkgsByRoot(root: string, limit: number): Set<Pkg> {
-    const pkgs = new Set<Pkg>();
+  getPkgsByRoot(root: string, limit: number): Set<string> {
     const rootPkg = this.pkgs.get(root);
-    if (!rootPkg) return pkgs;
-    const q = [rootPkg];
+    if (!rootPkg) return new Set();
+    const pkgs = new Set<string>();
+    const children = this.getPkgsByRootForward(rootPkg, limit / 2);
+    const parents = this.getPkgsByRootBackward(rootPkg, limit / 2);
+    for (const el of children) {
+      parents.add(el);
+    }
+    for (const el of parents) {
+      pkgs.add(el.ref.id);
+    }
+    return pkgs;
+  }
+
+  getPkgsByRootForward(root: Pkg, limit: number): Set<Pkg> {
+    const pkgs = new Set<Pkg>();
+    const q = [root];
     while (limit > 0 && q.length > 0) {
-      limit--;
       const current: Pkg = q.shift()!;
       pkgs.add(current);
       for (const el of current.imports) {
         q.push(el);
       }
+      limit--;
+    }
+    return pkgs;
+  }
+
+  getPkgsByRootBackward(root: Pkg, limit: number): Set<Pkg> {
+    const pkgs = new Set<Pkg>();
+    const q = [root];
+    while (limit > 0 && q.length > 0) {
+      const current: Pkg = q.shift()!;
+      pkgs.add(current);
+      for (const el of current.exports) {
+        q.push(el);
+      }
+      limit--;
     }
     return pkgs;
   }

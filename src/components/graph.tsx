@@ -4,6 +4,7 @@ import { GraphType, StateCall, StateFile, StatePkg, StateTheme } from '../state'
 import { GraphMessageType } from "../message";
 
 import styles from './graph.module.css';
+import data from "../data";
 
 export interface GraphProps {
   theme: StateTheme;
@@ -40,10 +41,12 @@ const Graph = ({ pkg, theme, graphType, setPkg }: GraphProps) => {
       g.start();
     }
 
-    worker.onmessage = ({ data }: MessageEvent) => {
-      switch (data.type) {
+    worker.onmessage = (ev: MessageEvent) => {
+      const payload = ev.data.msg;
+      switch (ev.data.type) {
         case GraphMessageType.UPDATE_PKG:
-          setPkg(data.msg.data);
+          const pkgSet = data.getPkgsByRoot(payload.data.entrance, 12);
+          setPkg({ entrance: payload.data.entrance, active: payload.data.active, set: pkgSet });
           break;
       }
     };
