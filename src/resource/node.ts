@@ -5,6 +5,15 @@ import { SourceDep } from "../protocol/dep";
 import { SourceFile } from "../protocol/file";
 import { SourcePkg } from "../protocol/pkg";
 
+export interface Dir {
+  name: string;
+  path: string;
+  parent?: Dir;
+  children: Set<Dir>;
+  pkgPtr?: Pkg,
+  files: Set<File>;
+}
+
 export interface Pkg {
   path: string,
   imports: Set<Pkg>,

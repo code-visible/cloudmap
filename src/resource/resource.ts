@@ -5,13 +5,16 @@ import { SourceDep } from "../protocol/dep";
 import { SourceFile } from "../protocol/file";
 import { Source } from "../protocol/map";
 import { SourcePkg } from "../protocol/pkg";
-import { Abstract, Call, File, Callable, Dep, Pkg } from "./node";
+import { getNameFromPath, getPrefixPathFromPath, normalizePath } from "../utils/path";
+import { Abstract, Call, File, Callable, Dep, Pkg, Dir } from "./node";
 
 export class SourceMap {
   name: string;
   directory: string;
   // lang: string;
   // packageOriented: boolean;
+  root: Dir;
+  dirs: Map<string, Dir>;
   pkgs: Map<string, Pkg>;
   files: Map<string, File>;
   callables: Map<string, Callable>;
@@ -22,12 +25,21 @@ export class SourceMap {
   constructor() {
     this.name = "";
     this.directory = "";
+    this.dirs = new Map();
     this.pkgs = new Map();
     this.files = new Map();
     this.callables = new Map();
     this.abstracts = new Map();
     this.calls = new Map();
     this.deps = new Map();
+    this.root = {
+      name: "",
+      path: "",
+      children: new Set<Dir>(),
+      files: new Set<File>(),
+      pkgPtr: undefined,
+      parent: undefined,
+    };
   }
 
   parseSource(data: Source) {
@@ -35,7 +47,27 @@ export class SourceMap {
       this.pkgs.set(el.id, this.parsePkg(el));
     }
     for (const el of data.files) {
-      this.files.set(el.id, this.parseFile(el));
+      const file = this.parseFile(el);
+      this.files.set(el.id, file);
+      if (!this.dirs.has(el.path)) {
+        const newDir: Dir = {
+          name: getNameFromPath(el.path),
+          path: normalizePath(el.path),
+          parent: undefined,
+          children: new Set<Dir>(),
+          files: new Set<File>(),
+          pkgPtr: undefined,
+        };
+        newDir.files.add(file);
+        if (el.pkg && this.pkgs.has(el.pkg)) {
+          const pkg = this.pkgs.get(el.pkg);
+          newDir.pkgPtr = pkg;
+        }
+        this.dirs.set(el.path, newDir);
+        continue;
+      }
+      const dir = this.dirs.get(el.path)!;
+      dir.files.add(file);
     }
     for (const el of data.callables) {
       this.callables.set(el.id, this.parseCallable(el));
@@ -49,6 +81,7 @@ export class SourceMap {
     for (const el of data.deps) {
       this.deps.set(el.id, this.parseDep(el));
     }
+    this.buildDirsHierarchy();
     for (const el of this.files.values()) {
       this.buildDependenciesNetwork(el);
     }
@@ -59,7 +92,7 @@ export class SourceMap {
 
   private parsePkg(el: SourcePkg): Pkg {
     const pkg: Pkg = {
-      path: el.path === "." ? "main" : el.path,
+      path: el.path === "." ? "project" : normalizePath(el.path),
       imports: new Set(),
       exports: new Set(),
       files: new Set(),
@@ -162,6 +195,51 @@ export class SourceMap {
       dep.filePtr = file;
     }
     return dep;
+  }
+
+  private buildDirsHierarchy() {
+    this.serarchRootDir();
+    for (const el of this.dirs.values()) {
+      if (el === this.root) continue;
+      let currentDir = el;
+      while (currentDir.path.length > 0) {
+        const currentPath = currentDir.path;
+        if (currentPath.indexOf("/") < 0) {
+          this.root.children.add(currentDir);
+          currentDir.parent = this.root;
+          break;
+        }
+        const parentPath = getPrefixPathFromPath(currentPath);
+        if (this.dirs.has(parentPath)) {
+          const parentDir = this.dirs.get(parentPath)!;
+          parentDir.children.add(currentDir);
+          currentDir.parent = parentDir;
+          break;
+        }
+        const parentDir: Dir = {
+          name: getNameFromPath(parentPath),
+          path: parentPath,
+          parent: undefined,
+          children: new Set<Dir>(),
+          files: new Set<File>(),
+          pkgPtr: undefined,
+        };
+        this.dirs.set(parentPath, parentDir);
+        parentDir.children.add(currentDir);
+        currentDir.parent = parentDir;
+        currentDir = parentDir;
+      }
+    }
+  }
+
+  private serarchRootDir() {
+    for (const el of this.dirs.values()) {
+      // TODO: provide better definition of root in protocol.
+      if (el.path === ".") {
+        this.root = el;
+        return;
+      }
+    }
   }
 
   private buildDependenciesNetwork(file: File) {
