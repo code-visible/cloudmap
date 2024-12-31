@@ -1,5 +1,11 @@
-import { Dir, File, Pkg } from '../resource/node';
-import { GraphType, StateCall, StateFile, StatePkg, StateTheme } from '../state';
+import { Dir, File } from '../resource/node';
+import {
+  GraphType,
+  StateCall,
+  StatePannel,
+  StatePkg,
+  StateTheme
+} from '../state';
 import data from '../data';
 
 import styles from './pannel.module.css';
@@ -7,6 +13,8 @@ import styles from './pannel.module.css';
 export interface PannelProps {
   // file: StateFile;
   // call: StateCall;
+  pannel: StatePannel;
+  setPannel: (s: StatePannel) => void;
   theme: StateTheme;
   setTheme: (s: StateTheme) => void;
   graphType: GraphType;
@@ -15,7 +23,7 @@ export interface PannelProps {
   setPkg: (s: StatePkg) => void;
 };
 
-function Pannel({ pkg, theme, setPkg, setGraphType }: PannelProps) {
+function Pannel({ pannel, setPannel, pkg, theme, setPkg, setGraphType }: PannelProps) {
 
   const activePkg = data.pkgs.get(pkg.active);
 
@@ -28,6 +36,16 @@ function Pannel({ pkg, theme, setPkg, setGraphType }: PannelProps) {
     return theme.palette.muted;
   };
 
+  const toggleExpandDir = (path: string) => {
+    if (pannel.expand.has(path)) {
+      pannel.expand.delete(path);
+    } else {
+      pannel.expand.add(path);
+    }
+
+    setPannel({ ...pannel });
+  };
+
   const renderDirectory = (dir: Dir): any => {
     return (
       <li
@@ -36,15 +54,21 @@ function Pannel({ pkg, theme, setPkg, setGraphType }: PannelProps) {
       >
         <div
           className={styles.dirname}
-          onClick={() => handleSelectDir(dir)}
+          // onClick={() => handleSelectDir(dir)}
+          onClick={() => toggleExpandDir(dir.path)}
           style={{
             color: getDirColor(dir),
           }}
         >{dir.name}</div>
-        <ul className={styles.dirlist}>
-          {renderDirectories(dir.children)}
-          {renderFiles(dir.files)}
-        </ul>
+        {
+          pannel.expand.has(dir.path) || !dir.parent ? (
+            <ul className={styles.dirlist}>
+              {renderDirectories(dir.children)}
+              {
+                renderFiles(dir.files)}
+            </ul>
+          ) : null
+        }
       </li>
     );
   };

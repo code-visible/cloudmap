@@ -1,7 +1,16 @@
 import { useState } from 'react'
 import Pannel from './components/pannel';
 import Graph from './components/graph';
-import { GraphType, InitialStateGraph, InitialStatePkg, InitialStateTheme, StatePkg, StateTheme } from './state';
+import {
+  GraphType,
+  InitialStateGraph,
+  InitialStatePannel,
+  InitialStatePkg,
+  InitialStateTheme,
+  StatePannel,
+  StatePkg,
+  StateTheme
+} from './state';
 import mayk from './themes/mayk';
 import chaya from './themes/chaya';
 
@@ -10,6 +19,7 @@ import './App.css'
 function App() {
   const [theme, setTheme] = useState<StateTheme>(InitialStateTheme);
   const [pkg, setPkg] = useState<StatePkg>(InitialStatePkg);
+  const [pannel, setPannel] = useState<StatePannel>(InitialStatePannel);
   const [graphType, setGraphType] = useState<GraphType>(InitialStateGraph);
 
   return (
@@ -26,6 +36,8 @@ function App() {
       </div>
       <div className='content'>
         <Pannel
+          pannel={pannel}
+          setPannel={setPannel}
           theme={theme}
           setTheme={setTheme}
           graphType={graphType}

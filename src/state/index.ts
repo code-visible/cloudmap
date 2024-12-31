@@ -21,6 +21,11 @@ export interface StateFile { }
 
 export interface StateCall { }
 
+export interface StatePannel {
+  lock: boolean;
+  expand: Set<string>,
+}
+
 export const InitialStatePkg: StatePkg = {
   entrance: "",
   active: "",
@@ -30,5 +35,10 @@ export const InitialStatePkg: StatePkg = {
 export const InitialStateTheme: StateTheme = {
   palette: mayk,
 };
+
+export const InitialStatePannel: StatePannel = {
+  lock: false,
+  expand: new Set(),
+}
 
 export const InitialStateGraph = GraphType.PKG;
