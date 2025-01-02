@@ -1,22 +1,39 @@
 import { useState } from 'react'
 import Pannel from './components/pannel';
 import Graph from './components/graph';
-import { GraphType, InitialStateGraph, InitialStatePkg, InitialStateTheme, StatePkg, StateTheme } from './state';
+import {
+  GraphType,
+  InitialStateCall,
+  InitialStateFile,
+  InitialStateGraph,
+  InitialStatePannel,
+  InitialStatePkg,
+  InitialStateTheme,
+  StateCall,
+  StateFile,
+  StatePannel,
+  StatePkg,
+  StateTheme
+} from './state';
 import mayk from './themes/mayk';
 import chaya from './themes/chaya';
 
 import './App.css'
+import data from './data';
 
 function App() {
   const [theme, setTheme] = useState<StateTheme>(InitialStateTheme);
   const [pkg, setPkg] = useState<StatePkg>(InitialStatePkg);
+  const [file, setFile] = useState<StateFile>(InitialStateFile);
+  const [call, setCall] = useState<StateCall>(InitialStateCall);
+  const [pannel, setPannel] = useState<StatePannel>(InitialStatePannel);
   const [graphType, setGraphType] = useState<GraphType>(InitialStateGraph);
 
   return (
     <div className='app'>
       <div className='header'>
         <div className='title'>
-          project name
+          {data.name}
         </div>
         <div className='theme'>
           <div>theme: </div>
@@ -26,6 +43,12 @@ function App() {
       </div>
       <div className='content'>
         <Pannel
+          file={file}
+          setFile={setFile}
+          call={call}
+          setCall={setCall}
+          pannel={pannel}
+          setPannel={setPannel}
           theme={theme}
           setTheme={setTheme}
           graphType={graphType}
@@ -35,6 +58,10 @@ function App() {
         />
         <div className='seperator'></div>
         <Graph
+          file={file}
+          setFile={setFile}
+          call={call}
+          setCall={setCall}
           theme={theme}
           graphType={graphType}
           setGraphType={setGraphType}
