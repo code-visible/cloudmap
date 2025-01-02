@@ -3,6 +3,7 @@ export interface Palette {
   focus: string;
   muted1: string;
   muted2: string;
+  muted3: string;
   arrow: string;
   card: string;
   seperator: string;
