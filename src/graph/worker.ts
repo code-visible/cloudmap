@@ -14,5 +14,11 @@ onmessage = (ev: MessageEvent) => {
     case GraphMessageType.UPDATE_PKG:
       painter.updateStatePkg(ev.data.msg);
       break;
+    case GraphMessageType.UPDATE_FILE:
+      painter.updateStateFile(ev.data.msg);
+      break;
+    case GraphMessageType.UPDATE_CALL:
+      painter.updateStateCall(ev.data.msg);
+      break;
   }
 };

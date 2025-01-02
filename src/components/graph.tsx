@@ -27,7 +27,7 @@ worker.onerror = (err) => {
   if (err.message) console.log(err.message);
 };
 
-const Graph = ({ pkg, file, call, theme, graphType, setPkg }: GraphProps) => {
+const Graph = ({ pkg, file, call, theme, graphType, setPkg, setCall }: GraphProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const [graph, setGraph] = useState<Depict | undefined>(undefined);
 
@@ -52,10 +52,13 @@ const Graph = ({ pkg, file, call, theme, graphType, setPkg }: GraphProps) => {
           const pkgSet = data.getPkgsByRoot(payload.data.entrance, 12);
           setPkg({ entrance: payload.data.entrance, active: payload.data.active, set: pkgSet });
           break;
+        case GraphMessageType.UPDATE_CALL:
+          const callableSet = data.getFileCallsByRoot(payload.data.entrance, 24);
+          setCall({ entrance: payload.data.entrance, active: payload.data.active, set: callableSet });
       }
     };
 
-    return () => g?.destory();
+    return () => g?.destroy();
   }, []);
 
   useEffect(() => {
