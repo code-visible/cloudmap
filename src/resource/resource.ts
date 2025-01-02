@@ -6,7 +6,7 @@ import { SourceFile } from "../protocol/file";
 import { Source } from "../protocol/map";
 import { SourcePkg } from "../protocol/pkg";
 import { getNameFromPath, getPrefixPathFromPath, normalizePath } from "../utils/path";
-import { Abstract, Call, File, Callable, Dep, Pkg, Dir } from "./node";
+import { Abstract, Call, File, Callable, Dep, Pkg, Dir, FileCall } from "./node";
 
 export class SourceMap {
   name: string;
@@ -71,11 +71,11 @@ export class SourceMap {
       const dir = this.dirs.get(el.path)!;
       dir.files.add(file);
     }
-    for (const el of data.callables) {
-      this.callables.set(el.id, this.parseCallable(el));
-    }
     for (const el of data.abstracts) {
       this.abstracts.set(el.id, this.parseAbstract(el));
+    }
+    for (const el of data.callables) {
+      this.callables.set(el.id, this.parseCallable(el));
     }
     for (const el of data.calls) {
       this.calls.set(el.id, this.parseCall(el));
@@ -137,8 +137,17 @@ export class SourceMap {
     const callable: Callable = {
       pkg,
       file,
+      callers: new Set(),
+      callees: new Set(),
       ref: el,
     };
+    if (el.method && el.abstract) {
+      const abs = this.abstracts.get(el.abstract);
+      if (!abs) {
+        throw new Error(`broken callable(method=true) with unexpected abstract field: ${el.id} - ${el.abstract}.`);
+      }
+      callable.absPtr = abs;
+    }
     pkg.callables.add(callable);
     file.callables.add(callable);
     return callable;
@@ -263,9 +272,22 @@ export class SourceMap {
     }
   }
 
-  private buildCallsNetwork(_call: Call) {
-    // TODO
+  private buildCallsNetwork(call: Call) {
+    if (call.ref.callee === "" || call.ref.caller === "") return;
+    const callee = this.callables.get(call.ref.callee);
+    if (!callee) {
+      throw new Error(`broken call with unexpected callee field: ${call.ref.id} - ${call.ref.callee}.`);
+    }
+    const caller = this.callables.get(call.ref.caller);
+    if (!caller) {
+      throw new Error(`broken call with unexpected caller field: ${call.ref.id} - ${call.ref.caller}.`);
+    }
+    callee.callers.add(caller);
+    caller.callees.add(callee);
+    callee.file.exports.add(caller.file);
+    caller.file.imports.add(callee.file);
   }
+
 
   getPkgsByRoot(root: string, limit: number): Set<string> {
     const rootPkg = this.pkgs.get(root);
@@ -335,5 +357,64 @@ export class SourceMap {
       pkgs.add(pkg);
     }
     return pkgs;
+  }
+
+  getFileCallsByRoot(root: string, limit: number): Set<FileCall> {
+    const rootCallable = this.callables.get(root);
+    if (!rootCallable) return new Set();
+    const children = this.getCallablesByRootForward(rootCallable, limit / 2);
+    const parents = this.getCallablesByRootBackward(rootCallable, limit / 2);
+    for (const el of children) {
+      parents.add(el);
+    }
+    const result = new Set<FileCall>();
+    const fileMap = new Map<File, FileCall>();
+    for (const el of parents) {
+      if (!fileMap.has(el.file)) {
+        const newFileCall = {
+          file: el.file.ref.id,
+          callables: new Set<string>(),
+        };
+        fileMap.set(el.file, newFileCall);
+      }
+      const fc = fileMap.get(el.file)!;
+      fc.callables.add(el.ref.id);
+    }
+    for (const el of fileMap.values()) {
+      result.add(el);
+    }
+    return result;
+  }
+
+  getCallablesByRootForward(root: Callable, limit: number): Set<Callable> {
+    const callables = new Set<Callable>();
+    const q = [root];
+    while (limit > 0 && q.length > 0) {
+      const current: Callable = q.shift()!;
+      callables.add(current);
+      for (const el of current.callees) {
+        q.push(el);
+      }
+      limit--;
+    }
+    return callables;
+  }
+
+  getCallablesByRootBackward(root: Callable, limit: number): Set<Callable> {
+    const callables = new Set<Callable>();
+    const q = [root];
+    while (limit > 0 && q.length > 0) {
+      const current: Callable = q.shift()!;
+      callables.add(current);
+      for (const el of current.callers) {
+        q.push(el);
+      }
+      limit--;
+    }
+    return callables;
+  }
+
+  getFilesByRoot(root: string, limit: number): Set<string> {
+    return new Set();
   }
 };

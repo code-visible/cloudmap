@@ -42,6 +42,9 @@ export interface Abstract {
 export interface Callable {
   pkg: Pkg,
   file: File,
+  callers: Set<Callable>,
+  callees: Set<Callable>,
+  absPtr?: Abstract,
   ref: SourceCallable,
 };
 
@@ -55,4 +58,9 @@ export interface Dep {
   pkgPtr?: Pkg,
   filePtr?: File,
   ref: SourceDep,
+};
+
+export interface FileCall {
+  file: string;
+  callables: Set<string>;
 };
