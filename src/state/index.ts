@@ -1,3 +1,4 @@
+import { FileCall } from "../resource/node";
 import mayk from "../themes/mayk";
 import { Palette } from "../themes/theme";
 
@@ -20,14 +21,22 @@ export interface StateTheme {
 export interface StateFile {
   entrance: string;
   active: string;
+  set: Set<string>;
 }
 
-export interface StateCall { }
+export interface StateCall {
+  entrance: string;
+  active: string;
+  set: Set<FileCall>;
+}
 
 export interface StatePannel {
   lock: boolean;
+  // expand directories
   expand: Set<string>,
   hover: string;
+  // current expanded file, only expand one file at a time
+  file: string;
 }
 
 export const InitialStatePkg: StatePkg = {
@@ -42,6 +51,9 @@ export const InitialStateFile: StateFile = {
 };
 
 export const InitialStateCall: StateCall = {
+  entrance: "",
+  active: "",
+  set: new Set(),
 };
 
 export const InitialStateTheme: StateTheme = {
@@ -52,6 +64,7 @@ export const InitialStatePannel: StatePannel = {
   lock: false,
   expand: new Set(),
   hover: "",
+  file: "",
 }
 
 export const InitialStateGraph = GraphType.PKG;

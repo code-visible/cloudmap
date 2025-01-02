@@ -1,4 +1,4 @@
-import { Dir, File } from '../resource/node';
+import { Callable, Dir, File } from '../resource/node';
 import {
   GraphType,
   StateCall,
@@ -26,7 +26,7 @@ export interface PannelProps {
   setPkg: (s: StatePkg) => void;
 };
 
-function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType }: PannelProps) {
+function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, setCall }: PannelProps) {
 
   const activePkg = data.pkgs.get(pkg.active);
 
@@ -42,13 +42,23 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType }
 
   const getFileColor = (file: File) => {
     if (pannel.hover === file.ref.id) return theme.palette.hover;
-    // if (!dir.pkgPtr) return theme.palette.muted2;
     // const fileID = file.ref.id;
     // if (fileID === file.entrance) return theme.palette.focus;
     // if (fileID === file.active) return theme.palette.highlight;
-    // if (pkg.set.has(fileID) && activePkg && (activePkg.imports.has(dir.pkgPtr) || activePkg.exports.has(dir.pkgPtr))) return theme.palette.highlight;
     return theme.palette.muted2;
   };
+
+  const getCallableColor = (callable: Callable) => {
+    const fakedID = `(${callable.ref.abstract}).${callable.ref.name}`;
+    if (pannel.hover === fakedID) return theme.palette.hover;
+    // const fileID = file.ref.id;
+    // if (fileID === file.entrance) return theme.palette.focus;
+    // if (fileID === file.active) return theme.palette.highlight;
+    if (callable.ref.private) return theme.palette.muted3;
+    // if (prefix) return theme.palette.muted2;
+    return theme.palette.muted1;
+  };
+
 
   const toggleExpandDir = (path: string) => {
     if (pannel.expand.has(path)) {
@@ -60,10 +70,56 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType }
     setPannel({ ...pannel });
   };
 
+  const toggleExpandFile = (fileID: string) => {
+    if (pannel.file === fileID) {
+      pannel.file = "";
+    } else {
+      pannel.file = fileID;
+    }
+
+    setPannel({ ...pannel });
+  }
+
   const hoverItem = (key: string) => {
     pannel.hover = key;
     setPannel({ ...pannel });
-  }
+  };
+
+  const renderCallable = (callable: Callable): any => {
+    const fakedID = `(${callable.ref.abstract}).${callable.ref.name}`;
+    return (
+      <li
+        key={fakedID}
+        className={styles.callable}
+      >
+        <div
+          className={styles.callablename}
+          onMouseEnter={() => hoverItem(fakedID)}
+          onMouseLeave={() => hoverItem("")}
+        >
+          <div
+            className={styles.callabletext}
+            style={{
+              color: getCallableColor(callable),
+            }}
+          >
+            {
+              callable.absPtr ? `(${callable.absPtr.ref.name}).${callable.ref.name}` : callable.ref.name
+            }
+          </div>
+          {
+            pannel.hover === fakedID ? (
+              <div
+                className={styles.enter}
+                style={{ color: theme.palette.muted1 }}
+                onClick={() => handleSelectCallable(callable)}
+              >🡲</div>
+            ) : null
+          }
+        </div>
+      </li>
+    );
+  };
 
   const renderDirectory = (dir: Dir): any => {
     return (
@@ -135,9 +191,9 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType }
           <div
             className={styles.filetext}
             style={{
-              color:
-                getFileColor(file),
+              color: getFileColor(file),
             }}
+            onClick={() => toggleExpandFile(file.ref.id)}
           >
             {file.ref.name}
           </div>
@@ -151,8 +207,21 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType }
             ) : null
           }
         </div>
+        <ul className={styles.dirlist}>
+          {
+            pannel.file === file.ref.id ? renderCallables(file.callables) : null
+          }
+        </ul>
       </li>
     );
+  };
+
+  const renderCallables = (callables: Set<Callable>): any => {
+    const result = [];
+    for (const callable of callables) {
+      result.push(renderCallable(callable));
+    }
+    return result;
   };
 
   const renderFiles = (files: Set<File>): any => {
@@ -179,11 +248,18 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType }
     setPkg({ entrance: id, active: "", set: pkgSet });
   };
 
+  const handleSelectCallable = (callable: Callable) => {
+    const id = callable.ref.id;
+    setGraphType(GraphType.CALL);
+    const callableSet = data.getFileCallsByRoot(id, 24);
+    setCall({ entrance: id, active: "", set: callableSet });
+  };
+
   const handleSelectFile = (file: File) => {
     const id = file.ref.id;
     setGraphType(GraphType.FILE);
-    // const pkgSet = data.getPkgsByRoot(id, 12);
-    setFile({ entrance: id, active: "" });
+    const fileSet = data.getFilesByRoot(id, 12);
+    setFile({ entrance: id, active: "", set: fileSet });
   };
 
   return (

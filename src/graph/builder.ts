@@ -5,7 +5,9 @@ import { buildArrow } from "./ui/pkg/arrow";
 import { statePkg } from "./ui/pkg/state";
 import data from "../data";
 import { buildInfoCard } from "./ui/pkg/info";
-import { Pkg } from "../resource/node";
+import { Callable, File, Pkg } from "../resource/node";
+import { stateCall } from "./ui/call/state";
+import { buildCallCard } from "./ui/call/card";
 
 export class GraphBuilder {
   constructor() { }
@@ -41,8 +43,27 @@ export class GraphBuilder {
   }
 
   buildCallLayers(): ShadowElement[][] {
-    let layers: ShadowElement[][] = [];
+    const layer0: ShadowElement[] = [];
+    const fileCalls = stateCall.state.set;
+    const entrancePkg = data.callables.get(stateCall.state.entrance)!.file.pkg;
+    if (fileCalls.size === 0) return [];
+    const layoutResult = GraphLayout.layoutFileCallsDagre(fileCalls, 60, 60);
+    for (const fc of fileCalls) {
+      const node = layoutResult.nodes.get(fc.file);
+      if (node) {
+        const file = data.files.get(fc.file)!;
+        const callables: Callable[] = [];
+        for (const el of fc.callables) {
+          callables.push(data.callables.get(el)!);
+        }
+        const enter = entrancePkg === file.pkg;
+        layer0.push(buildCallCard(node.x - node.w / 2, node.y - node.h / 2, node.w, node.h, file, callables, enter));
+      }
+    }
+    for (const edge of layoutResult.edges) {
+      layer0.push(buildArrow(edge.startID, edge.endID, edge.points));
+    }
 
-    return layers;
+    return [layer0];
   }
 };

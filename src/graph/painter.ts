@@ -1,8 +1,9 @@
-import { CanvasEvent, Graph } from "@pattaya/depict/graph";
-import { GraphType, StatePkg, StateTheme } from "../state";
+import { CanvasEvent, Graph, ShadowElement } from "@pattaya/depict/graph";
+import { GraphType, StateCall, StateFile, StatePkg, StateTheme } from "../state";
 import { GraphBuilder } from "./builder";
 import { statePkg } from "./ui/pkg/state";
 import { stateTheme } from "./ui/theme/state";
+import { stateCall } from "./ui/call/state";
 
 interface GraphDraggingState {
   x: number,
@@ -47,6 +48,23 @@ export class Painter {
     this.graph.renderAll();
   }
 
+  updateStateFile({ graph, data }: { graph: GraphType, data: StateFile }) {
+    console.log(graph, data)
+  }
+
+  updateStateCall({ graph, data }: { graph: GraphType, data: StateCall }) {
+    if (GraphType.CALL !== this.graphType || data.entrance !== stateCall.state.entrance) {
+      stateCall.state = data;
+      this.graphType = graph;
+      this.buildLayers();
+
+      this.graph.renderAll();
+      return;
+    }
+    stateCall.state = data;
+    this.graph.renderAll();
+  }
+
   disableDraggingGraph() {
     this.graph.preHandle = null;
     this.graph.postHandle = null;
@@ -79,21 +97,23 @@ export class Painter {
   }
 
   buildLayers() {
+    let layers: ShadowElement[][] = [];
     switch (this.graphType) {
       case GraphType.PKG:
-        const layers = this.builder.buildPkgLayers();
-        for (let i = 0; i < layers.length; i++) {
-          this.graph.updateQueue(i, layers[i]);
-          this.graph.dx = 0;
-          this.graph.dy = 0;
-        }
-        return;
+        layers = this.builder.buildPkgLayers();
+        break;
       case GraphType.FILE:
-        // this.builder.buildFileLayers();
-        return;
+        layers = this.builder.buildFileLayers();
+        break;
       case GraphType.CALL:
-        // this.builder.buildCallLayers();
-        return;
+        layers = this.builder.buildCallLayers();
+        break;
+    }
+
+    for (let i = 0; i < layers.length; i++) {
+      this.graph.updateQueue(i, layers[i]);
+      this.graph.dx = 0;
+      this.graph.dy = 0;
     }
   }
 };
