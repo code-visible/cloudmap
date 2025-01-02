@@ -13,7 +13,8 @@ export const buildPkgCard = (x: number, y: number, id: string, name: string, fil
     x,
     y,
     shapes: [{
-      path: Rectangle.RoundAligned(0, 0, width, height, 9), opts: {
+      path: Rectangle.RoundAligned(0, 0, width, height, 9),
+      opts: {
         background: true,
         stroke: stateTheme.palette.card,
         fill: "#fff",
