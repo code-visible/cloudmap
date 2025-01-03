@@ -4,6 +4,7 @@ import { GraphBuilder } from "./builder";
 import { statePkg } from "./ui/pkg/state";
 import { stateTheme } from "./ui/theme/state";
 import { stateCall } from "./ui/call/state";
+import { stateFile } from "./ui/file/state";
 
 interface GraphDraggingState {
   x: number,
@@ -49,7 +50,15 @@ export class Painter {
   }
 
   updateStateFile({ graph, data }: { graph: GraphType, data: StateFile }) {
-    console.log(graph, data)
+    if (GraphType.FILE !== this.graphType || data.entrance !== stateFile.state.entrance) {
+      stateFile.state = data;
+      this.graphType = graph;
+      this.buildLayers();
+      this.graph.renderAll();
+      return;
+    }
+    stateFile.state = data;
+    this.graph.renderAll();
   }
 
   updateStateCall({ graph, data }: { graph: GraphType, data: StateCall }) {

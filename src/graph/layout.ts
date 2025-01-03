@@ -40,7 +40,7 @@ export class GraphLayout {
     // build edges
     for (const pkg of pkgs) {
       for (const target of pkg.imports) {
-        if (!pkgs.has(target)) continue;
+        if (!pkgs.has(target) || pkg === target) continue;
         dagre.setEdge(pkg.ref.id, target.ref.id);
       }
     }
@@ -57,6 +57,56 @@ export class GraphLayout {
           y: node.y + dy,
           w: 160,
           h: 120,
+        });
+      }
+    }
+
+    for (const id of dagre.edges()) {
+      const edge = dagre.edge(id);
+      result.edges.push({
+        startID: id.v,
+        endID: id.w,
+        points: edge.points.map(({ x, y }) => ([x + dx, y + dy]))
+      })
+    }
+
+    return result;
+  }
+
+  static layoutFilesDagre(files: Set<File>, dx: number, dy: number): LayoutResult {
+    const result: LayoutResult = {
+      nodes: new Map(),
+      edges: []
+    };
+
+    const dagre = new graphlib.Graph();
+    dagre.setGraph({ rankdir: "LR" });
+    dagre.setDefaultEdgeLabel(() => ({}));
+    // build nodes
+    for (const file of files) {
+      dagre.setNode(file.ref.id, { label: file.ref.name, width: 90, height: 90 });
+    }
+
+    // build edges
+    for (const file of files) {
+      for (const target of file.imports) {
+        if (!files.has(target) || file === target) continue;
+        dagre.setEdge(file.ref.id, target.ref.id);
+      }
+    }
+
+    // layout
+    layout(dagre);
+
+    for (const file of files) {
+      const node = dagre.node(file.ref.id);
+      if (node) {
+        result.nodes.set(file.ref.id, {
+          id: file.ref.id,
+          x: node.x + dx,
+          y: node.y + dy,
+          w: 90,
+          h: 90,
         });
       }
     }

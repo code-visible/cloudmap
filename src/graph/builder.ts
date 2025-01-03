@@ -8,6 +8,9 @@ import { buildInfoCard } from "./ui/pkg/info";
 import { Callable, File, Pkg } from "../resource/node";
 import { stateCall } from "./ui/call/state";
 import { buildCallCard } from "./ui/call/card";
+import { stateFile } from "./ui/file/state";
+import { buildFileNode } from "./ui/file/file";
+import { buildLineArrow } from "./ui/file/arrow";
 
 export class GraphBuilder {
   constructor() { }
@@ -37,9 +40,31 @@ export class GraphBuilder {
   }
 
   buildFileLayers(): ShadowElement[][] {
-    let layers: ShadowElement[][] = [];
+    const layer0: ShadowElement[] = [];
+    const files = stateFile.state.set;
+    if (files.size === 0) return [];
+    const fileSet = new Set<File>();
+    for (const el of files) {
+      fileSet.add(data.files.get(el)!);
+    }
+    const layoutResult = GraphLayout.layoutFilesDagre(fileSet, 60, 60);
 
-    return layers;
+    for (const file of fileSet) {
+      const node = layoutResult.nodes.get(file.ref.id);
+      if (node) {
+        layer0.push(buildFileNode(node.x - 0, node.y - 0, 20, file, false));
+      }
+    }
+
+    for (const edge of layoutResult.edges) {
+      const start = layoutResult.nodes.get(edge.startID)!;
+      const end = layoutResult.nodes.get(edge.endID)!;
+      layer0.push(buildLineArrow(edge.startID, edge.endID, start.x, start.y, end.x, end.y));
+    }
+
+    // const layer1: ShadowElement[] = [buildInfoCard()];
+
+    return [layer0];
   }
 
   buildCallLayers(): ShadowElement[][] {

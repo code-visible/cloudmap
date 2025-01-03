@@ -49,8 +49,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
   };
 
   const getCallableColor = (callable: Callable) => {
-    const fakedID = `(${callable.ref.abstract}).${callable.ref.name}`;
-    if (pannel.hover === fakedID) return theme.palette.hover;
+    if (pannel.hover === callable.ref.id) return theme.palette.hover;
     // const fileID = file.ref.id;
     // if (fileID === file.entrance) return theme.palette.focus;
     // if (fileID === file.active) return theme.palette.highlight;
@@ -86,15 +85,15 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
   };
 
   const renderCallable = (callable: Callable): any => {
-    const fakedID = `(${callable.ref.abstract}).${callable.ref.name}`;
+    const id = callable.ref.id;
     return (
       <li
-        key={fakedID}
+        key={id}
         className={styles.callable}
       >
         <div
           className={styles.callablename}
-          onMouseEnter={() => hoverItem(fakedID)}
+          onMouseEnter={() => hoverItem(id)}
           onMouseLeave={() => hoverItem("")}
         >
           <div
@@ -102,13 +101,14 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
             style={{
               color: getCallableColor(callable),
             }}
+            onClick={() => handleSelectCallable(callable)}
           >
             {
               callable.absPtr ? `(${callable.absPtr.ref.name}).${callable.ref.name}` : callable.ref.name
             }
           </div>
           {
-            pannel.hover === fakedID ? (
+            pannel.hover === id ? (
               <div
                 className={styles.enter}
                 style={{ color: theme.palette.muted1 }}
@@ -244,7 +244,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
     if (!dir.pkgPtr) return;
     const id = dir.pkgPtr.ref.id;
     setGraphType(GraphType.PKG);
-    const pkgSet = data.getPkgsByRoot(id, 12);
+    const pkgSet = data.getPkgsByRoot(id, 16);
     setPkg({ entrance: id, active: "", set: pkgSet });
   };
 
@@ -258,7 +258,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
   const handleSelectFile = (file: File) => {
     const id = file.ref.id;
     setGraphType(GraphType.FILE);
-    const fileSet = data.getFilesByRoot(id, 12);
+    const fileSet = data.getFilesByRoot(id, 16);
     setFile({ entrance: id, active: "", set: fileSet });
   };
 
