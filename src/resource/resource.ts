@@ -288,74 +288,34 @@ export class SourceMap {
     caller.file.imports.add(callee.file);
   }
 
-
   getPkgsByRoot(root: string, limit: number): Set<string> {
     const rootPkg = this.pkgs.get(root);
     if (!rootPkg) return new Set();
+
     const pkgs = new Set<string>();
-    const children = this.getPkgsByRootForward(rootPkg, limit / 2);
-    const parents = this.getPkgsByRootBackward(rootPkg, limit / 2);
-    for (const el of children) {
-      parents.add(el);
+    const q: Pkg[] = [];
+    for (const el of rootPkg.imports) {
+      q.push(el);
     }
-    for (const el of parents) {
-      pkgs.add(el.ref.id);
+    for (const el of rootPkg.exports) {
+      q.push(el);
     }
-    return pkgs;
-  }
-
-  getPkgsByRootForward(root: Pkg, limit: number): Set<Pkg> {
-    const pkgs = new Set<Pkg>();
-    const q = [root];
     while (limit > 0 && q.length > 0) {
       const current: Pkg = q.shift()!;
-      pkgs.add(current);
+      pkgs.add(current.ref.id);
       for (const el of current.imports) {
-        q.push(el);
+        if (!pkgs.has(el.ref.id)) {
+          q.push(el);
+        }
       }
-      limit--;
-    }
-    return pkgs;
-  }
-
-  getPkgsByRootBackward(root: Pkg, limit: number): Set<Pkg> {
-    const pkgs = new Set<Pkg>();
-    const q = [root];
-    while (limit > 0 && q.length > 0) {
-      const current: Pkg = q.shift()!;
-      pkgs.add(current);
       for (const el of current.exports) {
-        q.push(el);
+        if (!pkgs.has(el.ref.id)) {
+          q.push(el);
+        }
       }
       limit--;
     }
-    return pkgs;
-  }
 
-  getPkgsByMains(limit: number): Set<Pkg> {
-    const pkgs = new Set<Pkg>();
-    // const q = [];
-    // for (const root of this.entrances) {
-    //   for (const pkg of root.file.pkg.imports) {
-    //     q.push(pkg);
-    //   }
-    // }
-    // while (limit > 0 && q.length > 0) {
-    //   limit--;
-    //   const current: Pkg = q.shift()!;
-    //   pkgs.add(current);
-    //   for (const el of current.imports) {
-    //     q.push(el);
-    //   }
-    // }
-    return pkgs;
-  }
-
-  getAllPkgs(): Set<Pkg> {
-    const pkgs = new Set<Pkg>();
-    for (const pkg of this.pkgs.values()) {
-      pkgs.add(pkg);
-    }
     return pkgs;
   }
 
@@ -415,6 +375,35 @@ export class SourceMap {
   }
 
   getFilesByRoot(root: string, limit: number): Set<string> {
-    return new Set();
+    const files = new Set<string>();
+    files.add(root);
+
+    const rootFile = this.files.get(root);
+    if (!rootFile) return files;
+
+    const q: File[] = [];
+    for (const el of rootFile.imports) {
+      q.push(el);
+    }
+    for (const el of rootFile.exports) {
+      q.push(el);
+    }
+    while (limit > 0 && q.length > 0) {
+      const current: File = q.shift()!;
+      files.add(current.ref.id);
+      for (const el of current.imports) {
+        if (!files.has(el.ref.id)) {
+          q.push(el);
+        }
+      }
+      for (const el of current.exports) {
+        if (!files.has(el.ref.id)) {
+          q.push(el);
+        }
+      }
+      limit--;
+    }
+
+    return files;
   }
 };
