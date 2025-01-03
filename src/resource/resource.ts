@@ -289,10 +289,12 @@ export class SourceMap {
   }
 
   getPkgsByRoot(root: string, limit: number): Set<string> {
-    const rootPkg = this.pkgs.get(root);
-    if (!rootPkg) return new Set();
-
     const pkgs = new Set<string>();
+    pkgs.add(root);
+
+    const rootPkg = this.pkgs.get(root);
+    if (!rootPkg) return pkgs;
+
     const q: Pkg[] = [];
     for (const el of rootPkg.imports) {
       q.push(el);
