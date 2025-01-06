@@ -23,11 +23,11 @@ const worker = new Worker(new URL('../graph/worker.ts', import.meta.url), {
 });
 
 worker.onerror = (err) => {
-  console.log("fail to start the graph worker! ");
+  console.log("fail to run the graph worker! ");
   if (err.message) console.log(err.message);
 };
 
-const Graph = ({ pkg, file, call, theme, graphType, setPkg, setCall }: GraphProps) => {
+const Graph = ({ pkg, file, call, theme, graphType, setPkg, setCall, setFile }: GraphProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const [graph, setGraph] = useState<Depict | undefined>(undefined);
 
@@ -51,6 +51,10 @@ const Graph = ({ pkg, file, call, theme, graphType, setPkg, setCall }: GraphProp
         case GraphMessageType.UPDATE_PKG:
           const pkgSet = data.getPkgsByRoot(payload.data.entrance, 12);
           setPkg({ entrance: payload.data.entrance, active: payload.data.active, set: pkgSet });
+          break;
+        case GraphMessageType.UPDATE_FILE:
+          const fileSet = data.getFilesByRoot(payload.data.entrance, 16);
+          setFile({ entrance: payload.data.entrance, active: payload.data.active, set: fileSet });
           break;
         case GraphMessageType.UPDATE_CALL:
           const callableSet = data.getFileCallsByRoot(payload.data.entrance, 24);

@@ -48,6 +48,7 @@ export const InitialStatePkg: StatePkg = {
 export const InitialStateFile: StateFile = {
   entrance: "",
   active: "",
+  set: new Set(),
 };
 
 export const InitialStateCall: StateCall = {

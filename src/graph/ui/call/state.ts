@@ -5,12 +5,12 @@ export interface StateCallLocal {
   hoverY: number;
 };
 
-export interface GraphStatePkg {
+export interface GraphStateFile {
   state: StateCall;
   local: StateCallLocal;
 };
 
-export const stateCall: GraphStatePkg = {
+export const stateCall: GraphStateFile = {
   state: InitialStateCall,
   local: {
     hoverX: 0,

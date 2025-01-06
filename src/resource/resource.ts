@@ -1,3 +1,5 @@
+import javascript from "../lang/js";
+import { getLanguageOptions, LanguageOptions } from "../lang/lang";
 import { SourceAbstract } from "../protocol/abstract";
 import { SourceCall } from "../protocol/call";
 import { SourceCallable } from "../protocol/callable";
@@ -21,6 +23,7 @@ export class SourceMap {
   abstracts: Map<string, Abstract>;
   calls: Map<string, Call>;
   deps: Map<string, Dep>;
+  language: LanguageOptions;
 
   constructor() {
     this.name = "";
@@ -40,11 +43,13 @@ export class SourceMap {
       pkgPtr: undefined,
       parent: undefined,
     };
+    this.language = javascript;
   }
 
   parseSource(data: Source) {
     this.name = data.name;
     this.directory = data.directory;
+    this.language = getLanguageOptions(data.language);
     for (const el of data.pkgs) {
       this.pkgs.set(el.id, this.parsePkg(el));
     }
@@ -192,18 +197,21 @@ export class SourceMap {
     const dep: Dep = {
       ref: el,
     };
-    if (el.type === "pkg") {
-      const pkg = this.pkgs.get(el.ref);
-      if (!pkg) {
-        throw new Error(`broken dep with unexpected ref field: ${el.id} - ${el.type} - ${el.ref}.`);
-      }
-      dep.pkgPtr = pkg;
-    } else if (el.type === "file") {
-      const file = this.files.get(el.ref);
-      if (!file) {
-        throw new Error(`broken dep with unexpected ref field: ${el.id} - ${el.type} - ${el.ref}.`);
-      }
-      dep.filePtr = file;
+    switch (el.type) {
+      case "pkg":
+        const pkg = this.pkgs.get(el.ref);
+        if (!pkg) {
+          throw new Error(`broken dep with unexpected ref field: ${el.id} - ${el.type} - ${el.ref}.`);
+        }
+        dep.pkgPtr = pkg;
+        break;
+      case "file":
+        const file = this.files.get(el.ref);
+        if (!file) {
+          throw new Error(`broken dep with unexpected ref field: ${el.id} - ${el.type} - ${el.ref}.`);
+        }
+        dep.filePtr = file;
+        break;
     }
     return dep;
   }
@@ -263,10 +271,11 @@ export class SourceMap {
         if (dep.pkgPtr) {
           file.pkg.imports.add(dep.pkgPtr);
           dep.pkgPtr.exports.add(file.pkg);
-        }
-        if (dep.filePtr) {
+        } else if (dep.filePtr) {
           file.imports.add(dep.filePtr);
           dep.filePtr.exports.add(file);
+          file.pkg.imports.add(dep.filePtr.pkg);
+          dep.filePtr.pkg.exports.add(file.pkg);
         }
       }
     }
@@ -284,78 +293,42 @@ export class SourceMap {
     }
     callee.callers.add(caller);
     caller.callees.add(callee);
-    callee.file.exports.add(caller.file);
-    caller.file.imports.add(callee.file);
+    if (this.language.model === "pkg") {
+      callee.file.exports.add(caller.file);
+      caller.file.imports.add(callee.file);
+    }
   }
-
 
   getPkgsByRoot(root: string, limit: number): Set<string> {
-    const rootPkg = this.pkgs.get(root);
-    if (!rootPkg) return new Set();
     const pkgs = new Set<string>();
-    const children = this.getPkgsByRootForward(rootPkg, limit / 2);
-    const parents = this.getPkgsByRootBackward(rootPkg, limit / 2);
-    for (const el of children) {
-      parents.add(el);
-    }
-    for (const el of parents) {
-      pkgs.add(el.ref.id);
-    }
-    return pkgs;
-  }
+    pkgs.add(root);
 
-  getPkgsByRootForward(root: Pkg, limit: number): Set<Pkg> {
-    const pkgs = new Set<Pkg>();
-    const q = [root];
+    const rootPkg = this.pkgs.get(root);
+    if (!rootPkg) return pkgs;
+
+    const q: Pkg[] = [];
+    for (const el of rootPkg.imports) {
+      q.push(el);
+    }
+    for (const el of rootPkg.exports) {
+      q.push(el);
+    }
     while (limit > 0 && q.length > 0) {
       const current: Pkg = q.shift()!;
-      pkgs.add(current);
+      pkgs.add(current.ref.id);
       for (const el of current.imports) {
-        q.push(el);
+        if (!pkgs.has(el.ref.id)) {
+          q.push(el);
+        }
       }
-      limit--;
-    }
-    return pkgs;
-  }
-
-  getPkgsByRootBackward(root: Pkg, limit: number): Set<Pkg> {
-    const pkgs = new Set<Pkg>();
-    const q = [root];
-    while (limit > 0 && q.length > 0) {
-      const current: Pkg = q.shift()!;
-      pkgs.add(current);
       for (const el of current.exports) {
-        q.push(el);
+        if (!pkgs.has(el.ref.id)) {
+          q.push(el);
+        }
       }
       limit--;
     }
-    return pkgs;
-  }
 
-  getPkgsByMains(limit: number): Set<Pkg> {
-    const pkgs = new Set<Pkg>();
-    // const q = [];
-    // for (const root of this.entrances) {
-    //   for (const pkg of root.file.pkg.imports) {
-    //     q.push(pkg);
-    //   }
-    // }
-    // while (limit > 0 && q.length > 0) {
-    //   limit--;
-    //   const current: Pkg = q.shift()!;
-    //   pkgs.add(current);
-    //   for (const el of current.imports) {
-    //     q.push(el);
-    //   }
-    // }
-    return pkgs;
-  }
-
-  getAllPkgs(): Set<Pkg> {
-    const pkgs = new Set<Pkg>();
-    for (const pkg of this.pkgs.values()) {
-      pkgs.add(pkg);
-    }
     return pkgs;
   }
 
@@ -415,6 +388,35 @@ export class SourceMap {
   }
 
   getFilesByRoot(root: string, limit: number): Set<string> {
-    return new Set();
+    const files = new Set<string>();
+    files.add(root);
+
+    const rootFile = this.files.get(root);
+    if (!rootFile) return files;
+
+    const q: File[] = [];
+    for (const el of rootFile.imports) {
+      q.push(el);
+    }
+    for (const el of rootFile.exports) {
+      q.push(el);
+    }
+    while (limit > 0 && q.length > 0) {
+      const current: File = q.shift()!;
+      files.add(current.ref.id);
+      for (const el of current.imports) {
+        if (!files.has(el.ref.id)) {
+          q.push(el);
+        }
+      }
+      for (const el of current.exports) {
+        if (!files.has(el.ref.id)) {
+          q.push(el);
+        }
+      }
+      limit--;
+    }
+
+    return files;
   }
 };
