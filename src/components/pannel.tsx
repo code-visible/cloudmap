@@ -27,7 +27,6 @@ export interface PannelProps {
 };
 
 function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, setCall }: PannelProps) {
-
   const activePkg = data.pkgs.get(pkg.active);
 
   const getDirColor = (dir: Dir) => {
@@ -244,7 +243,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
     if (!dir.pkgPtr) return;
     const id = dir.pkgPtr.ref.id;
     setGraphType(GraphType.PKG);
-    const pkgSet = data.getPkgsByRoot(id, 16);
+    const pkgSet = data.getPkgsByRoot(id, 12);
     setPkg({ entrance: id, active: "", set: pkgSet });
   };
 

@@ -1,3 +1,5 @@
+import javascript from "../lang/js";
+import { getLanguageOptions, LanguageOptions } from "../lang/lang";
 import { SourceAbstract } from "../protocol/abstract";
 import { SourceCall } from "../protocol/call";
 import { SourceCallable } from "../protocol/callable";
@@ -21,6 +23,7 @@ export class SourceMap {
   abstracts: Map<string, Abstract>;
   calls: Map<string, Call>;
   deps: Map<string, Dep>;
+  language: LanguageOptions;
 
   constructor() {
     this.name = "";
@@ -40,11 +43,13 @@ export class SourceMap {
       pkgPtr: undefined,
       parent: undefined,
     };
+    this.language = javascript;
   }
 
   parseSource(data: Source) {
     this.name = data.name;
     this.directory = data.directory;
+    this.language = getLanguageOptions(data.language);
     for (const el of data.pkgs) {
       this.pkgs.set(el.id, this.parsePkg(el));
     }
@@ -192,18 +197,21 @@ export class SourceMap {
     const dep: Dep = {
       ref: el,
     };
-    if (el.type === "pkg") {
-      const pkg = this.pkgs.get(el.ref);
-      if (!pkg) {
-        throw new Error(`broken dep with unexpected ref field: ${el.id} - ${el.type} - ${el.ref}.`);
-      }
-      dep.pkgPtr = pkg;
-    } else if (el.type === "file") {
-      const file = this.files.get(el.ref);
-      if (!file) {
-        throw new Error(`broken dep with unexpected ref field: ${el.id} - ${el.type} - ${el.ref}.`);
-      }
-      dep.filePtr = file;
+    switch (el.type) {
+      case "pkg":
+        const pkg = this.pkgs.get(el.ref);
+        if (!pkg) {
+          throw new Error(`broken dep with unexpected ref field: ${el.id} - ${el.type} - ${el.ref}.`);
+        }
+        dep.pkgPtr = pkg;
+        break;
+      case "file":
+        const file = this.files.get(el.ref);
+        if (!file) {
+          throw new Error(`broken dep with unexpected ref field: ${el.id} - ${el.type} - ${el.ref}.`);
+        }
+        dep.filePtr = file;
+        break;
     }
     return dep;
   }
@@ -263,10 +271,11 @@ export class SourceMap {
         if (dep.pkgPtr) {
           file.pkg.imports.add(dep.pkgPtr);
           dep.pkgPtr.exports.add(file.pkg);
-        }
-        if (dep.filePtr) {
+        } else if (dep.filePtr) {
           file.imports.add(dep.filePtr);
           dep.filePtr.exports.add(file);
+          file.pkg.imports.add(dep.filePtr.pkg);
+          dep.filePtr.pkg.exports.add(file.pkg);
         }
       }
     }
@@ -284,8 +293,10 @@ export class SourceMap {
     }
     callee.callers.add(caller);
     caller.callees.add(callee);
-    callee.file.exports.add(caller.file);
-    caller.file.imports.add(callee.file);
+    if (this.language.model === "pkg") {
+      callee.file.exports.add(caller.file);
+      caller.file.imports.add(callee.file);
+    }
   }
 
   getPkgsByRoot(root: string, limit: number): Set<string> {

@@ -49,7 +49,7 @@ const Graph = ({ pkg, file, call, theme, graphType, setPkg, setCall, setFile }: 
       const payload = ev.data.msg;
       switch (ev.data.type) {
         case GraphMessageType.UPDATE_PKG:
-          const pkgSet = data.getPkgsByRoot(payload.data.entrance, 16);
+          const pkgSet = data.getPkgsByRoot(payload.data.entrance, 12);
           setPkg({ entrance: payload.data.entrance, active: payload.data.active, set: pkgSet });
           break;
         case GraphMessageType.UPDATE_FILE:

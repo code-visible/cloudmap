@@ -8,6 +8,7 @@ import { SourcePkg } from "./pkg";
 export interface Source {
   name: string;
   directory: string;
+  language: string;
   pkgs: SourcePkg[];
   files: SourceFile[];
   abstracts: SourceAbstract[];
