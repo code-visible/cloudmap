@@ -30,13 +30,34 @@ export interface StateCall {
   set: Set<FileCall>;
 }
 
+export interface ResourceSet {
+  pkgs: Set<string>;
+  fs: Set<string>;
+  fns: Set<string>;
+  abs: Set<string>;
+}
+
+export interface StateSearch {
+  keyword: string;
+  match: ResourceSet;
+  highlight: boolean;
+}
+
+export interface StateHover {
+  typ: GraphType;
+  id: string;
+}
+
+// expand directories and files
+export interface StateExpand {
+  pkgs: Set<string>;
+  fs: Set<string>;
+}
+
 export interface StatePannel {
-  lock: boolean;
-  // expand directories
-  expand: Set<string>,
-  hover: string;
-  // current expanded file, only expand one file at a time
-  file: string;
+  search: StateSearch;
+  expand: StateExpand,
+  hover: StateHover;
 }
 
 export const InitialStatePkg: StatePkg = {
@@ -62,10 +83,31 @@ export const InitialStateTheme: StateTheme = {
 };
 
 export const InitialStatePannel: StatePannel = {
-  lock: false,
-  expand: new Set(),
-  hover: "",
-  file: "",
+  search: {
+    keyword: "",
+    match: {
+      pkgs: new Set<string>(),
+      fs: new Set<string>(),
+      fns: new Set<string>(),
+      abs: new Set<string>(),
+    },
+    highlight: true,
+  },
+  expand: {
+    pkgs: new Set<string>(),
+    fs: new Set<string>(),
+  },
+  hover: {
+    typ: GraphType.PKG,
+    id: "",
+  },
+}
+
+export const InitialStateHide: ResourceSet = {
+  pkgs: new Set<string>(),
+  fs: new Set<string>(),
+  fns: new Set<string>(),
+  abs: new Set<string>(),
 }
 
 export const InitialStateGraph = GraphType.PKG;
