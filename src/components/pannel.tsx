@@ -8,6 +8,7 @@ import {
   StatePkg,
   StateTheme
 } from '../state';
+import Search from './search';
 import data from '../data';
 
 import styles from './pannel.module.css';
@@ -60,6 +61,60 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
     return theme.palette.muted1;
   };
 
+  const searchKeyword = (keyword: string) => {
+    resetSearchMatchList();
+    traverseDir(data.root, keyword);
+  };
+
+  const resetSearchMatchList = () => {
+    pannel.search.match.pkgs.clear();
+    pannel.search.match.fs.clear();
+    pannel.search.match.fns.clear();
+    pannel.search.match.abs.clear();
+  }
+
+  const traverseDir = (dir: Dir, keyword: string) => {
+    if (dir.path.indexOf(keyword) >= 0) {
+      addDirRecursive(dir);
+    }
+    for (const f of dir.files) {
+      if (f.ref.name.indexOf(keyword) >= 0) {
+        pannel.search.match.fs.add(f.ref.id);
+        addDirRecursive(dir);
+      }
+      for (const fn of f.callables) {
+        if (fn.ref.name.indexOf(keyword) >= 0) {
+          pannel.search.match.fns.add(fn.ref.id);
+          pannel.search.match.fs.add(f.ref.id);
+          addDirRecursive(dir);
+        }
+      }
+      for (const ab of f.abstracts) {
+        if (ab.ref.name.indexOf(keyword) >= 0) {
+          pannel.search.match.abs.add(ab.ref.id);
+          pannel.search.match.fs.add(f.ref.id);
+          addDirRecursive(dir);
+        }
+      }
+    }
+    for (const ch of dir.children) {
+      traverseDir(ch, keyword);
+    }
+  };
+
+  const addDirRecursive = (dir?: Dir) => {
+    if (!dir || dir === data.root) return;
+    const set = pannel.search.match.pkgs;
+    if (set.has(dir.path)) return;
+    set.add(dir.path);
+    addDirRecursive(dir.parent);
+  };
+
+  const handleSearch = (keyword: string) => {
+    if (keyword.length >= 2) searchKeyword(keyword);
+    pannel.search.keyword = keyword;
+    setPannel({ ...pannel });
+  };
 
   const toggleExpandDir = (path: string) => {
     const currentSet = pannel.expand.pkgs;
@@ -139,6 +194,13 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
   };
 
   const renderDirectory = (dir: Dir): any => {
+    const isDirExpanded = (dir: Dir) => {
+      if (!dir.parent) return true;
+      if (pannel.search.keyword !== "" && pannel.search.keyword.length >= 2) {
+        return pannel.search.match.pkgs.has(dir.path);
+      }
+      return pannel.expand.pkgs.has(dir.path)
+    }
     return (
       <li
         key={dir.path}
@@ -181,7 +243,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
           }
         </div>
         {
-          pannel.expand.pkgs.has(dir.path) || !dir.parent ? (
+          isDirExpanded(dir) ? (
             <ul className={styles.dirlist}>
               {renderDirectories(dir.children)}
               {
@@ -195,6 +257,12 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
   };
 
   const renderFile = (file: File): any => {
+    const isFileExpanded = (file: File) => {
+      if (pannel.search.keyword !== "" && pannel.search.keyword.length >= 2) {
+        return pannel.search.match.fs.has(file.ref.id);
+      }
+      return pannel.expand.fs.has(file.ref.id);
+    }
     return (
       <li
         key={file.ref.id}
@@ -226,7 +294,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
         </div>
         <ul className={styles.dirlist}>
           {
-            pannel.expand.fs.has(file.ref.id) ? renderCallables(file.callables) : null
+            isFileExpanded(file) ? renderCallables(file.callables) : null
           }
         </ul>
       </li>
@@ -234,25 +302,49 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
   };
 
   const renderCallables = (callables: Set<Callable>): any => {
+    const isCallableVisible = (callable: Callable) => {
+      if (pannel.search.keyword !== "" && pannel.search.keyword.length >= 2) {
+        return pannel.search.match.fns.has(callable.ref.id);
+      }
+      return true;
+    };
     const result = [];
     for (const callable of callables) {
-      result.push(renderCallable(callable));
+      if (isCallableVisible(callable)) {
+        result.push(renderCallable(callable));
+      }
     }
     return result;
   };
 
   const renderFiles = (files: Set<File>): any => {
     const result = [];
+    const isFileVisible = (file: File) => {
+      if (pannel.search.keyword !== "" && pannel.search.keyword.length >= 2) {
+        return pannel.search.match.fs.has(file.ref.id);
+      }
+      return true;
+    };
     for (const file of files) {
-      result.push(renderFile(file));
+      if (isFileVisible(file)) {
+        result.push(renderFile(file));
+      }
     }
     return result;
   };
 
   const renderDirectories = (dirs: Set<Dir>): any => {
+    const isDirVisible = (dir: Dir) => {
+      if (pannel.search.keyword !== "" && pannel.search.keyword.length >= 2) {
+        return pannel.search.match.pkgs.has(dir.path);
+      }
+      return true;
+    };
     const result = [];
     for (const dir of dirs) {
-      result.push(renderDirectory(dir));
+      if (isDirVisible(dir)) {
+        result.push(renderDirectory(dir));
+      }
     }
     return result;
   };
@@ -281,6 +373,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
 
   return (
     <div className={styles.pannel}>
+      <Search keyword={pannel.search.keyword} setKeyword={handleSearch} />
       <ul>
         {
           renderDirectory(data.root)
