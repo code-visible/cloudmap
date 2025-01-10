@@ -6,9 +6,11 @@ import {
   InitialStateCall,
   InitialStateFile,
   InitialStateGraph,
+  InitialStateHide,
   InitialStatePannel,
   InitialStatePkg,
   InitialStateTheme,
+  ResourceSet,
   StateCall,
   StateFile,
   StatePannel,
@@ -27,6 +29,7 @@ function App() {
   const [file, setFile] = useState<StateFile>(InitialStateFile);
   const [call, setCall] = useState<StateCall>(InitialStateCall);
   const [pannel, setPannel] = useState<StatePannel>(InitialStatePannel);
+  const [hide, setHide] = useState<ResourceSet>(InitialStateHide);
   const [graphType, setGraphType] = useState<GraphType>(InitialStateGraph);
 
   return (
@@ -49,6 +52,8 @@ function App() {
           setCall={setCall}
           pannel={pannel}
           setPannel={setPannel}
+          hide={hide}
+          setHide={setHide}
           theme={theme}
           setTheme={setTheme}
           graphType={graphType}

@@ -1,6 +1,7 @@
 import { Callable, Dir, File } from '../resource/node';
 import {
   GraphType,
+  ResourceSet,
   StateCall,
   StateFile,
   StatePannel,
@@ -18,6 +19,8 @@ export interface PannelProps {
   setCall: (s: StateCall) => void;
   pannel: StatePannel;
   setPannel: (s: StatePannel) => void;
+  hide: ResourceSet;
+  setHide: (s: ResourceSet) => void;
   theme: StateTheme;
   setTheme: (s: StateTheme) => void;
   graphType: GraphType;
@@ -30,7 +33,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
   const activePkg = data.pkgs.get(pkg.active);
 
   const getDirColor = (dir: Dir) => {
-    if (pannel.hover === dir.path) return theme.palette.hover;
+    if (pannel.hover.typ === GraphType.PKG && pannel.hover.id === dir.path) return theme.palette.hover;
     if (!dir.pkgPtr) return theme.palette.muted1;
     const pkgID = dir.pkgPtr.ref.id;
     if (pkgID === pkg.entrance) return theme.palette.focus;
@@ -40,7 +43,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
   };
 
   const getFileColor = (file: File) => {
-    if (pannel.hover === file.ref.id) return theme.palette.hover;
+    if (pannel.hover.typ === GraphType.FILE && pannel.hover.id === file.ref.id) return theme.palette.hover;
     // const fileID = file.ref.id;
     // if (fileID === file.entrance) return theme.palette.focus;
     // if (fileID === file.active) return theme.palette.highlight;
@@ -48,7 +51,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
   };
 
   const getCallableColor = (callable: Callable) => {
-    if (pannel.hover === callable.ref.id) return theme.palette.hover;
+    if (pannel.hover.typ === GraphType.CALL && pannel.hover.id === callable.ref.id) return theme.palette.hover;
     // const fileID = file.ref.id;
     // if (fileID === file.entrance) return theme.palette.focus;
     // if (fileID === file.active) return theme.palette.highlight;
@@ -59,27 +62,42 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
 
 
   const toggleExpandDir = (path: string) => {
-    if (pannel.expand.has(path)) {
-      pannel.expand.delete(path);
+    const currentSet = pannel.expand.pkgs;
+    if (currentSet.has(path)) {
+      currentSet.delete(path);
     } else {
-      pannel.expand.add(path);
+      currentSet.add(path);
     }
 
     setPannel({ ...pannel });
   };
 
   const toggleExpandFile = (fileID: string) => {
-    if (pannel.file === fileID) {
-      pannel.file = "";
+    const currentSet = pannel.expand.fs;
+    if (currentSet.has(fileID)) {
+      currentSet.delete(fileID);
     } else {
-      pannel.file = fileID;
+      currentSet.add(fileID);
     }
 
     setPannel({ ...pannel });
   }
 
-  const hoverItem = (key: string) => {
-    pannel.hover = key;
+  const hoverDir = (key: string) => {
+    pannel.hover.id = key;
+    pannel.hover.typ = GraphType.PKG;
+    setPannel({ ...pannel });
+  };
+
+  const hoverFile = (key: string) => {
+    pannel.hover.id = key;
+    pannel.hover.typ = GraphType.FILE;
+    setPannel({ ...pannel });
+  };
+
+  const hoverFn = (key: string) => {
+    pannel.hover.id = key;
+    pannel.hover.typ = GraphType.CALL;
     setPannel({ ...pannel });
   };
 
@@ -92,8 +110,8 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
       >
         <div
           className={styles.callablename}
-          onMouseEnter={() => hoverItem(id)}
-          onMouseLeave={() => hoverItem("")}
+          onMouseEnter={() => hoverFn(id)}
+          onMouseLeave={() => hoverFn("")}
         >
           <div
             className={styles.callabletext}
@@ -107,7 +125,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
             }
           </div>
           {
-            pannel.hover === id ? (
+            pannel.hover.typ === GraphType.CALL && pannel.hover.id === id ? (
               <div
                 className={styles.enter}
                 style={{ color: theme.palette.muted1 }}
@@ -128,8 +146,8 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
       >
         <div
           className={styles.dirname}
-          onMouseEnter={() => hoverItem(dir.path)}
-          onMouseLeave={() => hoverItem("")}
+          onMouseEnter={() => hoverDir(dir.path)}
+          onMouseLeave={() => hoverDir("")}
         >
           <div className={styles.diritem}>
             {
@@ -140,7 +158,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
                     color: getDirColor(dir),
                   }}
                 >
-                  {pannel.expand.has(dir.path) ? "-" : "+"}
+                  {pannel.expand.pkgs.has(dir.path) ? "-" : "+"}
                 </div>
               ) : (<div className={styles.diricon}></div>)
             }
@@ -153,7 +171,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
             >{dir.parent ? dir.name : data.name}</div>
           </div>
           {
-            dir.pkgPtr && pannel.hover === dir.path ? (
+            dir.pkgPtr && pannel.hover.typ === GraphType.PKG && pannel.hover.id === dir.path ? (
               <div
                 className={styles.enter}
                 style={{ color: theme.palette.muted1 }}
@@ -163,7 +181,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
           }
         </div>
         {
-          pannel.expand.has(dir.path) || !dir.parent ? (
+          pannel.expand.pkgs.has(dir.path) || !dir.parent ? (
             <ul className={styles.dirlist}>
               {renderDirectories(dir.children)}
               {
@@ -184,8 +202,8 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
       >
         <div
           className={styles.filename}
-          onMouseEnter={() => hoverItem(file.ref.id)}
-          onMouseLeave={() => hoverItem("")}
+          onMouseEnter={() => hoverFile(file.ref.id)}
+          onMouseLeave={() => hoverFile("")}
         >
           <div
             className={styles.filetext}
@@ -197,7 +215,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
             {file.ref.name}
           </div>
           {
-            pannel.hover === file.ref.id ? (
+            pannel.hover.typ === GraphType.FILE && pannel.hover.id === file.ref.id ? (
               <div
                 className={styles.enter}
                 style={{ color: theme.palette.muted1 }}
@@ -208,7 +226,7 @@ function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, 
         </div>
         <ul className={styles.dirlist}>
           {
-            pannel.file === file.ref.id ? renderCallables(file.callables) : null
+            pannel.expand.fs.has(file.ref.id) ? renderCallables(file.callables) : null
           }
         </ul>
       </li>
