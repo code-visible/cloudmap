@@ -1,11 +1,11 @@
 import { Callable, Dir, File } from '../resource/node';
 import {
   GraphType,
-  ResourceSet,
   StateCall,
   StateFile,
   StatePannel,
   StatePkg,
+  StateShared,
   StateTheme
 } from '../state';
 import Search from './search';
@@ -20,8 +20,8 @@ export interface PannelProps {
   setCall: (s: StateCall) => void;
   pannel: StatePannel;
   setPannel: (s: StatePannel) => void;
-  hide: ResourceSet;
-  setHide: (s: ResourceSet) => void;
+  shared: StateShared;
+  setShared: (s: StateShared) => void;
   theme: StateTheme;
   setTheme: (s: StateTheme) => void;
   graphType: GraphType;
@@ -30,32 +30,40 @@ export interface PannelProps {
   setPkg: (s: StatePkg) => void;
 };
 
-function Pannel({ pannel, setPannel, pkg, theme, setPkg, setFile, setGraphType, setCall }: PannelProps) {
-  const activePkg = data.pkgs.get(pkg.active);
-
+function Pannel({ pannel, setPannel, pkg, file, call, theme, setPkg, setFile, setGraphType, setCall, shared }: PannelProps) {
   const getDirColor = (dir: Dir) => {
+    if (dir.pkgPtr && dir.pkgPtr.ref.id === pkg.entrance) return theme.palette.focus;
+    const activePkg = data.pkgs.get(pkg.active);
+    if (shared.mutePannel) {
+      if (!dir.pkgPtr) return theme.palette.muted3;
+      const pkgID = dir.pkgPtr.ref.id;
+      if (pkgID === pkg.active) return theme.palette.highlight;
+      if (pkg.set.has(pkgID) && activePkg && (activePkg.imports.has(dir.pkgPtr) || activePkg.exports.has(dir.pkgPtr))) return theme.palette.highlight;
+      return theme.palette.muted3;
+    }
     if (pannel.hover.typ === GraphType.PKG && pannel.hover.id === dir.path) return theme.palette.hover;
-    if (!dir.pkgPtr) return theme.palette.muted1;
-    const pkgID = dir.pkgPtr.ref.id;
-    if (pkgID === pkg.entrance) return theme.palette.focus;
-    if (pkgID === pkg.active) return theme.palette.highlight;
-    if (pkg.set.has(pkgID) && activePkg && (activePkg.imports.has(dir.pkgPtr) || activePkg.exports.has(dir.pkgPtr))) return theme.palette.highlight;
     return theme.palette.muted1;
   };
 
-  const getFileColor = (file: File) => {
-    if (pannel.hover.typ === GraphType.FILE && pannel.hover.id === file.ref.id) return theme.palette.hover;
-    // const fileID = file.ref.id;
-    // if (fileID === file.entrance) return theme.palette.focus;
-    // if (fileID === file.active) return theme.palette.highlight;
+  const getFileColor = (f: File) => {
+    if (f.ref.id === file.entrance) return theme.palette.focus;
+    if (shared.mutePannel) {
+      const fileID = f.ref.id;
+      if (fileID === file.active) return theme.palette.highlight;
+      return theme.palette.muted3;
+    }
+    if (pannel.hover.typ === GraphType.FILE && pannel.hover.id === f.ref.id) return theme.palette.hover;
     return theme.palette.muted2;
   };
 
   const getCallableColor = (callable: Callable) => {
+    if (callable.ref.id === file.entrance) return theme.palette.focus;
+    if (shared.mutePannel) {
+      const fnID = callable.ref.id;
+      if (fnID === call.active) return theme.palette.highlight;
+      return theme.palette.muted3;
+    }
     if (pannel.hover.typ === GraphType.CALL && pannel.hover.id === callable.ref.id) return theme.palette.hover;
-    // const fileID = file.ref.id;
-    // if (fileID === file.entrance) return theme.palette.focus;
-    // if (fileID === file.active) return theme.palette.highlight;
     if (callable.ref.private) return theme.palette.muted3;
     // if (prefix) return theme.palette.muted2;
     return theme.palette.muted1;

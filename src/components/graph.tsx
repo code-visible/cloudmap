@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Depict } from "@pattaya/depict";
-import { GraphType, StateCall, StateFile, StatePkg, StateTheme } from '../state';
+import { GraphType, StateCall, StateFile, StatePkg, StateShared, StateTheme } from '../state';
 import { GraphMessageType } from "../message";
 
 import styles from './graph.module.css';
@@ -16,6 +16,8 @@ export interface GraphProps {
   setGraphType: (s: GraphType) => void;
   pkg: StatePkg;
   setPkg: (s: StatePkg) => void;
+  shared: StateShared;
+  setShared: (s: StateShared) => void;
 };
 
 const worker = new Worker(new URL('../graph/worker.ts', import.meta.url), {
@@ -27,7 +29,7 @@ worker.onerror = (err) => {
   if (err.message) console.log(err.message);
 };
 
-const Graph = ({ pkg, file, call, theme, graphType, setPkg, setCall, setFile }: GraphProps) => {
+const Graph = ({ pkg, file, call, theme, graphType, setPkg, setCall, setFile, setShared, shared }: GraphProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const [graph, setGraph] = useState<Depict | undefined>(undefined);
 
@@ -50,14 +52,17 @@ const Graph = ({ pkg, file, call, theme, graphType, setPkg, setCall, setFile }: 
       switch (ev.data.type) {
         case GraphMessageType.UPDATE_PKG:
           const pkgSet = data.getPkgsByRoot(payload.data.entrance, 12);
+          setShared({ ...shared, mutePannel: payload.data.active !== "" });
           setPkg({ entrance: payload.data.entrance, active: payload.data.active, set: pkgSet });
           break;
         case GraphMessageType.UPDATE_FILE:
           const fileSet = data.getFilesByRoot(payload.data.entrance, 16);
+          setShared({ ...shared, mutePannel: payload.data.active !== "" });
           setFile({ entrance: payload.data.entrance, active: payload.data.active, set: fileSet });
           break;
         case GraphMessageType.UPDATE_CALL:
           const callableSet = data.getFileCallsByRoot(payload.data.entrance, 24);
+          setShared({ ...shared, mutePannel: payload.data.active !== "" });
           setCall({ entrance: payload.data.entrance, active: payload.data.active, set: callableSet });
       }
     };

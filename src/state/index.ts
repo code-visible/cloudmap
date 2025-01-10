@@ -54,6 +54,11 @@ export interface StateExpand {
   fs: Set<string>;
 }
 
+export interface StateShared {
+  mutePannel: boolean;
+  hide: ResourceSet,
+}
+
 export interface StatePannel {
   search: StateSearch;
   expand: StateExpand,
@@ -103,11 +108,14 @@ export const InitialStatePannel: StatePannel = {
   },
 }
 
-export const InitialStateHide: ResourceSet = {
-  pkgs: new Set<string>(),
-  fs: new Set<string>(),
-  fns: new Set<string>(),
-  abs: new Set<string>(),
+export const InitialStateShared: StateShared = {
+  mutePannel: false,
+  hide: {
+    pkgs: new Set<string>(),
+    fs: new Set<string>(),
+    fns: new Set<string>(),
+    abs: new Set<string>(),
+  }
 }
 
 export const InitialStateGraph = GraphType.PKG;
