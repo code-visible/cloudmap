@@ -18,10 +18,11 @@ export const buildCallArrow = (startID: string, endID: string, points: number[][
     ],
     data: { s: startID, e: endID },
     update(_delta) {
-      const active = stateCall.local.ativeFile;
+      const callable = stateCall.local.ativeCallable;
+      const files = stateCall.local.ativeFiles;
       const edgeOpts = this.shapes![0].opts!;
       const triangleOpts = this.children![0].shapes![0].opts!;
-      if (active && (this.data.s === active.ref.id || this.data.e === active.ref.id)) {
+      if (callable && files && ((callable.file.ref.id === this.data.s && files.has(this.data.e)) || (callable.file.ref.id === this.data.e && files.has(this.data.s)))) {
         edgeOpts.stroke = stateTheme.palette.highlight;
         triangleOpts.stroke = stateTheme.palette.highlight;
         triangleOpts.fill = stateTheme.palette.highlight;

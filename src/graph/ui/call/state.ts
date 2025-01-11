@@ -6,7 +6,7 @@ export interface StateCallLocal {
   hoverX: number;
   hoverY: number;
   ativeCallable?: Callable;
-  ativeFile?: File;
+  ativeFiles: Set<string>;
 };
 
 export interface GraphStateCall {
@@ -20,18 +20,25 @@ export const stateCall: GraphStateCall = {
     hoverX: 0,
     hoverY: 0,
     ativeCallable: undefined,
-    ativeFile: undefined,
+    ativeFiles: new Set(),
   },
 };
 
 export const updateCallState = (state: StateCall) => {
   stateCall.state = state;
+  stateCall.local.ativeFiles.clear();
   if (state.active === "") {
     stateCall.local.ativeCallable = undefined;
-    stateCall.local.ativeFile = undefined;
     return;
   }
   const callable = data.callables.get(state.active);
   stateCall.local.ativeCallable = callable;
-  stateCall.local.ativeFile = callable ? callable.file : undefined;
+  if (callable) {
+    for (const el of callable.callees) {
+      stateCall.local.ativeFiles.add(el.file.ref.id);
+    }
+    for (const el of callable.callers) {
+      stateCall.local.ativeFiles.add(el.file.ref.id);
+    }
+  }
 };
