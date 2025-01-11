@@ -46,9 +46,17 @@ export const buildFileNode = (x: number, y: number, r: number, file: File, highl
       }
       if (this.data.id === stateFile.state.active) {
         opts.stroke = stateTheme.palette.highlight;
+        opts.fill = "#abc";
+        return;
+      }
+      const active = stateFile.local.activeFile;
+      if (active && (active.exports.has(file) || active.imports.has(file))) {
+        opts.stroke = stateTheme.palette.highlight;
+        opts.fill = "#ddd";
         return;
       }
       opts.stroke = stateTheme.palette.muted3;
+      opts.fill = "#fff";
     },
     data: { id: file.ref.id, active: false },
     contain: (x, y) => x > -r && x < r && y > -r && y < r,

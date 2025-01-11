@@ -11,6 +11,7 @@ import { buildCallCard } from "./ui/call/card";
 import { stateFile } from "./ui/file/state";
 import { buildFileNode } from "./ui/file/file";
 import { buildLineArrow } from "./ui/file/arrow";
+import { buildCallArrow } from "./ui/call/arrow";
 
 export class GraphBuilder {
   constructor() { }
@@ -89,7 +90,7 @@ export class GraphBuilder {
       }
     }
     for (const edge of layoutResult.edges) {
-      layer0.push(buildArrow(edge.startID, edge.endID, edge.points));
+      layer0.push(buildCallArrow(edge.startID, edge.endID, edge.points));
     }
 
     return [layer0, []];

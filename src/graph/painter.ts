@@ -3,8 +3,8 @@ import { GraphType, StateCall, StateFile, StatePkg, StateTheme } from "../state"
 import { GraphBuilder } from "./builder";
 import { statePkg } from "./ui/pkg/state";
 import { stateTheme } from "./ui/theme/state";
-import { stateCall } from "./ui/call/state";
-import { stateFile } from "./ui/file/state";
+import { stateCall, updateCallState } from "./ui/call/state";
+import { stateFile, updateFileState } from "./ui/file/state";
 
 interface GraphDraggingState {
   x: number,
@@ -51,25 +51,25 @@ export class Painter {
 
   updateStateFile({ graph, data }: { graph: GraphType, data: StateFile }) {
     if (GraphType.FILE !== this.graphType || data.entrance !== stateFile.state.entrance || data.pkg !== stateFile.state.pkg) {
-      stateFile.state = data;
+      updateFileState(data);
       this.graphType = graph;
       this.buildLayers();
       this.graph.renderAll();
       return;
     }
-    stateFile.state = data;
+    updateFileState(data);
     this.graph.renderAll();
   }
 
   updateStateCall({ graph, data }: { graph: GraphType, data: StateCall }) {
     if (GraphType.CALL !== this.graphType || data.entrance !== stateCall.state.entrance || data.pkg !== stateCall.state.pkg) {
-      stateCall.state = data;
+      updateCallState(data);
       this.graphType = graph;
       this.buildLayers();
       this.graph.renderAll();
       return;
     }
-    stateCall.state = data;
+    updateCallState(data);
     this.graph.renderAll();
   }
 
