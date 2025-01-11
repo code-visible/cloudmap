@@ -50,7 +50,7 @@ export class Painter {
   }
 
   updateStateFile({ graph, data }: { graph: GraphType, data: StateFile }) {
-    if (GraphType.FILE !== this.graphType || data.entrance !== stateFile.state.entrance) {
+    if (GraphType.FILE !== this.graphType || data.entrance !== stateFile.state.entrance || data.pkg !== stateFile.state.pkg) {
       stateFile.state = data;
       this.graphType = graph;
       this.buildLayers();
@@ -62,11 +62,10 @@ export class Painter {
   }
 
   updateStateCall({ graph, data }: { graph: GraphType, data: StateCall }) {
-    if (GraphType.CALL !== this.graphType || data.entrance !== stateCall.state.entrance) {
+    if (GraphType.CALL !== this.graphType || data.entrance !== stateCall.state.entrance || data.pkg !== stateCall.state.pkg) {
       stateCall.state = data;
       this.graphType = graph;
       this.buildLayers();
-
       this.graph.renderAll();
       return;
     }
@@ -120,9 +119,9 @@ export class Painter {
     }
 
     for (let i = 0; i < layers.length; i++) {
-      this.graph.updateQueue(i, layers[i]);
-      this.graph.dx = 0;
-      this.graph.dy = 0;
+      this.graph.resetGraph(layers);
     }
+    this.graph.dx = 0;
+    this.graph.dy = 0;
   }
 };

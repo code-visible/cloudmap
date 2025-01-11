@@ -37,9 +37,9 @@ export const buildPkgCard = (x: number, y: number, id: string, name: string, fil
       },
     ],
     children: [
-      buildCardField(20, 58, "files", `${files}`),
-      buildCardField(20, 78, "functions", `${functions}`),
-      buildCardField(20, 98, "abstract", `${abstract}`),
+      buildCardField(20, 58, "files", `${files}`, id, GraphType.FILE),
+      buildCardField(20, 78, "functions", `${functions}`, id, GraphType.CALL),
+      buildCardField(20, 98, "abstract", `${abstract}`, id, GraphType.REF),
     ],
     data: { id, active: false },
     update(_delta) {

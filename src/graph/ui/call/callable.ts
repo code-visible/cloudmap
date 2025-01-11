@@ -8,14 +8,6 @@ export const buildCallableField = (x: number, y: number, callable: Callable): Sh
   return {
     x,
     y,
-    // shapes: [
-    //   {
-    //     path: Rectangle.Basic(0, -13, 192, 18),
-    //     opts: {
-    //       stroke: "#993"
-    //     }
-    //   },
-    // ],
     texts: [
       {
         content: callable.ref.name,
@@ -54,7 +46,7 @@ export const buildCallableField = (x: number, y: number, callable: Callable): Sh
       return true;
     },
     onClick() {
-      postMessage({ type: GraphMessageType.UPDATE_CALL, msg: { graph: GraphType.CALL, data: { entrance: this.data.id, active: "", set: new Set() } } });
+      postMessage({ type: GraphMessageType.UPDATE_CALL, msg: { graph: GraphType.CALL, data: { pkg: "", entrance: this.data.id, active: "", set: new Set() } } });
       return true;
     },
   };

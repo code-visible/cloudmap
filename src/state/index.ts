@@ -6,6 +6,7 @@ export const enum GraphType {
   PKG = 1,
   FILE = 2,
   CALL = 3,
+  REF = 4,
 }
 
 export interface StatePkg {
@@ -19,12 +20,14 @@ export interface StateTheme {
 }
 
 export interface StateFile {
+  pkg: string;
   entrance: string;
   active: string;
   set: Set<string>;
 }
 
 export interface StateCall {
+  pkg: string;
   entrance: string;
   active: string;
   set: Set<FileCall>;
@@ -72,12 +75,14 @@ export const InitialStatePkg: StatePkg = {
 };
 
 export const InitialStateFile: StateFile = {
+  pkg: "",
   entrance: "",
   active: "",
   set: new Set(),
 };
 
 export const InitialStateCall: StateCall = {
+  pkg: "",
   entrance: "",
   active: "",
   set: new Set(),

@@ -30,9 +30,9 @@ export interface PannelProps {
   setPkg: (s: StatePkg) => void;
 };
 
-function Pannel({ pannel, setPannel, pkg, file, call, theme, setPkg, setFile, setGraphType, setCall, shared }: PannelProps) {
+function Pannel({ pannel, graphType, setPannel, pkg, file, call, theme, setPkg, setFile, setGraphType, setCall, shared }: PannelProps) {
   const getDirColor = (dir: Dir) => {
-    if (dir.pkgPtr && dir.pkgPtr.ref.id === pkg.entrance) return theme.palette.focus;
+    if (graphType === GraphType.PKG && dir.pkgPtr && dir.pkgPtr.ref.id === pkg.entrance) return theme.palette.focus;
     const activePkg = data.pkgs.get(pkg.active);
     if (shared.mutePannel) {
       if (!dir.pkgPtr) return theme.palette.muted3;
@@ -46,7 +46,7 @@ function Pannel({ pannel, setPannel, pkg, file, call, theme, setPkg, setFile, se
   };
 
   const getFileColor = (f: File) => {
-    if (f.ref.id === file.entrance) return theme.palette.focus;
+    if (graphType === GraphType.FILE && f.ref.id === file.entrance) return theme.palette.focus;
     if (shared.mutePannel) {
       const fileID = f.ref.id;
       if (fileID === file.active) return theme.palette.highlight;
@@ -57,7 +57,7 @@ function Pannel({ pannel, setPannel, pkg, file, call, theme, setPkg, setFile, se
   };
 
   const getCallableColor = (callable: Callable) => {
-    if (callable.ref.id === file.entrance) return theme.palette.focus;
+    if (GraphType.CALL && callable.ref.id === file.entrance) return theme.palette.focus;
     if (shared.mutePannel) {
       const fnID = callable.ref.id;
       if (fnID === call.active) return theme.palette.highlight;
@@ -369,14 +369,14 @@ function Pannel({ pannel, setPannel, pkg, file, call, theme, setPkg, setFile, se
     const id = callable.ref.id;
     setGraphType(GraphType.CALL);
     const callableSet = data.getFileCallsByRoot(id, 24);
-    setCall({ entrance: id, active: "", set: callableSet });
+    setCall({ pkg: "", entrance: id, active: "", set: callableSet });
   };
 
   const handleSelectFile = (file: File) => {
     const id = file.ref.id;
     setGraphType(GraphType.FILE);
     const fileSet = data.getFilesByRoot(id, 16);
-    setFile({ entrance: id, active: "", set: fileSet });
+    setFile({ pkg: "", entrance: id, active: "", set: fileSet });
   };
 
   return (

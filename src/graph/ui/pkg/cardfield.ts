@@ -1,17 +1,12 @@
 import type { ShadowElement } from "@pattaya/depict/graph";
+import { GraphType } from "../../../state";
+import { GraphMessageType } from "../../../message";
+import { FileCall } from "../../../resource/node";
 
-export const buildCardField = (x: number, y: number, key: string, val: string): ShadowElement => {
+export const buildCardField = (x: number, y: number, key: string, val: string, id: string, typ: GraphType): ShadowElement => {
   return {
     x,
     y,
-    // shapes: [
-    //   {
-    //     path: Rectangle.Basic(0, -13, 192, 18),
-    //     opts: {
-    //       stroke: "#993"
-    //     }
-    //   },
-    // ],
     texts: [
       {
         content: key,
@@ -42,6 +37,35 @@ export const buildCardField = (x: number, y: number, key: string, val: string): 
     onMouseleave(render) {
       this.texts![0].opts!.fill = "#666";
       render();
+      return true;
+    },
+    onClick() {
+      switch (typ) {
+        case GraphType.FILE:
+          const newStateFile = {
+            pkg: id,
+            entrance: "",
+            active: "",
+            set: new Set<string>(),
+          };
+          postMessage({
+            type: GraphMessageType.UPDATE_FILE, msg: { graph: GraphType.FILE, data: newStateFile }
+          });
+          break;
+        case GraphType.CALL:
+          const newStateCall = {
+            pkg: id,
+            entrance: "",
+            active: "",
+            set: new Set<FileCall>(),
+          };
+          postMessage({
+            type: GraphMessageType.UPDATE_CALL, msg: { graph: GraphType.CALL, data: newStateCall }
+          });
+          break;
+        case GraphType.REF:
+          break;
+      }
       return true;
     },
   };
