@@ -18,7 +18,7 @@ export class GraphBuilder {
   buildPkgLayers(): ShadowElement[][] {
     const layer0: ShadowElement[] = [];
     const pkgs = statePkg.state.set;
-    if (pkgs.size === 0) return [];
+    if (pkgs.size === 0) return [[], []];
     const pkgSet = new Set<Pkg>();
     for (const el of pkgs) {
       pkgSet.add(data.pkgs.get(el)!);
@@ -42,7 +42,7 @@ export class GraphBuilder {
   buildFileLayers(): ShadowElement[][] {
     const layer0: ShadowElement[] = [];
     const files = stateFile.state.set;
-    if (files.size === 0) return [];
+    if (files.size === 0) return [[], []];
     const fileSet = new Set<File>();
     for (const el of files) {
       fileSet.add(data.files.get(el)!);
@@ -64,14 +64,17 @@ export class GraphBuilder {
 
     // const layer1: ShadowElement[] = [buildInfoCard()];
 
-    return [layer0];
+    return [layer0, []];
   }
 
   buildCallLayers(): ShadowElement[][] {
     const layer0: ShadowElement[] = [];
     const fileCalls = stateCall.state.set;
-    const entrancePkg = data.callables.get(stateCall.state.entrance)!.file.pkg;
-    if (fileCalls.size === 0) return [];
+    let entrancePkg = ""
+    if (stateCall.state.entrance) {
+      entrancePkg = data.callables.get(stateCall.state.entrance)!.file.pkg.ref.id;
+    }
+    if (fileCalls.size === 0) return [[], []];
     const layoutResult = GraphLayout.layoutFileCallsDagre(fileCalls, 60, 60);
     for (const fc of fileCalls) {
       const node = layoutResult.nodes.get(fc.file);
@@ -81,7 +84,7 @@ export class GraphBuilder {
         for (const el of fc.callables) {
           callables.push(data.callables.get(el)!);
         }
-        const enter = entrancePkg === file.pkg;
+        const enter = entrancePkg === file.pkg.ref.id;
         layer0.push(buildCallCard(node.x - node.w / 2, node.y - node.h / 2, node.w, node.h, file, callables, enter));
       }
     }
@@ -89,6 +92,6 @@ export class GraphBuilder {
       layer0.push(buildArrow(edge.startID, edge.endID, edge.points));
     }
 
-    return [layer0];
+    return [layer0, []];
   }
 };

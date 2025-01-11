@@ -1,4 +1,4 @@
-import source from '../testdata/cacheme.json';
+import source from '../testdata/prom.json';
 import { SourceMap } from '../resource/resource';
 import type { Source } from '../protocol/map';
 

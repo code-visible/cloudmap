@@ -56,13 +56,18 @@ export const buildFileNode = (x: number, y: number, r: number, file: File, highl
       this.data.active = true;
       stateFile.local.hoverX = x + this.x;
       stateFile.local.hoverY = y + this.y;
-      postMessage({ type: GraphMessageType.UPDATE_FILE, msg: { graph: GraphType.FILE, data: { entrance: stateFile.state.entrance, active: this.data.id, set: [] } } });
+      postMessage({ type: GraphMessageType.UPDATE_FILE, msg: { graph: GraphType.FILE, data: { pkg: stateFile.state.pkg, entrance: stateFile.state.entrance, active: this.data.id, set: [] } } });
       return true;
     },
     onMouseleave(_render, _x, _y, _mx, _my) {
       this.data.active = false;
-      postMessage({ type: GraphMessageType.UPDATE_FILE, msg: { graph: GraphType.FILE, data: { entrance: stateFile.state.entrance, active: "", set: [] } } });
+      postMessage({ type: GraphMessageType.UPDATE_FILE, msg: { graph: GraphType.FILE, data: { pkg: stateFile.state.pkg, entrance: stateFile.state.entrance, active: "", set: [] } } });
       return true;
     },
+    onClick(_render, _x, _y, _mouseX, _mouseY) {
+      this.data.active = false;
+      postMessage({ type: GraphMessageType.UPDATE_FILE, msg: { graph: GraphType.FILE, data: { pkg: "", entrance: this.data.id, active: "", set: [] } } });
+      return true;
+    }
   }
 };

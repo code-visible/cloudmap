@@ -8,11 +8,13 @@ import {
   InitialStateGraph,
   InitialStatePannel,
   InitialStatePkg,
+  InitialStateShared,
   InitialStateTheme,
   StateCall,
   StateFile,
   StatePannel,
   StatePkg,
+  StateShared,
   StateTheme
 } from './state';
 import mayk from './themes/mayk';
@@ -27,6 +29,7 @@ function App() {
   const [file, setFile] = useState<StateFile>(InitialStateFile);
   const [call, setCall] = useState<StateCall>(InitialStateCall);
   const [pannel, setPannel] = useState<StatePannel>(InitialStatePannel);
+  const [shared, setShared] = useState<StateShared>(InitialStateShared);
   const [graphType, setGraphType] = useState<GraphType>(InitialStateGraph);
 
   return (
@@ -49,6 +52,8 @@ function App() {
           setCall={setCall}
           pannel={pannel}
           setPannel={setPannel}
+          shared={shared}
+          setShared={setShared}
           theme={theme}
           setTheme={setTheme}
           graphType={graphType}
@@ -62,6 +67,8 @@ function App() {
           setFile={setFile}
           call={call}
           setCall={setCall}
+          shared={shared}
+          setShared={setShared}
           theme={theme}
           graphType={graphType}
           setGraphType={setGraphType}

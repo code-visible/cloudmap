@@ -335,23 +335,25 @@ export class SourceMap {
   getFileCallsByRoot(root: string, limit: number): Set<FileCall> {
     const rootCallable = this.callables.get(root);
     if (!rootCallable) return new Set();
-    const children = this.getCallablesByRootForward(rootCallable, limit / 2);
-    const parents = this.getCallablesByRootBackward(rootCallable, limit / 2);
+    const children = this.getCallablesByRootForward(rootCallable, limit * 8);
+    const parents = this.getCallablesByRootBackward(rootCallable, limit * 8);
     for (const el of children) {
       parents.add(el);
     }
     const result = new Set<FileCall>();
     const fileMap = new Map<File, FileCall>();
     for (const el of parents) {
-      if (!fileMap.has(el.file)) {
-        const newFileCall = {
-          file: el.file.ref.id,
-          callables: new Set<string>(),
-        };
-        fileMap.set(el.file, newFileCall);
+      if (this.isCallableConnectedInSet(el, parents)) {
+        if (!fileMap.has(el.file)) {
+          const newFileCall = {
+            file: el.file.ref.id,
+            callables: new Set<string>(),
+          };
+          fileMap.set(el.file, newFileCall);
+        }
+        const fc = fileMap.get(el.file)!;
+        fc.callables.add(el.ref.id);
       }
-      const fc = fileMap.get(el.file)!;
-      fc.callables.add(el.ref.id);
     }
     for (const el of fileMap.values()) {
       result.add(el);
@@ -385,6 +387,78 @@ export class SourceMap {
       limit--;
     }
     return callables;
+  }
+
+  getFilesByPkg(pkg: string, limit: number): Set<string> {
+    const files = new Set<string>();
+    const p = this.pkgs.get(pkg);
+    if (!p) return files;
+    for (const f of p.files) {
+      if (limit <= 0) return files;
+      files.add(f.ref.id);
+      limit--;
+    }
+    return files;
+  }
+
+  private isCallableConnectedInSet(c: Callable, set: Set<Callable>): boolean {
+    for (const i of c.callers) {
+      if (i.file === c.file) continue;
+      if (set.has(i)) return true;
+    }
+    for (const o of c.callees) {
+      if (o.file === c.file) continue;
+      if (set.has(o)) return true;
+    }
+    return false;
+  }
+
+  getFileCallsByPkg(pkg: string, limit: number): Set<FileCall> {
+    const result = new Set<FileCall>();
+    const p = this.pkgs.get(pkg);
+    if (!p) return result;
+
+    // build all callables call graph in a single package.
+    // select the most connected files to export
+    const fileMap = new Map<File, FileCall>();
+    for (const el of p.callables) {
+      if (this.isCallableConnectedInSet(el, p.callables)) {
+        // connectedCallables.add(el);
+        if (!fileMap.has(el.file)) {
+          const newFileCall = {
+            file: el.file.ref.id,
+            callables: new Set<string>(),
+          };
+          fileMap.set(el.file, newFileCall);
+        }
+        const fc = fileMap.get(el.file)!;
+        fc.callables.add(el.ref.id);
+      }
+    }
+
+    while (limit > 0 && fileMap.size > 0) {
+      // warn: O(n^2), n = count of files in package.
+      let currentKey: File | undefined;
+      let currentFC: FileCall | undefined;
+      for (const [key, fc] of fileMap) {
+        if (!currentKey) {
+          currentKey = key;
+          currentFC = fc;
+          continue;
+        }
+        if (currentFC!.callables.size < fc.callables.size) {
+          currentKey = key;
+          currentFC = fc;
+        }
+      }
+      fileMap.delete(currentKey!)
+      result.add(currentFC!);
+      limit--;
+    }
+    // for (const el of fileMap.values()) {
+    //   result.add(el);
+    // }
+    return result;
   }
 
   getFilesByRoot(root: string, limit: number): Set<string> {
