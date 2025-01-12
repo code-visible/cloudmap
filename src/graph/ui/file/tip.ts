@@ -1,13 +1,13 @@
 import type { ShadowElement } from "@pattaya/depict/graph";
 import { Rectangle, Triangle } from "@pattaya/pather";
-import { statePkg } from "./state";
+import { stateFile } from "./state";
 import { stateTheme } from "../theme/state";
 import data from "../../../data";
 
-export const buildInfoCard = (): ShadowElement => {
+export const buildFileTip = (): ShadowElement => {
   const width = 320;
   // +22
-  const height = 56;
+  const height = 96;
   return {
     x: 0,
     y: 0,
@@ -36,6 +36,73 @@ export const buildInfoCard = (): ShadowElement => {
           fill: "#000",
         },
       },
+      {
+        x: 20,
+        y: 55, // +24
+        content: "path:",
+        opts: {
+          width: 256,
+          ellipsis: true,
+          font: "14px san-serf",
+          fill: stateTheme.palette.muted2,
+        },
+      },
+      {
+        x: 54,
+        y: 55, // +24
+        content: "/",
+        opts: {
+          width: 234,
+          ellipsis: true,
+          font: "14px san-serf",
+          fill: stateTheme.palette.muted2,
+        },
+      },
+      {
+        x: 20,
+        y: 75, // +20
+        content: "fns:",
+        opts: {
+          width: 32,
+          ellipsis: true,
+          font: "14px san-serf",
+          fill: stateTheme.palette.muted2,
+        },
+      },
+      {
+        x: 50,
+        y: 75, // +20
+        content: "22",
+        opts: {
+          width: 32,
+          ellipsis: true,
+          font: "14px san-serf",
+          fill: stateTheme.palette.muted2,
+        },
+      },
+
+      {
+        x: 100,
+        y: 75, // +20
+        content: "abs:",
+        opts: {
+          width: 32,
+          ellipsis: true,
+          font: "14px san-serf",
+          fill: stateTheme.palette.muted2,
+        },
+      },
+      {
+        x: 130,
+        y: 75, // +20
+        content: "5",
+        opts: {
+          width: 256,
+          ellipsis: true,
+          font: "14px san-serf",
+          fill: stateTheme.palette.muted2,
+        },
+      },
       // {
       //   x: 21,
       //   y: 56,
@@ -62,7 +129,7 @@ export const buildInfoCard = (): ShadowElement => {
     children: [
       {
         x: 160,
-        y: 56,
+        y: 98,
         shapes: [
           {
             path: Triangle.Isosceles(0, 0, 16, 12),
@@ -89,7 +156,7 @@ export const buildInfoCard = (): ShadowElement => {
     data: 0,
     hidden: true,
     update(_delta) {
-      if (statePkg.state.active === "") {
+      if (stateFile.state.active === "") {
         // this.x = -500;
         this.data++;
         this.hidden = true;
@@ -97,11 +164,12 @@ export const buildInfoCard = (): ShadowElement => {
         this.data++;
         this.hidden = false;
       }
-      const pkg = data.pkgs.get(statePkg.state.active);
-      if (pkg) {
-        this.texts![0].content = pkg.path;
-        this.x = statePkg.local.hoverX - 72;
-        this.y = statePkg.local.hoverY - 72;
+      const file = data.files.get(stateFile.state.active);
+      if (file) {
+        this.texts![0].content = file.ref.name;
+        this.texts![2].content = file.ref.path;
+        this.x = stateFile.local.hoverX - 160;
+        this.y = stateFile.local.hoverY - 136;
       }
     },
   };

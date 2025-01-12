@@ -3,7 +3,6 @@ import { GraphLayout } from "./layout";
 import { buildPkgCard } from "./ui/pkg/card";
 import { buildArrow } from "./ui/pkg/arrow";
 import { statePkg } from "./ui/pkg/state";
-import data from "../data";
 import { buildInfoCard } from "./ui/pkg/info";
 import { Callable, File, Pkg } from "../resource/node";
 import { stateCall } from "./ui/call/state";
@@ -12,6 +11,8 @@ import { stateFile } from "./ui/file/state";
 import { buildFileNode } from "./ui/file/file";
 import { buildLineArrow } from "./ui/file/arrow";
 import { buildCallArrow } from "./ui/call/arrow";
+import data from "../data";
+import { buildFileTip } from "./ui/file/tip";
 
 export class GraphBuilder {
   constructor() { }
@@ -63,9 +64,9 @@ export class GraphBuilder {
       layer0.push(buildLineArrow(edge.startID, edge.endID, start.x, start.y, end.x, end.y));
     }
 
-    // const layer1: ShadowElement[] = [buildInfoCard()];
+    const layer1: ShadowElement[] = [buildFileTip()];
 
-    return [layer0, []];
+    return [layer0, layer1];
   }
 
   buildCallLayers(): ShadowElement[][] {
