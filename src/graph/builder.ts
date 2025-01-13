@@ -13,6 +13,7 @@ import { buildLineArrow } from "./ui/file/arrow";
 import { buildCallArrow } from "./ui/call/arrow";
 import data from "../data";
 import { buildFileTip } from "./ui/file/tip";
+import { buildCallTip } from "./ui/call/tip";
 
 export class GraphBuilder {
   constructor() { }
@@ -94,6 +95,8 @@ export class GraphBuilder {
       layer0.push(buildCallArrow(edge.startID, edge.endID, edge.points));
     }
 
-    return [layer0, []];
+    const layer1: ShadowElement[] = [buildCallTip()];
+
+    return [layer0, layer1];
   }
 };
