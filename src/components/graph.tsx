@@ -186,6 +186,7 @@ const Graph = ({ data, pkg, file, call, theme, graphType, setPkg, setCall, setFi
         if (call.set.has(caller)) {
           const callerID = caller.file.ref.id;
           const calleeID = callable.file.ref.id;
+          if (callerID === calleeID) continue;
           const edgeID = `${callerID}-${calleeID}`
           if (!edges.has(edgeID)) {
             edges.add(edgeID);
@@ -197,6 +198,7 @@ const Graph = ({ data, pkg, file, call, theme, graphType, setPkg, setCall, setFi
         if (call.set.has(callee)) {
           const callerID = callable.file.ref.id;
           const calleeID = callee.file.ref.id;
+          if (callerID === calleeID) continue;
           const edgeID = `${callerID}-${calleeID}`
           if (!edges.has(edgeID)) {
             edges.add(edgeID);
