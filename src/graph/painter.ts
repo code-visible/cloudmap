@@ -1,10 +1,10 @@
 import { CanvasEvent, Graph, ShadowElement } from "@pattaya/depict/graph";
-import { GraphType, StateCall, StateFile, StatePkg, StateTheme } from "../state";
+import { GraphType, StateGraphCall, StateGraphFile, StateGraphPkg, StateTheme } from "../state";
 import { GraphBuilder } from "./builder";
 import { statePkg } from "./ui/pkg/state";
 import { stateTheme } from "./ui/theme/state";
 import { stateCall, updateCallState } from "./ui/call/state";
-import { stateFile, updateFileState } from "./ui/file/state";
+import { stateFile } from "./ui/file/state";
 
 interface GraphDraggingState {
   x: number,
@@ -35,10 +35,12 @@ export class Painter {
     this.graph.renderAll();
   }
 
-  updateStatePkg({ graph, data }: { graph: GraphType, data: StatePkg }) {
+  updateStatePkg({ graph, data }: { graph: GraphType, data: StateGraphPkg }) {
     // compare the new state with current state
     // and decide if the graph should be rebuild
-    if (GraphType.PKG !== this.graphType || data.entrance !== statePkg.state.entrance) {
+    const prevEntranceID = statePkg.state.entrance ? statePkg.state.entrance.id : "";
+    const nextEntranceID = data.entrance ? data.entrance.id : "";
+    if (GraphType.PKG !== this.graphType || prevEntranceID !== nextEntranceID) {
       statePkg.state = data;
       this.graphType = graph;
       this.buildLayers();
@@ -49,20 +51,24 @@ export class Painter {
     this.graph.renderAll();
   }
 
-  updateStateFile({ graph, data }: { graph: GraphType, data: StateFile }) {
-    if (GraphType.FILE !== this.graphType || data.entrance !== stateFile.state.entrance || data.pkg !== stateFile.state.pkg) {
-      updateFileState(data);
+  updateStateFile({ graph, data }: { graph: GraphType, data: StateGraphFile }) {
+    const prevEntranceID = stateFile.state.entrance ? stateFile.state.entrance.id : "";
+    const nextEntranceID = data.entrance ? data.entrance.id : "";
+    if (GraphType.FILE !== this.graphType || prevEntranceID !== nextEntranceID || data.pkg !== stateFile.state.pkg) {
+      stateFile.state = data;
       this.graphType = graph;
       this.buildLayers();
       this.graph.renderAll();
       return;
     }
-    updateFileState(data);
+    stateFile.state = data;
     this.graph.renderAll();
   }
 
-  updateStateCall({ graph, data }: { graph: GraphType, data: StateCall }) {
-    if (GraphType.CALL !== this.graphType || data.entrance !== stateCall.state.entrance || data.pkg !== stateCall.state.pkg) {
+  updateStateCall({ graph, data }: { graph: GraphType, data: StateGraphCall }) {
+    const prevEntranceID = stateCall.state.entrance ? stateCall.state.entrance.id : "";
+    const nextEntranceID = data.entrance ? data.entrance.id : "";
+    if (GraphType.CALL !== this.graphType || prevEntranceID !== nextEntranceID || data.pkg !== stateCall.state.pkg) {
       updateCallState(data);
       this.graphType = graph;
       this.buildLayers();
@@ -118,9 +124,7 @@ export class Painter {
         break;
     }
 
-    for (let i = 0; i < layers.length; i++) {
-      this.graph.resetGraph(layers);
-    }
+    this.graph.resetGraph(layers);
     this.graph.dx = 0;
     this.graph.dy = 0;
   }

@@ -1,6 +1,5 @@
-import data from "../../../data";
-import { Callable, File } from "../../../resource/node";
-import { InitialStateCall, StateCall } from "../../../state";
+import { Callable } from "../../../resource/node";
+import { InitialStateGraphCall, StateGraphCall } from "../../../state";
 
 export interface StateCallLocal {
   hoverX: number;
@@ -10,35 +9,28 @@ export interface StateCallLocal {
 };
 
 export interface GraphStateCall {
-  state: StateCall;
+  state: StateGraphCall;
   local: StateCallLocal;
 };
 
 export const stateCall: GraphStateCall = {
-  state: InitialStateCall,
+  state: InitialStateGraphCall,
   local: {
     hoverX: 0,
     hoverY: 0,
-    ativeCallable: undefined,
     ativeFiles: new Set(),
   },
 };
 
-export const updateCallState = (state: StateCall) => {
+export const updateCallState = (state: StateGraphCall) => {
   stateCall.state = state;
   stateCall.local.ativeFiles.clear();
-  if (state.active === "") {
-    stateCall.local.ativeCallable = undefined;
-    return;
-  }
-  const callable = data.callables.get(state.active);
-  stateCall.local.ativeCallable = callable;
-  if (callable) {
-    for (const el of callable.callees) {
-      stateCall.local.ativeFiles.add(el.file.ref.id);
-    }
-    for (const el of callable.callers) {
-      stateCall.local.ativeFiles.add(el.file.ref.id);
-    }
+  if (state.active) {
+    // for (const el of state.active.callees) {
+    //   stateCall.local.ativeFiles.add(el.file.ref.id);
+    // }
+    // for (const el of state.active.callers) {
+    //   stateCall.local.ativeFiles.add(el.file.ref.id);
+    // }
   }
 };

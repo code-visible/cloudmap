@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Depict } from "@pattaya/depict";
-import { GraphType, StateCall, StateFile, StatePkg, StateShared, StateTheme } from '../state';
+import { GraphFileCall, GraphType, StateCall, StateFile, StateGraphCall, StateGraphFile, StateGraphPkg, StatePkg, StateShared, StateTheme, toGraphCallable, toGraphFile, toGraphPkg } from '../state';
 import { GraphMessageType } from "../message";
+import { SourceMap } from "../resource/resource";
 
 import styles from './graph.module.css';
-import data from "../data";
 
 export interface GraphProps {
+  data: SourceMap;
   file: StateFile;
   setFile: (s: StateFile) => void;
   call: StateCall;
@@ -29,7 +30,7 @@ worker.onerror = (err) => {
   if (err.message) console.log(err.message);
 };
 
-const Graph = ({ pkg, file, call, theme, graphType, setPkg, setCall, setFile, setShared, shared, setGraphType }: GraphProps) => {
+const Graph = ({ data, pkg, file, call, theme, graphType, setPkg, setCall, setFile, setShared, shared, setGraphType }: GraphProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const [graph, setGraph] = useState<Depict | undefined>(undefined);
 
@@ -72,10 +73,10 @@ const Graph = ({ pkg, file, call, theme, graphType, setPkg, setCall, setFile, se
         case GraphMessageType.UPDATE_CALL:
           setShared({ ...shared, mutePannel: payload.data.active !== "" });
           if (payload.data.entrance) {
-            const callableSet = data.getFileCallsByRoot(payload.data.entrance, 8);
+            const callableSet = data.getCallablesByRoot(payload.data.entrance, 8);
             setCall({ pkg: "", entrance: payload.data.entrance, active: payload.data.active, set: callableSet });
           } else if (payload.data.pkg) {
-            const callableSet = data.getFileCallsByPkg(payload.data.pkg, 8);
+            const callableSet = data.getCallablesByPkg(payload.data.pkg, 8);
             setCall({ pkg: payload.data.pkg, entrance: "", active: payload.data.active, set: callableSet });
           }
           setGraphType(GraphType.CALL);
@@ -87,15 +88,124 @@ const Graph = ({ pkg, file, call, theme, graphType, setPkg, setCall, setFile, se
   }, []);
 
   useEffect(() => {
-    worker.postMessage({ type: GraphMessageType.UPDATE_PKG, msg: { graph: graphType, data: pkg } });
+    const msgGraphPkg: StateGraphPkg = {
+      nodes: new Map(),
+      edges: [],
+    };
+    if (pkg.entrance) {
+      const entrance = data.pkgs.get(pkg.entrance);
+      if (entrance) {
+        msgGraphPkg.entrance = toGraphPkg(entrance);
+      }
+    }
+    if (pkg.active) {
+      const active = data.pkgs.get(pkg.active);
+      if (active) {
+        msgGraphPkg.active = toGraphPkg(active);
+      }
+    }
+    for (const pkgID of pkg.set) {
+      const p = data.pkgs.get(pkgID);
+      if (p) {
+        const graphPkg = toGraphPkg(p);
+        msgGraphPkg.nodes.set(graphPkg.id, graphPkg);
+        for (const target of p.imports) {
+          if (!pkg.set.has(target.ref.id) || p === target) continue;
+          msgGraphPkg.edges.push({ start: pkgID, end: target.ref.id });
+        }
+      }
+    }
+    worker.postMessage({ type: GraphMessageType.UPDATE_PKG, msg: { graph: graphType, data: msgGraphPkg } });
   }, [pkg]);
 
   useEffect(() => {
-    worker.postMessage({ type: GraphMessageType.UPDATE_FILE, msg: { graph: graphType, data: file } });
+    const msgGraphFile: StateGraphFile = {
+      pkg: file.pkg,
+      nodes: new Map(),
+      edges: [],
+    };
+    if (file.entrance) {
+      const entrance = data.files.get(file.entrance);
+      if (entrance) {
+        msgGraphFile.entrance = toGraphFile(entrance);
+      }
+    }
+    if (file.active) {
+      const active = data.files.get(file.active);
+      if (active) {
+        msgGraphFile.active = toGraphFile(active);
+      }
+    }
+    for (const fileID of file.set) {
+      const f = data.files.get(fileID);
+      if (f) {
+        const graphFile = toGraphFile(f);
+        msgGraphFile.nodes.set(graphFile.id, graphFile);
+        for (const target of f.imports) {
+          if (!file.set.has(target.ref.id) || f === target) continue;
+          msgGraphFile.edges.push({ start: fileID, end: target.ref.id });
+        }
+      }
+    }
+    worker.postMessage({ type: GraphMessageType.UPDATE_FILE, msg: { graph: graphType, data: msgGraphFile } });
   }, [file]);
 
   useEffect(() => {
-    worker.postMessage({ type: GraphMessageType.UPDATE_CALL, msg: { graph: graphType, data: call } });
+    const msgGraphCall: StateGraphCall = {
+      pkg: call.pkg,
+      nodes: new Map(),
+      edges: [],
+    };
+    if (call.entrance) {
+      const entrance = data.callables.get(call.entrance);
+      if (entrance) {
+        msgGraphCall.entrance = toGraphCallable(entrance);
+      }
+    }
+    if (call.active) {
+      const active = data.callables.get(call.active);
+      if (active) {
+        msgGraphCall.active = toGraphCallable(active);
+        msgGraphCall.activeHostFile = toGraphFile(active.file);
+      }
+    }
+    const edges = new Set<string>();
+    for (const callable of call.set) {
+      const file = callable.file;
+      if (!msgGraphCall.nodes.has(file.ref.id)) {
+        const newFileCall: GraphFileCall = {
+          file: toGraphFile(file),
+          callables: new Map(),
+        };
+        msgGraphCall.nodes.set(file.ref.id, newFileCall);
+      }
+      const fc = msgGraphCall.nodes.get(file.ref.id)!;
+      fc.callables.set(callable.ref.id, toGraphCallable(callable));
+
+      for (const caller of callable.callers) {
+        if (call.set.has(caller)) {
+          const callerID = caller.file.ref.id;
+          const calleeID = callable.file.ref.id;
+          const edgeID = `${callerID}-${calleeID}`
+          if (!edges.has(edgeID)) {
+            edges.add(edgeID);
+            msgGraphCall.edges.push({ start: callerID, end: calleeID });
+          }
+        }
+      }
+      for (const callee of callable.callees) {
+        if (call.set.has(callee)) {
+          const callerID = callable.file.ref.id;
+          const calleeID = callee.file.ref.id;
+          const edgeID = `${callerID}-${calleeID}`
+          if (!edges.has(edgeID)) {
+            edges.add(edgeID);
+            msgGraphCall.edges.push({ start: callerID, end: calleeID });
+          }
+        }
+      }
+    }
+    worker.postMessage({ type: GraphMessageType.UPDATE_CALL, msg: { graph: graphType, data: msgGraphCall } });
   }, [call]);
 
   useEffect(() => {

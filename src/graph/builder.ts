@@ -4,33 +4,28 @@ import { buildPkgCard } from "./ui/pkg/card";
 import { buildArrow } from "./ui/pkg/arrow";
 import { statePkg } from "./ui/pkg/state";
 import { buildInfoCard } from "./ui/pkg/info";
-import { Callable, File, Pkg } from "../resource/node";
 import { stateCall } from "./ui/call/state";
 import { buildCallCard } from "./ui/call/card";
 import { stateFile } from "./ui/file/state";
 import { buildFileNode } from "./ui/file/file";
 import { buildLineArrow } from "./ui/file/arrow";
 import { buildCallArrow } from "./ui/call/arrow";
-import data from "../data";
 import { buildFileTip } from "./ui/file/tip";
 import { buildCallTip } from "./ui/call/tip";
+import { GraphCallable } from "../state";
 
 export class GraphBuilder {
   constructor() { }
 
   buildPkgLayers(): ShadowElement[][] {
     const layer0: ShadowElement[] = [];
-    const pkgs = statePkg.state.set;
+    const pkgs = statePkg.state.nodes;
     if (pkgs.size === 0) return [[], []];
-    const pkgSet = new Set<Pkg>();
-    for (const el of pkgs) {
-      pkgSet.add(data.pkgs.get(el)!);
-    }
-    const layoutResult = GraphLayout.layoutPkgsDagre(pkgSet, 60, 60);
-    for (const pkg of pkgSet) {
-      const node = layoutResult.nodes.get(pkg.ref.id);
+    const layoutResult = GraphLayout.layoutPkgsDagre(pkgs, statePkg.state.edges, 60, 60);
+    for (const pkg of pkgs.values()) {
+      const node = layoutResult.nodes.get(pkg.id);
       if (node) {
-        layer0.push(buildPkgCard(node.x - 80, node.y - 60, pkg.ref.id, pkg.path, pkg.files.size, pkg.callables.size, pkg.abstracts.size));
+        layer0.push(buildPkgCard(node.x - 80, node.y - 60, pkg));
       }
     }
     for (const edge of layoutResult.edges) {
@@ -44,16 +39,12 @@ export class GraphBuilder {
 
   buildFileLayers(): ShadowElement[][] {
     const layer0: ShadowElement[] = [];
-    const files = stateFile.state.set;
+    const files = stateFile.state.nodes;
     if (files.size === 0) return [[], []];
-    const fileSet = new Set<File>();
-    for (const el of files) {
-      fileSet.add(data.files.get(el)!);
-    }
-    const layoutResult = GraphLayout.layoutFilesDagre(fileSet, 60, 60);
+    const layoutResult = GraphLayout.layoutFilesDagre(files, stateFile.state.edges, 60, 60);
 
-    for (const file of fileSet) {
-      const node = layoutResult.nodes.get(file.ref.id);
+    for (const file of files.values()) {
+      const node = layoutResult.nodes.get(file.id);
       if (node) {
         layer0.push(buildFileNode(node.x - 0, node.y - 0, 20, file, false));
       }
@@ -72,23 +63,21 @@ export class GraphBuilder {
 
   buildCallLayers(): ShadowElement[][] {
     const layer0: ShadowElement[] = [];
-    const fileCalls = stateCall.state.set;
-    let entrancePkg = ""
-    if (stateCall.state.entrance) {
-      entrancePkg = data.callables.get(stateCall.state.entrance)!.file.pkg.ref.id;
-    }
+    const fileCalls = stateCall.state.nodes;
     if (fileCalls.size === 0) return [[], []];
-    const layoutResult = GraphLayout.layoutFileCallsDagre(fileCalls, 60, 60);
-    for (const fc of fileCalls) {
-      const node = layoutResult.nodes.get(fc.file);
+    const layoutResult = GraphLayout.layoutFileCallsDagre(fileCalls, stateCall.state.edges, 60, 60);
+    for (const fc of fileCalls.values()) {
+      const node = layoutResult.nodes.get(fc.file.id);
       if (node) {
-        const file = data.files.get(fc.file)!;
-        const callables: Callable[] = [];
-        for (const el of fc.callables) {
-          callables.push(data.callables.get(el)!);
+        const callables: GraphCallable[] = [];
+        for (const el of fc.callables.values()) {
+          callables.push(el);
         }
-        const enter = entrancePkg === file.pkg.ref.id;
-        layer0.push(buildCallCard(node.x - node.w / 2, node.y - node.h / 2, node.w, node.h, file, callables, enter));
+        let enter = false;
+        if (stateCall.state.entrance && (stateCall.state.entrance.pkg === fc.file.pkg)) {
+          enter = true;
+        }
+        layer0.push(buildCallCard(node.x - node.w / 2, node.y - node.h / 2, node.w, node.h, fc.file, callables, enter));
       }
     }
     for (const edge of layoutResult.edges) {

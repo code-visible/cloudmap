@@ -2,7 +2,6 @@ import type { ShadowElement } from "@pattaya/depict/graph";
 import { Rectangle, Triangle } from "@pattaya/pather";
 import { statePkg } from "./state";
 import { stateTheme } from "../theme/state";
-import data from "../../../data";
 
 export const buildInfoCard = (): ShadowElement => {
   const width = 320;
@@ -86,22 +85,15 @@ export const buildInfoCard = (): ShadowElement => {
         ]
       }
     ],
-    data: 0,
     hidden: true,
     update(_delta) {
-      if (statePkg.state.active === "") {
-        // this.x = -500;
-        this.data++;
-        this.hidden = true;
-      } else {
-        this.data++;
+      if (statePkg.state.active) {
         this.hidden = false;
-      }
-      const pkg = data.pkgs.get(statePkg.state.active);
-      if (pkg) {
-        this.texts![0].content = pkg.path;
+        this.texts![0].content = statePkg.state.active.path;
         this.x = statePkg.local.hoverX - 72;
         this.y = statePkg.local.hoverY - 72;
+      } else {
+        this.hidden = true;
       }
     },
   };

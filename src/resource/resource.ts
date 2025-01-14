@@ -46,7 +46,29 @@ export class SourceMap {
     this.language = javascript;
   }
 
+  reset() {
+    this.name = "";
+    this.directory = "";
+    this.dirs = new Map();
+    this.pkgs = new Map();
+    this.files = new Map();
+    this.callables = new Map();
+    this.abstracts = new Map();
+    this.calls = new Map();
+    this.deps = new Map();
+    this.root = {
+      name: "",
+      path: "",
+      children: new Set<Dir>(),
+      files: new Set<File>(),
+      pkgPtr: undefined,
+      parent: undefined,
+    };
+    this.language = javascript;
+  }
+
   parseSource(data: Source) {
+    this.reset();
     this.name = data.name;
     this.directory = data.directory;
     this.language = getLanguageOptions(data.language);
@@ -332,6 +354,17 @@ export class SourceMap {
     return pkgs;
   }
 
+  getCallablesByRoot(root: string, limit: number): Set<Callable> {
+    const rootCallable = this.callables.get(root);
+    if (!rootCallable) return new Set();
+    const children = this.getCallablesByRootForward(rootCallable, limit * 8);
+    const parents = this.getCallablesByRootBackward(rootCallable, limit * 8);
+    for (const el of children) {
+      parents.add(el);
+    }
+    return parents;
+  }
+
   getFileCallsByRoot(root: string, limit: number): Set<FileCall> {
     const rootCallable = this.callables.get(root);
     if (!rootCallable) return new Set();
@@ -411,6 +444,23 @@ export class SourceMap {
       if (set.has(o)) return true;
     }
     return false;
+  }
+
+  getCallablesByPkg(pkg: string, limit: number): Set<Callable> {
+    const result = new Set<Callable>();
+    const p = this.pkgs.get(pkg);
+    if (!p) return result;
+
+    // TODO
+    // build all callables call graph in a single package.
+    // select the most connected files to export
+    for (const el of p.callables) {
+      if (this.isCallableConnectedInSet(el, p.callables)) {
+        result.add(el);
+      }
+    }
+
+    return result;
   }
 
   getFileCallsByPkg(pkg: string, limit: number): Set<FileCall> {

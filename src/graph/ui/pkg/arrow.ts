@@ -20,7 +20,7 @@ export const buildArrow = (startID: string, endID: string, points: number[][]): 
     update(_delta) {
       const edgeOpts = this.shapes![0].opts!;
       const triangleOpts = this.children![0].shapes![0].opts!;
-      if (this.data.s === statePkg.state.active || this.data.e === statePkg.state.active) {
+      if (this.data.s === statePkg.state.active?.id || this.data.e === statePkg.state.active?.id) {
         edgeOpts.stroke = stateTheme.palette.highlight;
         triangleOpts.stroke = stateTheme.palette.highlight;
         triangleOpts.fill = stateTheme.palette.highlight;

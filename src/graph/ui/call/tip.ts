@@ -2,7 +2,6 @@ import type { ShadowElement } from "@pattaya/depict/graph";
 import { Rectangle } from "@pattaya/pather";
 import { stateCall } from "./state";
 import { stateTheme } from "../theme/state";
-import data from "../../../data";
 
 export const buildCallTip = (): ShadowElement => {
   const width = 520;
@@ -40,20 +39,20 @@ export const buildCallTip = (): ShadowElement => {
     data: 0,
     hidden: true,
     update(_delta) {
-      if (stateCall.state.active === "") {
+      if (stateCall.state.active) {
+        this.data++;
+        this.hidden = false;
+      } else {
         // this.x = -500;
         this.data++;
         this.hidden = true;
-      } else {
-        this.data++;
-        this.hidden = false;
       }
-      const callable = data.callables.get(stateCall.state.active);
+      const callable = stateCall.state.active;
       if (callable) {
         // TODO: improve style
-        this.texts![0].content = callable.ref.signature;
-        this.x = stateCall.local.hoverX - 180;
-        this.y = stateCall.local.hoverY - 56;
+        this.texts![0].content = callable.signature;
+        this.x = stateCall.local.hoverX - 196;
+        this.y = stateCall.local.hoverY - 60;
       }
     },
   };

@@ -2,7 +2,6 @@ import type { ShadowElement } from "@pattaya/depict/graph";
 import { Rectangle, Triangle } from "@pattaya/pather";
 import { stateFile } from "./state";
 import { stateTheme } from "../theme/state";
-import data from "../../../data";
 
 export const buildFileTip = (): ShadowElement => {
   const width = 320;
@@ -72,7 +71,7 @@ export const buildFileTip = (): ShadowElement => {
       {
         x: 50,
         y: 75, // +20
-        content: "22",
+        content: "-",
         opts: {
           width: 32,
           ellipsis: true,
@@ -80,7 +79,6 @@ export const buildFileTip = (): ShadowElement => {
           fill: stateTheme.palette.muted2,
         },
       },
-
       {
         x: 100,
         y: 75, // +20
@@ -95,7 +93,7 @@ export const buildFileTip = (): ShadowElement => {
       {
         x: 130,
         y: 75, // +20
-        content: "5",
+        content: "-",
         opts: {
           width: 256,
           ellipsis: true,
@@ -153,23 +151,19 @@ export const buildFileTip = (): ShadowElement => {
         ]
       }
     ],
-    data: 0,
     hidden: true,
     update(_delta) {
-      if (stateFile.state.active === "") {
-        // this.x = -500;
-        this.data++;
-        this.hidden = true;
-      } else {
-        this.data++;
-        this.hidden = false;
-      }
-      const file = data.files.get(stateFile.state.active);
+      const file = stateFile.state.active;
       if (file) {
-        this.texts![0].content = file.ref.name;
-        this.texts![2].content = file.ref.path;
+        this.hidden = false;
+        this.texts![0].content = file.name;
+        this.texts![2].content = file.path;
+        this.texts![4].content = `${file.callables}`;
+        this.texts![6].content = `${file.abstracts}`;
         this.x = stateFile.local.hoverX - 160;
         this.y = stateFile.local.hoverY - 136;
+      } else {
+        this.hidden = true;
       }
     },
   };

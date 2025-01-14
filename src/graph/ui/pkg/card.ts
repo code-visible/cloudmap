@@ -4,9 +4,9 @@ import { buildCardField } from "./cardfield";
 import { statePkg } from "./state";
 import { stateTheme } from "../theme/state";
 import { GraphMessageType } from "../../../message";
-import { GraphType } from "../../../state";
+import { GraphPkg, GraphType } from "../../../state";
 
-export const buildPkgCard = (x: number, y: number, id: string, name: string, files: number, functions: number, abstract: number): ShadowElement => {
+export const buildPkgCard = (x: number, y: number, pkg: GraphPkg): ShadowElement => {
   const width = 160;
   const height = 120;
   return {
@@ -27,7 +27,7 @@ export const buildPkgCard = (x: number, y: number, id: string, name: string, fil
       {
         x: 20,
         y: 31,
-        content: name,
+        content: pkg.name,
         opts: {
           width: 106,
           ellipsis: true,
@@ -37,21 +37,21 @@ export const buildPkgCard = (x: number, y: number, id: string, name: string, fil
       },
     ],
     children: [
-      buildCardField(20, 58, "files", `${files}`, id, GraphType.FILE),
-      buildCardField(20, 78, "functions", `${functions}`, id, GraphType.CALL),
-      buildCardField(20, 98, "abstracts", `${abstract}`, id, GraphType.REF),
+      buildCardField(20, 58, "files", `${pkg.files}`, pkg.id, GraphType.FILE),
+      buildCardField(20, 78, "functions", `${pkg.callables}`, pkg.id, GraphType.CALL),
+      buildCardField(20, 98, "abstracts", `${pkg.abstracts}`, pkg.id, GraphType.REF),
     ],
-    data: { id, active: false },
+    data: { id: pkg.id, active: false },
     update(_delta) {
       const opts = this.shapes![0].opts!;
       opts.shadowBlur = this.data.id === statePkg.state.active ? 15 : 0;
-      if (this.data.id === statePkg.state.entrance) {
-        opts.stroke = stateTheme.palette.focus;
-        opts.fill = "#fafbfc";
+      if (this.data.id === statePkg.state.active?.id) {
+        opts.stroke = stateTheme.palette.highlight;
         return;
       }
-      if (this.data.id === statePkg.state.active) {
-        opts.stroke = stateTheme.palette.highlight;
+      if (this.data.id === statePkg.state.entrance?.id) {
+        opts.stroke = stateTheme.palette.focus;
+        opts.fill = "#fafbfc";
         return;
       }
       if (!this.data.active) {
@@ -63,17 +63,25 @@ export const buildPkgCard = (x: number, y: number, id: string, name: string, fil
       this.data.active = true;
       statePkg.local.hoverX = x + this.x;
       statePkg.local.hoverY = y + this.y;
-      postMessage({ type: GraphMessageType.UPDATE_PKG, msg: { graph: GraphType.PKG, data: { entrance: statePkg.state.entrance, active: this.data.id, set: [] } } });
+      const data = {
+        entrance: statePkg.state.entrance ? statePkg.state.entrance.id : "",
+        active: this.data.id,
+      };
+      postMessage({ type: GraphMessageType.UPDATE_PKG, msg: { graph: GraphType.PKG, data } });
       return true;
     },
     onMouseleave(_render, _x, _y, _mx, _my) {
       this.data.active = false;
-      postMessage({ type: GraphMessageType.UPDATE_PKG, msg: { graph: GraphType.PKG, data: { entrance: statePkg.state.entrance, active: "", set: [] } } });
+      const data = {
+        entrance: statePkg.state.entrance ? statePkg.state.entrance.id : "",
+        active: "",
+      };
+      postMessage({ type: GraphMessageType.UPDATE_PKG, msg: { graph: GraphType.PKG, data } });
       return true;
     },
     onClick(_render, _x, _y, _mouseX, _mouseY) {
       this.data.active = false;
-      postMessage({ type: GraphMessageType.UPDATE_PKG, msg: { graph: GraphType.PKG, data: { entrance: this.data.id, active: "", set: [] } } });
+      postMessage({ type: GraphMessageType.UPDATE_PKG, msg: { graph: GraphType.PKG, data: { entrance: this.data.id, active: "" } } });
       return true;
     },
   };
