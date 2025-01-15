@@ -222,6 +222,7 @@ const Graph = ({ data, pkg, file, call, theme, graphType, setPkg, setCall, setFi
           width: "100%",
           height: "100%",
           overflow: "hidden",
+          ...theme.graph.background
         }}
         ref={rootRef}
       ></div>

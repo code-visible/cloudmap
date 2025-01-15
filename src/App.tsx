@@ -23,6 +23,8 @@ import mayk from './themes/mayk';
 import chaya from './themes/chaya';
 
 import './App.css'
+import khin from './themes/khin';
+import mint from './themes/mint';
 
 function App() {
   const [data, setData] = useState<SourceMap>(new SourceMap());
@@ -51,8 +53,10 @@ function App() {
         </div>
         <div className='theme'>
           <div>theme: </div>
-          <button onClick={() => setTheme({ palette: mayk })}>mayk</button>
-          <button onClick={() => setTheme({ palette: chaya })}>chaya</button>
+          <button onClick={() => setTheme({ graph: mayk.graph, palette: mayk.palette })}>mayk</button>
+          <button onClick={() => setTheme({ graph: khin.graph, palette: khin.palette })}>khin</button>
+          <button onClick={() => setTheme({ graph: chaya.graph, palette: chaya.palette })}>chaya</button>
+          <button onClick={() => setTheme({ graph: mint.graph, palette: mint.palette })}>mint</button>
         </div>
       </div>
       <div className='content'>

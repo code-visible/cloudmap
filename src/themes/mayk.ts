@@ -1,6 +1,7 @@
-import { Palette } from "./theme";
+import { CSSProperties } from "react";
+import { GraphArrow, GraphPannel, GraphStyle, Palette } from "./theme";
 
-const mayk: Palette = {
+const palette: Palette = {
   highlight: "#339",
   focus: "#117",
   muted1: "#666",
@@ -13,4 +14,52 @@ const mayk: Palette = {
   hover: "#000",
 };
 
-export default mayk;
+const background: CSSProperties = {
+  // backgroundColor: "#fff",
+  backgroundImage: "linear-gradient(#fff2f9 1px, transparent 1px), linear-gradient(to right, #fff2f9 1px, transparent 1px)",
+  backgroundSize: "22px 22px",
+  backgroundColor: "#ffffff",
+};
+
+const pannel: GraphPannel = {
+  muted: {
+    backgroundColor: "#fff",
+    strokeWidth: 2,
+    strokeColor: "#fff",
+    shadowColor: "#fff",
+  },
+  focus: {
+    backgroundColor: "#fff",
+    strokeWidth: 2,
+    strokeColor: "#fff",
+    shadowColor: "#fff",
+  },
+  active: {
+    backgroundColor: "#fff",
+    strokeWidth: 2,
+    strokeColor: "#fff",
+    shadowColor: "#fff",
+  },
+};
+
+const arrow: GraphArrow = {
+  muted: {
+    color: "#fff",
+    width: 1,
+  },
+  active: {
+    color: "#fff",
+    width: 1,
+  },
+};
+
+const graph: GraphStyle = {
+  background,
+  pannel,
+  arrow,
+}
+
+export default {
+  palette,
+  graph,
+};
