@@ -18,6 +18,7 @@ export interface PannelStyle {
   strokeWidth: number;
   strokeColor: string;
   shadowColor: string;
+  shadowBlur: number;
 }
 
 export interface ArrowStyle {
@@ -36,6 +37,7 @@ export interface TipStyle {
 
 export interface GraphPannel {
   muted: PannelStyle;
+  normal: PannelStyle;
   focus: PannelStyle;
   active: PannelStyle;
 };

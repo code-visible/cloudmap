@@ -16,8 +16,8 @@ export const buildCallCard = (x: number, y: number, w: number, h: number, file: 
           stroke: highlight ? stateTheme.palette.focus : stateTheme.palette.card,
           fill: highlight ? "#fafbfc" : "#fff",
           border: true,
-          shadowColor: stateTheme.palette.cardShadow,
-          shadowBlur: 0,
+          shadowColor: stateTheme.graph.pannel.normal.shadowColor,
+          shadowBlur: stateTheme.graph.pannel.normal.shadowBlur,
         }
       },
     ],

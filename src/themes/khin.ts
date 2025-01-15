@@ -24,20 +24,30 @@ const pannel: GraphPannel = {
   muted: {
     backgroundColor: "#fff",
     strokeWidth: 1,
-    strokeColor: palette.muted3,
+    strokeColor: "#ccc",
     shadowColor: "rgba(150, 150, 150, .2)",
+    shadowBlur: 5,
+  },
+  normal: {
+    backgroundColor: "#fff",
+    strokeWidth: 1,
+    strokeColor: "#999",
+    shadowColor: "rgba(150, 150, 150, .2)",
+    shadowBlur: 12,
   },
   focus: {
     backgroundColor: "#fff",
-    strokeWidth: 3,
+    strokeWidth: 2,
     strokeColor: "#f0f",
-    shadowColor: "rgba(150, 150, 150, .2)",
+    shadowColor: "rgba(255, 0, 255, .2)",
+    shadowBlur: 24,
   },
   active: {
     backgroundColor: "#fff",
     strokeWidth: 2,
-    strokeColor: "#ff0",
-    shadowColor: "rgba(150, 150, 150, .2)",
+    strokeColor: "#f00",
+    shadowColor: "rgba(255, 0, 0, .2)",
+    shadowBlur: 24,
   },
 };
 

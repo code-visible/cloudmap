@@ -26,18 +26,28 @@ const pannel: GraphPannel = {
     strokeWidth: 1,
     strokeColor: palette.card,
     shadowColor: "rgba(150, 150, 150, .2)",
+    shadowBlur: 0,
+  },
+  normal: {
+    backgroundColor: "#fff",
+    strokeWidth: 1,
+    strokeColor: palette.card,
+    shadowColor: "rgba(150, 150, 150, .2)",
+    shadowBlur: 0,
   },
   focus: {
     backgroundColor: "#fafbfc",
     strokeWidth: 1,
     strokeColor: palette.focus,
     shadowColor: "rgba(150, 150, 150, .2)",
+    shadowBlur: 0,
   },
   active: {
     backgroundColor: "#fafbfc",
     strokeWidth: 1,
     strokeColor: palette.focus,
     shadowColor: "rgba(150, 150, 150, .2)",
+    shadowBlur: 0,
   },
 };
 

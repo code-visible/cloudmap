@@ -1,10 +1,19 @@
-import type { ShadowElement } from "@pattaya/depict/graph";
+import type { MeshOptions, ShadowElement } from "@pattaya/depict/graph";
 import { Rectangle } from "@pattaya/pather";
 import { buildCardField } from "./cardfield";
 import { statePkg } from "./state";
 import { stateTheme } from "../theme/state";
 import { GraphMessageType } from "../../../message";
 import { GraphPkg, GraphType } from "../../../state";
+import { PannelStyle } from "../../../themes/theme";
+
+const setOpts = (style: PannelStyle, opts: MeshOptions) => {
+  opts.stroke = style.strokeColor;
+  opts.lineWidth = style.strokeWidth;
+  opts.fill = style.backgroundColor;
+  opts.shadowColor = style.shadowColor;
+  opts.shadowBlur = style.shadowBlur;
+};
 
 export const buildPkgCard = (x: number, y: number, pkg: GraphPkg): ShadowElement => {
   const width = 160;
@@ -17,11 +26,11 @@ export const buildPkgCard = (x: number, y: number, pkg: GraphPkg): ShadowElement
       opts: {
         background: true,
         border: true,
-        fill: stateTheme.graph.pannel.muted.backgroundColor,
-        stroke: stateTheme.graph.pannel.muted.strokeColor,
-        lineWidth: stateTheme.graph.pannel.muted.strokeWidth,
-        shadowColor: stateTheme.graph.pannel.muted.shadowColor,
-        shadowBlur: 0,
+        fill: stateTheme.graph.pannel.normal.backgroundColor,
+        stroke: stateTheme.graph.pannel.normal.strokeColor,
+        lineWidth: stateTheme.graph.pannel.normal.strokeWidth,
+        shadowColor: stateTheme.graph.pannel.normal.shadowColor,
+        shadowBlur: stateTheme.graph.pannel.normal.shadowBlur,
       }
     }],
     texts: [
@@ -46,35 +55,20 @@ export const buildPkgCard = (x: number, y: number, pkg: GraphPkg): ShadowElement
     update(_delta) {
       const theme = stateTheme.graph.pannel;
       const opts = this.shapes![0].opts!;
-      opts.shadowBlur = this.data.id === statePkg.state.active ? 15 : 0;
-      if (this.data.id === statePkg.state.active?.id) {
-        opts.stroke = theme.focus.strokeColor;
-        opts.lineWidth = theme.focus.strokeWidth;
-        opts.fill = theme.focus.backgroundColor;
-        opts.shadowColor = theme.focus.shadowColor;
+      const active = statePkg.state.active;
+      if (active) {
+        if (this.data.id === active.id) {
+          setOpts(theme.focus, opts);
+          return;
+        }
+        if (active.exports.has(this.data.id) || active.imports.has(this.data.id)) {
+          setOpts(theme.active, opts);
+          return;
+        }
+        setOpts(theme.muted, opts);
         return;
       }
-      // const active = statePkg.state.active;
-      // if (active && (active.exports.has(pkg.id) || active.imports.has(pkg.id))) {
-      //   opts.stroke = theme.active.strokeColor;
-      //   opts.lineWidth = theme.active.strokeWidth;
-      //   opts.fill = theme.active.backgroundColor;
-      //   opts.shadowColor = theme.active.shadowColor;
-      //   return;
-      // }
-      // if (this.data.id === statePkg.state.entrance?.id) {
-      //   opts.stroke = theme.focus.strokeColor;
-      //   opts.lineWidth = theme.focus.strokeWidth;
-      //   opts.fill = theme.focus.backgroundColor;
-      //   opts.shadowColor = theme.focus.shadowColor;
-      //   return;
-      // }
-      if (!this.data.active) {
-        opts.stroke = theme.muted.strokeColor;
-        opts.lineWidth = theme.muted.strokeWidth;
-        opts.fill = theme.muted.backgroundColor;
-        opts.shadowColor = theme.muted.shadowColor;
-      }
+      setOpts(theme.normal, opts);
     },
     contain: (x, y) => x > 0 && x < width && y > 0 && y < height,
     onMouseenter(_render, x, y, _mx, _my) {

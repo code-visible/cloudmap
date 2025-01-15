@@ -1,6 +1,7 @@
 import { Callable, File, Pkg } from "../resource/node";
 import { GraphStyle, Palette } from "../themes/theme";
 import khin from "../themes/khin";
+import { getNameFromPath } from "../utils/path";
 
 export const enum GraphType {
   PKG = 1,
@@ -19,6 +20,8 @@ export interface GraphPkg {
   name: string;
   path: string;
   files: number;
+  imports: Set<string>;
+  exports: Set<string>;
   callables: number;
   abstracts: number;
 }
@@ -26,17 +29,19 @@ export interface GraphPkg {
 export const toGraphPkg = (pkg: Pkg): GraphPkg => {
   const result = {
     id: pkg.ref.id,
-    name: "",
+    name: getNameFromPath(pkg.ref.name),
     path: pkg.path,
     files: pkg.files.size,
     callables: pkg.callables.size,
     abstracts: pkg.abstracts.size,
+    imports: new Set<string>(),
+    exports: new Set<string>(),
   };
-  const names = pkg.ref.name.split("/");
-  if (names.length > 0) {
-    result.name = names[names.length - 1];
-  } else {
-    result.name = pkg.ref.name;
+  for (const el of pkg.imports) {
+    result.imports.add(el.ref.id);
+  }
+  for (const el of pkg.exports) {
+    result.exports.add(el.ref.id);
   }
   return result;
 }
