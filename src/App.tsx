@@ -21,10 +21,10 @@ import {
 } from './state';
 import mayk from './themes/mayk';
 import chaya from './themes/chaya';
-
-import './App.css'
 import khin from './themes/khin';
 import mint from './themes/mint';
+
+import './App.css'
 
 function App() {
   const [data, setData] = useState<SourceMap>(new SourceMap());
