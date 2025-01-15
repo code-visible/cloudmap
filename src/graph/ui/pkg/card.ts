@@ -16,10 +16,11 @@ export const buildPkgCard = (x: number, y: number, pkg: GraphPkg): ShadowElement
       path: Rectangle.RoundAligned(0, 0, width, height, 9),
       opts: {
         background: true,
-        stroke: stateTheme.palette.card,
-        fill: "#fff",
         border: true,
-        shadowColor: stateTheme.palette.cardShadow,
+        fill: stateTheme.graph.pannel.muted.backgroundColor,
+        stroke: stateTheme.graph.pannel.muted.strokeColor,
+        lineWidth: stateTheme.graph.pannel.muted.strokeWidth,
+        shadowColor: stateTheme.graph.pannel.muted.shadowColor,
         shadowBlur: 0,
       }
     }],
@@ -43,19 +44,36 @@ export const buildPkgCard = (x: number, y: number, pkg: GraphPkg): ShadowElement
     ],
     data: { id: pkg.id, active: false },
     update(_delta) {
+      const theme = stateTheme.graph.pannel;
       const opts = this.shapes![0].opts!;
       opts.shadowBlur = this.data.id === statePkg.state.active ? 15 : 0;
       if (this.data.id === statePkg.state.active?.id) {
-        opts.stroke = stateTheme.palette.highlight;
+        opts.stroke = theme.focus.strokeColor;
+        opts.lineWidth = theme.focus.strokeWidth;
+        opts.fill = theme.focus.backgroundColor;
+        opts.shadowColor = theme.focus.shadowColor;
         return;
       }
-      if (this.data.id === statePkg.state.entrance?.id) {
-        opts.stroke = stateTheme.palette.focus;
-        opts.fill = "#fafbfc";
-        return;
-      }
+      // const active = statePkg.state.active;
+      // if (active && (active.exports.has(pkg.id) || active.imports.has(pkg.id))) {
+      //   opts.stroke = theme.active.strokeColor;
+      //   opts.lineWidth = theme.active.strokeWidth;
+      //   opts.fill = theme.active.backgroundColor;
+      //   opts.shadowColor = theme.active.shadowColor;
+      //   return;
+      // }
+      // if (this.data.id === statePkg.state.entrance?.id) {
+      //   opts.stroke = theme.focus.strokeColor;
+      //   opts.lineWidth = theme.focus.strokeWidth;
+      //   opts.fill = theme.focus.backgroundColor;
+      //   opts.shadowColor = theme.focus.shadowColor;
+      //   return;
+      // }
       if (!this.data.active) {
-        opts.stroke = stateTheme.palette.card;
+        opts.stroke = theme.muted.strokeColor;
+        opts.lineWidth = theme.muted.strokeWidth;
+        opts.fill = theme.muted.backgroundColor;
+        opts.shadowColor = theme.muted.shadowColor;
       }
     },
     contain: (x, y) => x > 0 && x < width && y > 0 && y < height,

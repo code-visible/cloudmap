@@ -23,6 +23,15 @@ export interface PannelStyle {
 export interface ArrowStyle {
   color: string;
   width: number;
+  endpointStrokeColor: string,
+  endpointBackgroundColor: string,
+}
+
+export interface TipStyle {
+  backgroundColor: string;
+  strokeWidth: number;
+  strokeColor: string;
+  shadowColor: string;
 }
 
 export interface GraphPannel {
@@ -40,4 +49,5 @@ export interface GraphStyle {
   background: CSSProperties;
   pannel: GraphPannel;
   arrow: GraphArrow;
+  // tip: TipStyle;
 };

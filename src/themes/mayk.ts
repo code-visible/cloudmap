@@ -15,7 +15,6 @@ const palette: Palette = {
 };
 
 const background: CSSProperties = {
-  // backgroundColor: "#fff",
   backgroundImage: "linear-gradient(#fff2f9 1px, transparent 1px), linear-gradient(to right, #fff2f9 1px, transparent 1px)",
   backgroundSize: "22px 22px",
   backgroundColor: "#ffffff",
@@ -24,32 +23,36 @@ const background: CSSProperties = {
 const pannel: GraphPannel = {
   muted: {
     backgroundColor: "#fff",
-    strokeWidth: 2,
-    strokeColor: "#fff",
-    shadowColor: "#fff",
+    strokeWidth: 1,
+    strokeColor: palette.card,
+    shadowColor: "rgba(150, 150, 150, .2)",
   },
   focus: {
-    backgroundColor: "#fff",
-    strokeWidth: 2,
-    strokeColor: "#fff",
-    shadowColor: "#fff",
+    backgroundColor: "#fafbfc",
+    strokeWidth: 1,
+    strokeColor: palette.focus,
+    shadowColor: "rgba(150, 150, 150, .2)",
   },
   active: {
-    backgroundColor: "#fff",
-    strokeWidth: 2,
-    strokeColor: "#fff",
-    shadowColor: "#fff",
+    backgroundColor: "#fafbfc",
+    strokeWidth: 1,
+    strokeColor: palette.focus,
+    shadowColor: "rgba(150, 150, 150, .2)",
   },
 };
 
 const arrow: GraphArrow = {
   muted: {
-    color: "#fff",
+    color: "#ccc",
     width: 1,
+    endpointStrokeColor: "#aaa",
+    endpointBackgroundColor: "#fff",
   },
   active: {
-    color: "#fff",
+    color: palette.focus,
     width: 1,
+    endpointStrokeColor: palette.focus,
+    endpointBackgroundColor: "#fff",
   },
 };
 
