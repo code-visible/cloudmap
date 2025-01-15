@@ -32,6 +32,7 @@ export class Painter {
 
   updateStateTheme(theme: StateTheme) {
     stateTheme.palette = theme.palette;
+    stateTheme.graph = theme.graph;
     this.graph.renderAll();
   }
 
