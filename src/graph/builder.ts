@@ -18,27 +18,27 @@ export class GraphBuilder {
   constructor() { }
 
   buildPkgLayers(): ShadowElement[][] {
-    const layer0: ShadowElement[] = [];
+    const layer1: ShadowElement[] = [];
     const pkgs = statePkg.state.nodes;
     if (pkgs.size === 0) return [[], []];
     const layoutResult = GraphLayout.layoutPkgsDagre(pkgs, statePkg.state.edges, 60, 60);
     for (const pkg of pkgs.values()) {
       const node = layoutResult.nodes.get(pkg.id);
       if (node) {
-        layer0.push(buildPkgCard(node.x - 80, node.y - 60, pkg));
+        layer1.push(buildPkgCard(node.x - 80, node.y - 60, pkg));
       }
     }
     for (const edge of layoutResult.edges) {
-      layer0.push(buildArrow(edge.startID, edge.endID, edge.points));
+      layer1.push(buildArrow(edge.startID, edge.endID, edge.points));
     }
 
-    const layer1: ShadowElement[] = [buildInfoCard()];
+    layer1.push(buildInfoCard());
 
-    return [layer0, layer1];
+    return [layer1];
   }
 
   buildFileLayers(): ShadowElement[][] {
-    const layer0: ShadowElement[] = [];
+    const layer1: ShadowElement[] = [];
     const files = stateFile.state.nodes;
     if (files.size === 0) return [[], []];
     const layoutResult = GraphLayout.layoutFilesDagre(files, stateFile.state.edges, 60, 60);
@@ -46,23 +46,23 @@ export class GraphBuilder {
     for (const file of files.values()) {
       const node = layoutResult.nodes.get(file.id);
       if (node) {
-        layer0.push(buildFileNode(node.x - 0, node.y - 0, 20, file, false));
+        layer1.push(buildFileNode(node.x - 0, node.y - 0, 20, file, false));
       }
     }
 
     for (const edge of layoutResult.edges) {
       const start = layoutResult.nodes.get(edge.startID)!;
       const end = layoutResult.nodes.get(edge.endID)!;
-      layer0.push(buildLineArrow(edge.startID, edge.endID, start.x, start.y, end.x, end.y));
+      layer1.push(buildLineArrow(edge.startID, edge.endID, start.x, start.y, end.x, end.y));
     }
 
-    const layer1: ShadowElement[] = [buildFileTip()];
+    layer1.push(buildFileTip());
 
-    return [layer0, layer1];
+    return [layer1];
   }
 
   buildCallLayers(): ShadowElement[][] {
-    const layer0: ShadowElement[] = [];
+    const layer1: ShadowElement[] = [];
     const fileCalls = stateCall.state.nodes;
     if (fileCalls.size === 0) return [[], []];
     const layoutResult = GraphLayout.layoutFileCallsDagre(fileCalls, stateCall.state.edges, 60, 60);
@@ -77,15 +77,15 @@ export class GraphBuilder {
         if (stateCall.state.entrance && (stateCall.state.entrance.pkg === fc.file.pkg)) {
           enter = true;
         }
-        layer0.push(buildCallCard(node.x - node.w / 2, node.y - node.h / 2, node.w, node.h, fc.file, callables, enter));
+        layer1.push(buildCallCard(node.x - node.w / 2, node.y - node.h / 2, node.w, node.h, fc.file, callables, enter));
       }
     }
     for (const edge of layoutResult.edges) {
-      layer0.push(buildCallArrow(edge.startID, edge.endID, edge.points));
+      layer1.push(buildCallArrow(edge.startID, edge.endID, edge.points));
     }
 
-    const layer1: ShadowElement[] = [buildCallTip()];
+    layer1.push(buildCallTip());
 
-    return [layer0, layer1];
+    return [layer1];
   }
 };
