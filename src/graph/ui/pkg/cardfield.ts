@@ -14,7 +14,7 @@ export const buildCardField = (x: number, y: number, key: string, val: string, i
         opts: {
           width: 128,
           font: "14px/2 san-serf",
-          fill: stateTheme.palette.muted1,
+          fill: stateTheme.graph.text.body.normal.color,
         }
       },
       {
@@ -23,20 +23,20 @@ export const buildCardField = (x: number, y: number, key: string, val: string, i
         opts: {
           width: 128,
           font: "14px/2 san-serf",
-          fill: stateTheme.palette.muted1,
+          fill: stateTheme.graph.text.body.normal.color,
         }
       },
     ],
     contain(x, y) {
-      return x > 0 && x < 192 && y > -10 && y < 0;
+      return x > 0 && x < 192 && y > -15 && y < 2;
     },
     onMouseenter(render) {
-      this.texts![0].opts!.fill = stateTheme.palette.focus;
+      this.texts![0].opts!.fill = stateTheme.graph.text.body.focus.color;
       render();
       return true;
     },
     onMouseleave(render) {
-      this.texts![0].opts!.fill = stateTheme.palette.muted1;
+      this.texts![0].opts!.fill = stateTheme.graph.text.body.normal.color;
       render();
       return true;
     },

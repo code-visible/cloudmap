@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { GraphArrow, GraphPannel, GraphStyle, Palette } from "./theme";
+import { GraphArrow, GraphPannel, GraphStyle, GraphText, Palette } from "./theme";
 
 const palette: Palette = {
   highlight: "#339",
@@ -18,6 +18,29 @@ const background: CSSProperties = {
   backgroundImage: "linear-gradient(#fff2f9 1px, transparent 1px), linear-gradient(to right, #fff2f9 1px, transparent 1px)",
   backgroundSize: "22px 22px",
   backgroundColor: "#ffffff",
+};
+
+const text: GraphText = {
+  header: {
+    normal: {
+      color: "#000",
+      font: "bold 14px san-serf",
+    },
+    focus: {
+      color: "#000",
+      font: "bold 14px san-serf",
+    },
+  },
+  body: {
+    normal: {
+      color: palette.muted1,
+      font: "14px/2 san-serf",
+    },
+    focus: {
+      color: palette.focus,
+      font: "14px/2 san-serf",
+    },
+  },
 };
 
 const pannel: GraphPannel = {
@@ -70,6 +93,7 @@ const graph: GraphStyle = {
   background,
   pannel,
   arrow,
+  text,
 }
 
 export default {

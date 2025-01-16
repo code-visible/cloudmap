@@ -15,11 +15,11 @@ export const buildInfoCard = (): ShadowElement => {
         path: Rectangle.RoundAligned(0, 0, width, height, 9),
         opts: {
           background: true,
-          stroke: stateTheme.palette.card,
-          fill: "#fff",
           border: true,
-          shadowColor: stateTheme.palette.cardShadow,
-          shadowBlur: 12,
+          stroke: stateTheme.graph.pannel.normal.strokeColor,
+          fill: stateTheme.graph.pannel.normal.backgroundColor,
+          shadowColor: stateTheme.graph.pannel.normal.shadowColor,
+          shadowBlur: stateTheme.graph.pannel.normal.shadowBlur,
         }
       },
     ],
@@ -31,8 +31,8 @@ export const buildInfoCard = (): ShadowElement => {
         opts: {
           width: 256,
           ellipsis: true,
-          font: "14px san-serf",
-          fill: "#000",
+          font: stateTheme.graph.text.header.normal.font,
+          fill: stateTheme.graph.text.header.normal.color,
         },
       },
       // {
@@ -66,11 +66,11 @@ export const buildInfoCard = (): ShadowElement => {
           {
             path: Triangle.Isosceles(0, 0, 16, 12),
             opts: {
-              fill: "#fff",
-              stroke: stateTheme.palette.card,
+              stroke: stateTheme.graph.pannel.normal.strokeColor,
+              fill: stateTheme.graph.pannel.normal.backgroundColor,
               border: true,
               rotation: 3.142,
-              shadowColor: stateTheme.palette.cardShadow,
+              shadowColor: stateTheme.graph.pannel.normal.shadowColor,
               shadowBlur: 6,
             }
           },
@@ -78,7 +78,7 @@ export const buildInfoCard = (): ShadowElement => {
             y: -6,
             path: Rectangle.Basic(0, 0, 32, 8),
             opts: {
-              fill: "#fff",
+              fill: stateTheme.graph.pannel.normal.backgroundColor,
               border: false,
             }
           }
@@ -95,6 +95,21 @@ export const buildInfoCard = (): ShadowElement => {
       } else {
         this.hidden = true;
       }
+      const theme = stateTheme.graph;
+      const pannelOpts = this.shapes![0].opts!;
+      const triangleOpts = this.children![0].shapes![0].opts!;
+      const blockOpts = this.children![0].shapes![1].opts!;
+      const textOpts = this.texts![0].opts!;
+      pannelOpts.stroke = theme.pannel.normal.strokeColor;
+      pannelOpts.fill = theme.pannel.normal.backgroundColor;
+      pannelOpts.shadowColor = theme.pannel.normal.shadowColor;
+      pannelOpts.shadowBlur = theme.pannel.normal.shadowBlur;
+      textOpts.font = theme.text.body.normal.font;
+      textOpts.fill = theme.text.body.normal.color;
+      triangleOpts.stroke = theme.pannel.normal.strokeColor;
+      triangleOpts.fill = theme.pannel.normal.backgroundColor;
+      triangleOpts.shadowColor = theme.pannel.normal.shadowColor;
+      blockOpts.fill = theme.pannel.normal.backgroundColor;
     },
   };
 };

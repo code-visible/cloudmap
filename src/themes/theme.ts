@@ -19,6 +19,11 @@ export interface PannelStyle {
   strokeColor: string;
   shadowColor: string;
   shadowBlur: number;
+};
+
+export interface TextStyle {
+  color: string;
+  font: string;
 }
 
 export interface ArrowStyle {
@@ -26,14 +31,25 @@ export interface ArrowStyle {
   width: number;
   endpointStrokeColor: string,
   endpointBackgroundColor: string,
-}
+};
 
 export interface TipStyle {
   backgroundColor: string;
   strokeWidth: number;
   strokeColor: string;
   shadowColor: string;
-}
+};
+
+export interface GraphText {
+  header: {
+    normal: TextStyle;
+    focus: TextStyle;
+  },
+  body: {
+    normal: TextStyle;
+    focus: TextStyle;
+  },
+};
 
 export interface GraphPannel {
   muted: PannelStyle;
@@ -51,5 +67,6 @@ export interface GraphStyle {
   background: CSSProperties;
   pannel: GraphPannel;
   arrow: GraphArrow;
+  text: GraphText;
   // tip: TipStyle;
 };

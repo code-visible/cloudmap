@@ -41,8 +41,8 @@ export const buildPkgCard = (x: number, y: number, pkg: GraphPkg): ShadowElement
         opts: {
           width: 106,
           ellipsis: true,
-          font: "bold 14px san-serf",
-          fill: "#000",
+          font: stateTheme.graph.text.header.normal.font,
+          fill: stateTheme.graph.text.header.normal.color,
         }
       },
     ],
