@@ -95,21 +95,6 @@ export const buildInfoCard = (): ShadowElement => {
       } else {
         this.hidden = true;
       }
-      const theme = stateTheme.graph;
-      const pannelOpts = this.shapes![0].opts!;
-      const triangleOpts = this.children![0].shapes![0].opts!;
-      const blockOpts = this.children![0].shapes![1].opts!;
-      const textOpts = this.texts![0].opts!;
-      pannelOpts.stroke = theme.pannel.normal.strokeColor;
-      pannelOpts.fill = theme.pannel.normal.backgroundColor;
-      pannelOpts.shadowColor = theme.pannel.normal.shadowColor;
-      pannelOpts.shadowBlur = theme.pannel.normal.shadowBlur;
-      textOpts.font = theme.text.body.normal.font;
-      textOpts.fill = theme.text.body.normal.color;
-      triangleOpts.stroke = theme.pannel.normal.strokeColor;
-      triangleOpts.fill = theme.pannel.normal.backgroundColor;
-      triangleOpts.shadowColor = theme.pannel.normal.shadowColor;
-      blockOpts.fill = theme.pannel.normal.backgroundColor;
     },
   };
 };
