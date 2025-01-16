@@ -1,6 +1,6 @@
 import { Callable, File, Pkg } from "../resource/node";
+import mayk from "../themes/mayk";
 import { GraphStyle, Palette } from "../themes/theme";
-import khin from "../themes/khin";
 import { getNameFromPath } from "../utils/path";
 
 export const enum GraphType {
@@ -250,8 +250,8 @@ export const InitialStateCall: StateCall = {
 };
 
 export const InitialStateTheme: StateTheme = {
-  palette: khin.palette,
-  graph: khin.graph,
+  palette: mayk.palette,
+  graph: mayk.graph,
 };
 
 export const InitialStatePannel: StatePannel = {

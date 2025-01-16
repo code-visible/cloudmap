@@ -13,7 +13,7 @@ export const buildCardField = (x: number, y: number, key: string, val: string, i
         content: key,
         opts: {
           width: 128,
-          font: "14px/2 san-serf",
+          font: stateTheme.graph.text.body.normal.font,
           fill: stateTheme.graph.text.body.normal.color,
         }
       },
@@ -22,7 +22,7 @@ export const buildCardField = (x: number, y: number, key: string, val: string, i
         content: val,
         opts: {
           width: 128,
-          font: "14px/2 san-serf",
+          font: stateTheme.graph.text.body.normal.font,
           fill: stateTheme.graph.text.body.normal.color,
         }
       },

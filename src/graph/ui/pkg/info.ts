@@ -5,8 +5,9 @@ import { stateTheme } from "../theme/state";
 
 export const buildInfoCard = (): ShadowElement => {
   const width = 320;
-  // +22
   const height = 56;
+  const pannelTheme = stateTheme.graph.pannel;
+  const textTheme = stateTheme.graph.text;
   return {
     x: 0,
     y: 0,
@@ -16,10 +17,10 @@ export const buildInfoCard = (): ShadowElement => {
         opts: {
           background: true,
           border: true,
-          stroke: stateTheme.graph.pannel.normal.strokeColor,
-          fill: stateTheme.graph.pannel.normal.backgroundColor,
-          shadowColor: stateTheme.graph.pannel.normal.shadowColor,
-          shadowBlur: stateTheme.graph.pannel.normal.shadowBlur,
+          stroke: pannelTheme.normal.strokeColor,
+          fill: pannelTheme.normal.backgroundColor,
+          shadowColor: pannelTheme.normal.shadowColor,
+          shadowBlur: pannelTheme.normal.shadowBlur,
         }
       },
     ],
@@ -31,8 +32,8 @@ export const buildInfoCard = (): ShadowElement => {
         opts: {
           width: 256,
           ellipsis: true,
-          font: stateTheme.graph.text.header.normal.font,
-          fill: stateTheme.graph.text.header.normal.color,
+          font: textTheme.header.normal.font,
+          fill: textTheme.header.normal.color,
         },
       },
       // {
@@ -66,11 +67,11 @@ export const buildInfoCard = (): ShadowElement => {
           {
             path: Triangle.Isosceles(0, 0, 16, 12),
             opts: {
-              stroke: stateTheme.graph.pannel.normal.strokeColor,
-              fill: stateTheme.graph.pannel.normal.backgroundColor,
+              stroke: pannelTheme.normal.strokeColor,
+              fill: pannelTheme.normal.backgroundColor,
               border: true,
               rotation: 3.142,
-              shadowColor: stateTheme.graph.pannel.normal.shadowColor,
+              shadowColor: pannelTheme.normal.shadowColor,
               shadowBlur: 6,
             }
           },
@@ -78,7 +79,7 @@ export const buildInfoCard = (): ShadowElement => {
             y: -6,
             path: Rectangle.Basic(0, 0, 32, 8),
             opts: {
-              fill: stateTheme.graph.pannel.normal.backgroundColor,
+              fill: pannelTheme.normal.backgroundColor,
               border: false,
             }
           }

@@ -5,6 +5,7 @@ import { stateCall } from "./state";
 import { stateTheme } from "../theme/state";
 
 export const buildCallableField = (x: number, y: number, callable: GraphCallable): ShadowElement => {
+  const theme = stateTheme.graph.text;
   return {
     x,
     y,
@@ -13,9 +14,9 @@ export const buildCallableField = (x: number, y: number, callable: GraphCallable
         content: callable.name,
         opts: {
           width: 110,
-          font: "14px/2 san-serf",
-          fill: "#333",
           ellipsis: true,
+          font: theme.body.normal.font,
+          fill: theme.body.normal.color,
         }
       },
     ],
@@ -23,22 +24,26 @@ export const buildCallableField = (x: number, y: number, callable: GraphCallable
     update(_delta) {
       const opts = this.texts![0].opts!;
       if (this.data.active) {
-        opts.fill = stateTheme.palette.focus;
+        opts.fill = theme.body.focus.color;
+        opts.font = theme.body.focus.font;
         return;
-      }
-      if (stateCall.state.entrance?.id === this.data.id) {
-        opts.fill = stateTheme.palette.focus;
-        return
       }
       const active = stateCall.state.active;
       if (active && (active.callees.has(callable.id) || active.callers.has(callable.id))) {
-        opts.fill = stateTheme.palette.highlight;
+        opts.fill = theme.body.focus.color;
+        opts.font = theme.body.focus.font;
         return;
       }
-      opts.fill = stateTheme.palette.muted3;
+      if (!active && (stateCall.state.entrance?.id === this.data.id)) {
+        opts.fill = theme.body.focus.color;
+        opts.font = theme.body.focus.font;
+        return
+      }
+      opts.fill = theme.body.normal.color;
+      opts.font = theme.body.normal.font;
     },
     contain(x, y) {
-      return x > 0 && x < 192 && y > -10 && y < 0;
+      return x > 0 && x < 192 && y > -13 && y < 4;
     },
     onMouseenter(render, x, y, _mx, _my) {
       this.data.active = true;

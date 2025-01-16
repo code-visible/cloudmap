@@ -5,8 +5,9 @@ import { stateTheme } from "../theme/state";
 
 export const buildFileTip = (): ShadowElement => {
   const width = 320;
-  // +22
   const height = 96;
+  const pannelTheme = stateTheme.graph.pannel;
+  const textTheme = stateTheme.graph.text;
   return {
     x: 0,
     y: 0,
@@ -15,11 +16,11 @@ export const buildFileTip = (): ShadowElement => {
         path: Rectangle.RoundAligned(0, 0, width, height, 9),
         opts: {
           background: true,
-          stroke: stateTheme.palette.card,
-          fill: "#fff",
           border: true,
-          shadowColor: stateTheme.palette.cardShadow,
-          shadowBlur: 12,
+          stroke: pannelTheme.normal.strokeColor,
+          fill: pannelTheme.normal.backgroundColor,
+          shadowColor: pannelTheme.normal.shadowColor,
+          shadowBlur: pannelTheme.normal.shadowBlur,
         }
       },
     ],
@@ -31,8 +32,8 @@ export const buildFileTip = (): ShadowElement => {
         opts: {
           width: 256,
           ellipsis: true,
-          font: "14px san-serf",
-          fill: "#000",
+          font: textTheme.header.normal.font,
+          fill: textTheme.header.normal.color,
         },
       },
       {
@@ -42,8 +43,8 @@ export const buildFileTip = (): ShadowElement => {
         opts: {
           width: 256,
           ellipsis: true,
-          font: "14px san-serf",
-          fill: stateTheme.palette.muted2,
+          font: textTheme.body.normal.font,
+          fill: textTheme.body.normal.color,
         },
       },
       {
@@ -53,8 +54,8 @@ export const buildFileTip = (): ShadowElement => {
         opts: {
           width: 234,
           ellipsis: true,
-          font: "14px san-serf",
-          fill: stateTheme.palette.muted2,
+          font: textTheme.body.normal.font,
+          fill: textTheme.body.normal.color,
         },
       },
       {
@@ -64,8 +65,8 @@ export const buildFileTip = (): ShadowElement => {
         opts: {
           width: 32,
           ellipsis: true,
-          font: "14px san-serf",
-          fill: stateTheme.palette.muted2,
+          font: textTheme.body.normal.font,
+          fill: textTheme.body.normal.color,
         },
       },
       {
@@ -75,8 +76,8 @@ export const buildFileTip = (): ShadowElement => {
         opts: {
           width: 32,
           ellipsis: true,
-          font: "14px san-serf",
-          fill: stateTheme.palette.muted2,
+          font: textTheme.body.normal.font,
+          fill: textTheme.body.normal.color,
         },
       },
       {
@@ -86,8 +87,8 @@ export const buildFileTip = (): ShadowElement => {
         opts: {
           width: 32,
           ellipsis: true,
-          font: "14px san-serf",
-          fill: stateTheme.palette.muted2,
+          font: textTheme.body.normal.font,
+          fill: textTheme.body.normal.color,
         },
       },
       {
@@ -97,8 +98,8 @@ export const buildFileTip = (): ShadowElement => {
         opts: {
           width: 256,
           ellipsis: true,
-          font: "14px san-serf",
-          fill: stateTheme.palette.muted2,
+          font: textTheme.body.normal.font,
+          fill: textTheme.body.normal.color,
         },
       },
       // {
@@ -132,11 +133,11 @@ export const buildFileTip = (): ShadowElement => {
           {
             path: Triangle.Isosceles(0, 0, 16, 12),
             opts: {
-              fill: "#fff",
-              stroke: stateTheme.palette.card,
+              stroke: pannelTheme.normal.strokeColor,
+              fill: pannelTheme.normal.backgroundColor,
               border: true,
               rotation: 3.142,
-              shadowColor: stateTheme.palette.cardShadow,
+              shadowColor: pannelTheme.normal.shadowColor,
               shadowBlur: 6,
             }
           },
@@ -144,7 +145,7 @@ export const buildFileTip = (): ShadowElement => {
             y: -6,
             path: Rectangle.Basic(0, 0, 32, 8),
             opts: {
-              fill: "#fff",
+              fill: pannelTheme.normal.backgroundColor,
               border: false,
             }
           }
