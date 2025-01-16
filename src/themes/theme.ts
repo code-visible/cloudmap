@@ -1,5 +1,22 @@
 import { CSSProperties } from "react";
 
+export interface Page {
+  seperator: string;
+  scrollbarColor: string;
+  scrollbarWidth: string;
+}
+
+export interface Search {
+  textColor: string;
+  textSize: number;
+};
+
+export interface Header {
+  backgroundColor: string;
+  titleColor: string;
+  titleSize: number;
+}
+
 export interface Directory {
   backgroundColor: string;
   active: string;

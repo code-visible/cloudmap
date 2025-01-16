@@ -1,10 +1,27 @@
 import { CSSProperties } from "react";
-import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText } from "./theme";
+import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText, Header, Page, Search } from "./theme";
 
 const background: CSSProperties = {
   backgroundImage: "radial-gradient(#DBD9E7 2.5px, transparent 2.5px)",
   backgroundSize: "32px 32px",
   backgroundColor: "#EEEFFA",
+};
+
+const header: Header = {
+  backgroundColor: "#EEEFFA",
+  titleColor: "",
+  titleSize: 12,
+};
+
+const page: Page = {
+  seperator: "#ccc",
+  scrollbarColor: "",
+  scrollbarWidth: "",
+};
+
+const search: Search = {
+  textColor: "",
+  textSize: 12,
 };
 
 const directory: Directory = {
@@ -95,6 +112,9 @@ const graph: GraphStyle = {
 }
 
 export default {
-  graph,
+  page,
+  header,
+  search,
   directory,
+  graph,
 };

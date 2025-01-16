@@ -1,5 +1,5 @@
 import { Callable, File, Pkg } from "../resource/node";
-import { Directory, GraphStyle } from "../themes/theme";
+import { Directory, GraphStyle, Header, Page, Search } from "../themes/theme";
 import { getNameFromPath } from "../utils/path";
 import mayk from "../themes/mayk";
 
@@ -152,6 +152,9 @@ export interface StatePkg {
 }
 
 export interface StateTheme {
+  page: Page;
+  header: Header;
+  search: Search;
   directory: Directory;
   graph: GraphStyle;
 }
@@ -250,6 +253,9 @@ export const InitialStateCall: StateCall = {
 };
 
 export const InitialStateTheme: StateTheme = {
+  page: mayk.page,
+  header: mayk.header,
+  search: mayk.search,
   directory: mayk.directory,
   graph: mayk.graph,
 };

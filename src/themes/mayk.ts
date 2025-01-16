@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText } from "./theme";
+import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText, Header, Page, Search } from "./theme";
 
 const colors = {
   baby: "#BFD7ED",
@@ -8,6 +8,24 @@ const colors = {
   navy: "#003B73",
   comp1: "#EFFEFA",
   comp2: "#FAFBFF",
+};
+
+const header: Header = {
+  backgroundColor: "#fff",
+  titleColor: "",
+  titleSize: 12,
+};
+
+const page: Page = {
+  seperator: colors.baby,
+  scrollbarColor: "",
+  scrollbarWidth: "",
+};
+
+
+const search: Search = {
+  textColor: "",
+  textSize: 12,
 };
 
 const directory: Directory = {
@@ -104,6 +122,9 @@ const graph: GraphStyle = {
 }
 
 export default {
-  graph,
+  page,
+  header,
+  search,
   directory,
+  graph,
 };

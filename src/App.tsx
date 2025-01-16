@@ -47,16 +47,16 @@ function App() {
 
   return (
     <div className='app'>
-      <div className='header'>
+      <div className='header' style={{ borderBottomColor: theme.page.seperator, backgroundColor: theme.header.backgroundColor }}>
         <div className='title'>
           {data.name}
         </div>
         <div className='theme'>
           <div>theme: </div>
-          <button onClick={() => setTheme({ graph: mayk.graph, directory: mayk.directory })}>mayk</button>
-          <button onClick={() => setTheme({ graph: khin.graph, directory: khin.directory })}>khin</button>
-          <button onClick={() => setTheme({ graph: chaya.graph, directory: chaya.directory })}>chaya</button>
-          <button onClick={() => setTheme({ graph: mint.graph, directory: mint.directory })}>mint</button>
+          <button onClick={() => setTheme({ ...mayk })}>mayk</button>
+          <button onClick={() => setTheme({ ...khin })}>khin</button>
+          <button onClick={() => setTheme({ ...chaya })}>chaya</button>
+          <button onClick={() => setTheme({ ...mint })}>mint</button>
         </div>
       </div>
       <div className='content'>
@@ -77,7 +77,7 @@ function App() {
           pkg={pkg}
           setPkg={setPkg}
         />
-        <div className='seperator'></div>
+        <div className='seperator' style={{ backgroundColor: theme.page.seperator }}></div>
         <Graph
           data={data}
           file={file}
