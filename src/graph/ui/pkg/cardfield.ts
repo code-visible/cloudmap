@@ -28,7 +28,7 @@ export const buildCardField = (x: number, y: number, key: string, val: string, i
       },
     ],
     contain(x, y) {
-      return x > 0 && x < 192 && y > -15 && y < 2;
+      return x > 0 && x < 192 && y > -13 && y < 4;
     },
     onMouseenter(render) {
       this.texts![0].opts!.fill = stateTheme.graph.text.body.focus.color;
