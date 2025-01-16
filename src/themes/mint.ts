@@ -1,27 +1,9 @@
 import { CSSProperties } from "react";
-import { GraphArrow, GraphPannel, GraphStyle, GraphText, Palette } from "./theme";
-
-const palette: Palette = {
-  highlight: "#339",
-  focus: "#117",
-  muted1: "#666",
-  muted2: "#999",
-  muted3: "#ccc",
-  arrow: "#ccc",
-  card: "#666",
-  seperator: "#000",
-  cardShadow: "rgba(150, 150, 150, .2)",
-  hover: "#000",
-};
+import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText } from "./theme";
 
 // TODO: fix renderer
 const colors = {
-  baby: "#BFD7ED",
-  grotto: "#60A3D9",
-  royal: "#0074B7",
   navy: "#003B73",
-  comp1: "#EFFEFA",
-  comp2: "#FAFBFF",
 
   // TODO:
   // new theme base color
@@ -34,6 +16,17 @@ const colors = {
   comp3: "#ECE3CA",
   text1: "#8A8378",
   text2: "#282425",
+};
+
+const directory: Directory = {
+  backgroundColor: "#ECE3CA",
+  dir: colors.text2,
+  file: colors.text1,
+  unit: colors.text2,
+  active: colors.strong,
+  muted: colors.text1,
+  icon: colors.text1,
+  hover: "#000B43",
 };
 
 const background: CSSProperties = {
@@ -117,6 +110,6 @@ const graph: GraphStyle = {
 }
 
 export default {
-  palette,
   graph,
+  directory,
 };

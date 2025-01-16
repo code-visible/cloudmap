@@ -1,7 +1,7 @@
 import { Callable, File, Pkg } from "../resource/node";
-import mayk from "../themes/mayk";
-import { GraphStyle, Palette } from "../themes/theme";
+import { Directory, GraphStyle } from "../themes/theme";
 import { getNameFromPath } from "../utils/path";
+import mayk from "../themes/mayk";
 
 export const enum GraphType {
   PKG = 1,
@@ -152,7 +152,7 @@ export interface StatePkg {
 }
 
 export interface StateTheme {
-  palette: Palette;
+  directory: Directory;
   graph: GraphStyle;
 }
 
@@ -250,7 +250,7 @@ export const InitialStateCall: StateCall = {
 };
 
 export const InitialStateTheme: StateTheme = {
-  palette: mayk.palette,
+  directory: mayk.directory,
   graph: mayk.graph,
 };
 

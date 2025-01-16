@@ -1,18 +1,5 @@
 import { CSSProperties } from "react";
-import { GraphArrow, GraphPannel, GraphStyle, GraphText, Palette } from "./theme";
-
-const palette: Palette = {
-  highlight: "#339",
-  focus: "#117",
-  muted1: "#666",
-  muted2: "#999",
-  muted3: "#ccc",
-  arrow: "#ccc",
-  card: "#666",
-  seperator: "#000",
-  cardShadow: "rgba(150, 150, 150, .2)",
-  hover: "#000",
-};
+import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText } from "./theme";
 
 const colors = {
   black1: "#282C34",
@@ -24,6 +11,17 @@ const colors = {
   purple: "#4992DF",
   red: "#AB4959",
   comment: "#55515A"
+};
+
+const directory: Directory = {
+  backgroundColor: colors.black1,
+  dir: "#A8CDE0",
+  file: "#7DA5BF",
+  unit: "#A8CDE0",
+  active: colors.yellow,
+  muted: colors.comment,
+  icon: "#7DA5BF",
+  hover: colors.purple,
 };
 
 const background: CSSProperties = {
@@ -107,6 +105,6 @@ const graph: GraphStyle = {
 }
 
 export default {
-  palette,
   graph,
+  directory,
 };

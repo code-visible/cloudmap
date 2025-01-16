@@ -53,10 +53,10 @@ function App() {
         </div>
         <div className='theme'>
           <div>theme: </div>
-          <button onClick={() => setTheme({ graph: mayk.graph, palette: mayk.palette })}>mayk</button>
-          <button onClick={() => setTheme({ graph: khin.graph, palette: khin.palette })}>khin</button>
-          <button onClick={() => setTheme({ graph: chaya.graph, palette: chaya.palette })}>chaya</button>
-          <button onClick={() => setTheme({ graph: mint.graph, palette: mint.palette })}>mint</button>
+          <button onClick={() => setTheme({ graph: mayk.graph, directory: mayk.directory })}>mayk</button>
+          <button onClick={() => setTheme({ graph: khin.graph, directory: khin.directory })}>khin</button>
+          <button onClick={() => setTheme({ graph: chaya.graph, directory: chaya.directory })}>chaya</button>
+          <button onClick={() => setTheme({ graph: mint.graph, directory: mint.directory })}>mint</button>
         </div>
       </div>
       <div className='content'>

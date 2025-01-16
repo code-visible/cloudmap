@@ -1,18 +1,5 @@
 import { CSSProperties } from "react";
-import { GraphArrow, GraphPannel, GraphStyle, GraphText, Palette } from "./theme";
-
-const palette: Palette = {
-  highlight: "#339",
-  focus: "#117",
-  muted1: "#666",
-  muted2: "#999",
-  muted3: "#ccc",
-  arrow: "#ccc",
-  card: "#666",
-  seperator: "#000",
-  cardShadow: "rgba(150, 150, 150, .2)",
-  hover: "#000",
-};
+import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText } from "./theme";
 
 const colors = {
   baby: "#BFD7ED",
@@ -21,6 +8,17 @@ const colors = {
   navy: "#003B73",
   comp1: "#EFFEFA",
   comp2: "#FAFBFF",
+};
+
+const directory: Directory = {
+  backgroundColor: "#fff",
+  dir: colors.navy,
+  file: colors.royal,
+  unit: colors.navy,
+  active: colors.navy,
+  muted: colors.baby,
+  icon: colors.royal,
+  hover: "#000B43",
 };
 
 const background: CSSProperties = {
@@ -42,7 +40,7 @@ const text: GraphText = {
   },
   body: {
     normal: {
-      color: "#0074B7",
+      color: colors.royal,
       font: "14px/2 san-serf",
     },
     focus: {
@@ -91,7 +89,7 @@ const arrow: GraphArrow = {
     endpointBackgroundColor: "#fff",
   },
   active: {
-    color: "#0074B7",
+    color: colors.royal,
     width: 1,
     endpointStrokeColor: colors.navy,
     endpointBackgroundColor: "#fff",
@@ -106,6 +104,6 @@ const graph: GraphStyle = {
 }
 
 export default {
-  palette,
   graph,
+  directory,
 };

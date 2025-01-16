@@ -1,23 +1,21 @@
 import { CSSProperties } from "react";
-import { GraphArrow, GraphPannel, GraphStyle, GraphText, Palette } from "./theme";
-
-const palette: Palette = {
-  highlight: "#339",
-  focus: "#117",
-  muted1: "#666",
-  muted2: "#999",
-  muted3: "#ccc",
-  arrow: "#ccc",
-  card: "#666",
-  seperator: "#000",
-  cardShadow: "rgba(150, 150, 150, .2)",
-  hover: "#000",
-};
+import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText } from "./theme";
 
 const background: CSSProperties = {
   backgroundImage: "radial-gradient(#DBD9E7 2.5px, transparent 2.5px)",
   backgroundSize: "32px 32px",
   backgroundColor: "#EEEFFA",
+};
+
+const directory: Directory = {
+  backgroundColor: "#EEEFFA",
+  dir: "#59576A",
+  file: "#858494",
+  unit: "#59576A",
+  active: "#8476FA",
+  muted: "#858494",
+  icon: "#858494",
+  hover: "#000B43",
 };
 
 const text: GraphText = {
@@ -97,6 +95,6 @@ const graph: GraphStyle = {
 }
 
 export default {
-  palette,
   graph,
+  directory,
 };
