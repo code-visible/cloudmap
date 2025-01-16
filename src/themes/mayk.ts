@@ -14,6 +14,15 @@ const palette: Palette = {
   hover: "#000",
 };
 
+const colors = {
+  baby: "#BFD7ED",
+  grotto: "#60A3D9",
+  royal: "#0074B7",
+  navy: "#003B73",
+  comp1: "#EFFEFA",
+  comp2: "#FAFBFF",
+};
+
 const background: CSSProperties = {
   backgroundImage: "linear-gradient(#fff2f9 1px, transparent 1px), linear-gradient(to right, #fff2f9 1px, transparent 1px)",
   backgroundSize: "22px 22px",
@@ -23,21 +32,21 @@ const background: CSSProperties = {
 const text: GraphText = {
   header: {
     normal: {
-      color: "#000",
+      color: colors.navy,
       font: "bold 14px san-serf",
     },
     focus: {
-      color: "#000",
+      color: colors.navy,
       font: "bold 14px san-serf",
     },
   },
   body: {
     normal: {
-      color: palette.muted1,
+      color: "#0074B7",
       font: "14px/2 san-serf",
     },
     focus: {
-      color: palette.focus,
+      color: colors.navy,
       font: "14px/2 san-serf",
     },
   },
@@ -47,44 +56,44 @@ const pannel: GraphPannel = {
   muted: {
     backgroundColor: "#fff",
     strokeWidth: 1,
-    strokeColor: palette.card,
-    shadowColor: "rgba(150, 150, 150, .2)",
+    strokeColor: colors.grotto,
+    shadowColor: "#fff",
     shadowBlur: 0,
   },
   normal: {
     backgroundColor: "#fff",
     strokeWidth: 1,
-    strokeColor: palette.card,
-    shadowColor: "rgba(150, 150, 150, .2)",
+    strokeColor: colors.grotto,
+    shadowColor: "#fff",
     shadowBlur: 0,
   },
   focus: {
-    backgroundColor: "#fafbfc",
+    backgroundColor: colors.comp2,
     strokeWidth: 1,
-    strokeColor: palette.focus,
-    shadowColor: "rgba(150, 150, 150, .2)",
+    strokeColor: colors.navy,
+    shadowColor: "#fff",
     shadowBlur: 0,
   },
   active: {
-    backgroundColor: "#fafbfc",
+    backgroundColor: colors.comp1,
     strokeWidth: 1,
-    strokeColor: palette.focus,
-    shadowColor: "rgba(150, 150, 150, .2)",
+    strokeColor: colors.navy,
+    shadowColor: "#fff",
     shadowBlur: 0,
   },
 };
 
 const arrow: GraphArrow = {
   muted: {
-    color: "#ccc",
+    color: colors.baby,
     width: 1,
-    endpointStrokeColor: "#aaa",
+    endpointStrokeColor: colors.baby,
     endpointBackgroundColor: "#fff",
   },
   active: {
-    color: palette.focus,
+    color: "#0074B7",
     width: 1,
-    endpointStrokeColor: palette.focus,
+    endpointStrokeColor: colors.navy,
     endpointBackgroundColor: "#fff",
   },
 };
