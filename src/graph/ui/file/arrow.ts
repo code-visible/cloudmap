@@ -27,7 +27,7 @@ export const buildLineArrow = (startID: string, endID: string, x0: number, y0: n
     update(_delta) {
       const edgeOpts = this.shapes![0].opts!;
       const triangleOpts = this.children![0].shapes![0].opts!;
-      if (this.data.s === stateFile.state.active || this.data.e === stateFile.state.active) {
+      if (this.data.s === stateFile.state.active?.id || this.data.e === stateFile.state.active?.id) {
         edgeOpts.stroke = stateTheme.palette.highlight;
         triangleOpts.stroke = stateTheme.palette.highlight;
         triangleOpts.fill = stateTheme.palette.highlight;

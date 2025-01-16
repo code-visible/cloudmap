@@ -1,12 +1,148 @@
-import { FileCall } from "../resource/node";
-import mayk from "../themes/mayk";
-import { Palette } from "../themes/theme";
+import { Callable, File, Pkg } from "../resource/node";
+import { GraphStyle, Palette } from "../themes/theme";
+import khin from "../themes/khin";
+import { getNameFromPath } from "../utils/path";
 
 export const enum GraphType {
   PKG = 1,
   FILE = 2,
   CALL = 3,
   REF = 4,
+}
+
+export interface GraphEdge {
+  start: string;
+  end: string;
+}
+
+export interface GraphPkg {
+  id: string;
+  name: string;
+  path: string;
+  files: number;
+  imports: Set<string>;
+  exports: Set<string>;
+  callables: number;
+  abstracts: number;
+}
+
+export const toGraphPkg = (pkg: Pkg): GraphPkg => {
+  const result = {
+    id: pkg.ref.id,
+    name: getNameFromPath(pkg.ref.name),
+    path: pkg.path,
+    files: pkg.files.size,
+    callables: pkg.callables.size,
+    abstracts: pkg.abstracts.size,
+    imports: new Set<string>(),
+    exports: new Set<string>(),
+  };
+  for (const el of pkg.imports) {
+    result.imports.add(el.ref.id);
+  }
+  for (const el of pkg.exports) {
+    result.exports.add(el.ref.id);
+  }
+  return result;
+}
+
+export interface StateGraphPkg {
+  entrance?: GraphPkg;
+  active?: GraphPkg;
+  nodes: Map<string, GraphPkg>;
+  edges: GraphEdge[];
+}
+
+export interface StateGraphFile {
+  pkg: string;
+  entrance?: GraphFile;
+  active?: GraphFile;
+  nodes: Map<string, GraphFile>;
+  edges: GraphEdge[];
+}
+
+export interface StateGraphCall {
+  pkg: string;
+  entrance?: GraphCallable;
+  active?: GraphCallable;
+  activeHostFile?: GraphFile;
+  nodes: Map<string, GraphFileCall>;
+  edges: GraphEdge[];
+}
+
+export interface GraphFile {
+  id: string;
+  name: string;
+  path: string;
+  callables: number;
+  abstracts: number;
+  imports: Set<string>;
+  exports: Set<string>;
+  pkg: string;
+}
+
+export const toGraphFile = (file: File): GraphFile => {
+  const result = {
+    id: file.ref.id,
+    name: file.ref.name,
+    path: file.ref.path,
+    callables: file.callables.size,
+    abstracts: file.abstracts.size,
+    pkg: file.ref.pkg,
+    imports: new Set<string>(),
+    exports: new Set<string>(),
+  };
+  for (const el of file.imports) {
+    result.imports.add(el.ref.id);
+  }
+  for (const el of file.exports) {
+    result.exports.add(el.ref.id);
+  }
+  return result;
+}
+
+export interface GraphFileCall {
+  file: GraphFile,
+  callables: Map<string, GraphCallable>,
+}
+
+export interface GraphCallable {
+  id: string;
+  pos: string;
+  name: string;
+  signature: string;
+  abstract: string;
+  parameters: string[];
+  results: string[];
+  method: boolean;
+  file: string;
+  pkg: string;
+  callers: Set<string>;
+  callees: Set<string>;
+}
+
+export const toGraphCallable = (callable: Callable): GraphCallable => {
+  const result = {
+    id: callable.ref.id,
+    pos: callable.ref.pos,
+    name: callable.ref.name,
+    signature: callable.ref.signature,
+    abstract: callable.ref.abstract,
+    parameters: callable.ref.parameters,
+    results: callable.ref.results,
+    method: callable.ref.method,
+    file: callable.ref.file,
+    pkg: callable.ref.pkg,
+    callers: new Set<string>(),
+    callees: new Set<string>(),
+  };
+  for (const el of callable.callees) {
+    result.callees.add(el.ref.id);
+  }
+  for (const el of callable.callers) {
+    result.callers.add(el.ref.id);
+  }
+  return result;
 }
 
 export interface StatePkg {
@@ -17,6 +153,7 @@ export interface StatePkg {
 
 export interface StateTheme {
   palette: Palette;
+  graph: GraphStyle;
 }
 
 export interface StateFile {
@@ -30,7 +167,7 @@ export interface StateCall {
   pkg: string;
   entrance: string;
   active: string;
-  set: Set<FileCall>;
+  set: Set<Callable>;
 }
 
 export interface ResourceSet {
@@ -68,6 +205,30 @@ export interface StatePannel {
   hover: StateHover;
 }
 
+export const InitialStateGraphPkg: StateGraphPkg = {
+  entrance: undefined,
+  active: undefined,
+  nodes: new Map(),
+  edges: [],
+};
+
+export const InitialStateGraphFile: StateGraphFile = {
+  pkg: "",
+  entrance: undefined,
+  active: undefined,
+  nodes: new Map(),
+  edges: [],
+};
+
+export const InitialStateGraphCall: StateGraphCall = {
+  pkg: "",
+  entrance: undefined,
+  active: undefined,
+  activeHostFile: undefined,
+  nodes: new Map(),
+  edges: [],
+};
+
 export const InitialStatePkg: StatePkg = {
   entrance: "",
   active: "",
@@ -89,7 +250,8 @@ export const InitialStateCall: StateCall = {
 };
 
 export const InitialStateTheme: StateTheme = {
-  palette: mayk,
+  palette: khin.palette,
+  graph: khin.graph,
 };
 
 export const InitialStatePannel: StatePannel = {

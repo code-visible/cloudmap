@@ -1,12 +1,11 @@
 import { ShadowElement } from "@pattaya/depict/graph";
 import { Circle } from "@pattaya/pather";
 import { stateTheme } from "../theme/state";
-import { File } from "../../../resource/node";
 import { stateFile } from "./state";
 import { GraphMessageType } from "../../../message";
-import { GraphType } from "../../../state";
+import { GraphFile, GraphType } from "../../../state";
 
-export const buildFileNode = (x: number, y: number, r: number, file: File, highlight: boolean): ShadowElement => {
+export const buildFileNode = (x: number, y: number, r: number, file: GraphFile, highlight: boolean): ShadowElement => {
   return {
     x,
     y,
@@ -27,7 +26,7 @@ export const buildFileNode = (x: number, y: number, r: number, file: File, highl
       {
         x: -28,
         y: 4,
-        content: file.ref.name,
+        content: file.name,
         opts: {
           width: 106,
           ellipsis: true,
@@ -39,35 +38,53 @@ export const buildFileNode = (x: number, y: number, r: number, file: File, highl
     update(_delta) {
       const opts = this.shapes![0].opts!;
       opts.shadowBlur = this.data.id === stateFile.state.active ? 15 : 0;
-      if (this.data.id === stateFile.state.entrance) {
+      if (this.data.id === stateFile.state.active?.id) {
+        opts.stroke = stateTheme.palette.highlight;
+        opts.fill = "#abc";
+        return;
+      }
+      const active = stateFile.state.active;
+      if (active && (active.exports.has(file.id) || active.imports.has(file.id))) {
+        opts.stroke = stateTheme.palette.highlight;
+        opts.fill = "#ddd";
+        return;
+      }
+      if (this.data.id === stateFile.state.entrance?.id) {
         opts.stroke = stateTheme.palette.focus;
         opts.fill = "#fafbfc";
         return;
       }
-      if (this.data.id === stateFile.state.active) {
-        opts.stroke = stateTheme.palette.highlight;
-        return;
-      }
       opts.stroke = stateTheme.palette.muted3;
+      opts.fill = "#fff";
     },
-    data: { id: file.ref.id, active: false },
+    data: { id: file.id, active: false },
     contain: (x, y) => x > -r && x < r && y > -r && y < r,
     onMouseenter(_render, x, y, _mx, _my) {
       this.data.active = true;
       stateFile.local.hoverX = x + this.x;
       stateFile.local.hoverY = y + this.y;
-      postMessage({ type: GraphMessageType.UPDATE_FILE, msg: { graph: GraphType.FILE, data: { pkg: stateFile.state.pkg, entrance: stateFile.state.entrance, active: this.data.id, set: [] } } });
-      return true;
+      const data = {
+        pkg: stateFile.state.pkg,
+        entrance: stateFile.state.entrance ? stateFile.state.entrance.id : "",
+        active: this.data.id,
+      };
+      postMessage({ type: GraphMessageType.UPDATE_FILE, msg: { graph: GraphType.FILE, data } });
+      return false;
     },
     onMouseleave(_render, _x, _y, _mx, _my) {
       this.data.active = false;
-      postMessage({ type: GraphMessageType.UPDATE_FILE, msg: { graph: GraphType.FILE, data: { pkg: stateFile.state.pkg, entrance: stateFile.state.entrance, active: "", set: [] } } });
-      return true;
+      const data = {
+        pkg: stateFile.state.pkg,
+        entrance: stateFile.state.entrance ? stateFile.state.entrance.id : "",
+        active: "",
+      };
+      postMessage({ type: GraphMessageType.UPDATE_FILE, msg: { graph: GraphType.FILE, data } });
+      return false;
     },
     onClick(_render, _x, _y, _mouseX, _mouseY) {
       this.data.active = false;
-      postMessage({ type: GraphMessageType.UPDATE_FILE, msg: { graph: GraphType.FILE, data: { pkg: "", entrance: this.data.id, active: "", set: [] } } });
-      return true;
+      postMessage({ type: GraphMessageType.UPDATE_FILE, msg: { graph: GraphType.FILE, data: { pkg: "", entrance: this.data.id, active: "" } } });
+      return false;
     }
   }
 };

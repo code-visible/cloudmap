@@ -1,19 +1,22 @@
-import { InitialStateFile, StateFile } from "../../../state";
+import { File } from "../../../resource/node";
+import { InitialStateGraphFile, StateGraphFile } from "../../../state";
 
 export interface StateFileLocal {
-    hoverX: number;
-    hoverY: number;
+  hoverX: number;
+  hoverY: number;
+  activeFile?: File;
 };
 
 export interface GraphStateFile {
-    state: StateFile;
-    local: StateFileLocal;
+  state: StateGraphFile;
+  local: StateFileLocal;
 };
 
 export const stateFile: GraphStateFile = {
-    state: InitialStateFile,
-    local: {
-        hoverX: 0,
-        hoverY: 0,
-    },
+  state: InitialStateGraphFile,
+  local: {
+    hoverX: 0,
+    hoverY: 0,
+    activeFile: undefined,
+  },
 };

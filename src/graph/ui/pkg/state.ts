@@ -1,4 +1,4 @@
-import { InitialStatePkg, StatePkg } from "../../../state";
+import { InitialStateGraphPkg, StateGraphPkg } from "../../../state";
 
 export interface StatePkgLocal {
   hoverX: number;
@@ -6,12 +6,12 @@ export interface StatePkgLocal {
 };
 
 export interface GraphStatePkg {
-  state: StatePkg;
+  state: StateGraphPkg;
   local: StatePkgLocal;
 };
 
 export const statePkg: GraphStatePkg = {
-  state: InitialStatePkg,
+  state: InitialStateGraphPkg,
   local: {
     hoverX: 0,
     hoverY: 0,

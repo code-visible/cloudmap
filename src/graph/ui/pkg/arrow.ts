@@ -11,23 +11,26 @@ export const buildArrow = (startID: string, endID: string, points: number[][]): 
       {
         path: Curve.Multi(points, 12),
         opts: {
-          stroke: stateTheme.palette.arrow,
-          lineWidth: 1,
+          stroke: stateTheme.graph.arrow.muted.color,
+          lineWidth: stateTheme.graph.arrow.muted.width,
         }
       },
     ],
     data: { s: startID, e: endID },
     update(_delta) {
+      const theme = stateTheme.graph.arrow;
       const edgeOpts = this.shapes![0].opts!;
       const triangleOpts = this.children![0].shapes![0].opts!;
-      if (this.data.s === statePkg.state.active || this.data.e === statePkg.state.active) {
-        edgeOpts.stroke = stateTheme.palette.highlight;
-        triangleOpts.stroke = stateTheme.palette.highlight;
-        triangleOpts.fill = stateTheme.palette.highlight;
+      if (this.data.s === statePkg.state.active?.id || this.data.e === statePkg.state.active?.id) {
+        edgeOpts.stroke = theme.active.color;
+        edgeOpts.lineWidth = theme.active.width;
+        triangleOpts.stroke = theme.active.endpointStrokeColor;
+        triangleOpts.fill = theme.active.endpointBackgroundColor;
       } else {
-        edgeOpts.stroke = stateTheme.palette.arrow;
-        triangleOpts.stroke = "#aaa";
-        triangleOpts.fill = "#fff";
+        edgeOpts.stroke = theme.muted.color;
+        edgeOpts.lineWidth = theme.muted.width;
+        triangleOpts.stroke = theme.muted.endpointStrokeColor;
+        triangleOpts.fill = theme.muted.endpointBackgroundColor;
       }
     },
     children: [

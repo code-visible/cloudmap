@@ -2,6 +2,7 @@ import type { ShadowElement } from "@pattaya/depict/graph";
 import { GraphType } from "../../../state";
 import { GraphMessageType } from "../../../message";
 import { FileCall } from "../../../resource/node";
+import { stateTheme } from "../theme/state";
 
 export const buildCardField = (x: number, y: number, key: string, val: string, id: string, typ: GraphType): ShadowElement => {
   return {
@@ -13,7 +14,7 @@ export const buildCardField = (x: number, y: number, key: string, val: string, i
         opts: {
           width: 128,
           font: "14px/2 san-serf",
-          fill: "#333",
+          fill: stateTheme.graph.text.body.normal.color,
         }
       },
       {
@@ -22,20 +23,20 @@ export const buildCardField = (x: number, y: number, key: string, val: string, i
         opts: {
           width: 128,
           font: "14px/2 san-serf",
-          fill: "#666",
+          fill: stateTheme.graph.text.body.normal.color,
         }
       },
     ],
     contain(x, y) {
-      return x > 0 && x < 192 && y > -10 && y < 0;
+      return x > 0 && x < 192 && y > -15 && y < 2;
     },
     onMouseenter(render) {
-      this.texts![0].opts!.fill = "#993";
+      this.texts![0].opts!.fill = stateTheme.graph.text.body.focus.color;
       render();
       return true;
     },
     onMouseleave(render) {
-      this.texts![0].opts!.fill = "#666";
+      this.texts![0].opts!.fill = stateTheme.graph.text.body.normal.color;
       render();
       return true;
     },

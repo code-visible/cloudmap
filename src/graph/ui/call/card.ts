@@ -1,10 +1,10 @@
 import { ShadowElement } from "@pattaya/depict/graph";
 import { Rectangle } from "@pattaya/pather";
 import { stateTheme } from "../theme/state";
-import { Callable, File } from "../../../resource/node";
 import { buildCallableField } from "./callable";
+import { GraphCallable, GraphFile } from "../../../state";
 
-export const buildCallCard = (x: number, y: number, w: number, h: number, file: File, callables: Callable[], highlight: boolean): ShadowElement => {
+export const buildCallCard = (x: number, y: number, w: number, h: number, file: GraphFile, callables: GraphCallable[], highlight: boolean): ShadowElement => {
   return {
     x,
     y,
@@ -16,8 +16,8 @@ export const buildCallCard = (x: number, y: number, w: number, h: number, file: 
           stroke: highlight ? stateTheme.palette.focus : stateTheme.palette.card,
           fill: highlight ? "#fafbfc" : "#fff",
           border: true,
-          shadowColor: stateTheme.palette.cardShadow,
-          shadowBlur: 0,
+          shadowColor: stateTheme.graph.pannel.normal.shadowColor,
+          shadowBlur: stateTheme.graph.pannel.normal.shadowBlur,
         }
       },
     ],
@@ -25,7 +25,7 @@ export const buildCallCard = (x: number, y: number, w: number, h: number, file: 
       {
         x: 20,
         y: 31,
-        content: file.ref.name,
+        content: file.name,
         opts: {
           width: 106,
           ellipsis: true,

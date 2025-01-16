@@ -9,11 +9,12 @@ import {
   StateTheme
 } from '../state';
 import Search from './search';
-import data from '../data';
 
 import styles from './pannel.module.css';
+import { SourceMap } from '../resource/resource';
 
 export interface PannelProps {
+  data: SourceMap;
   file: StateFile;
   setFile: (s: StateFile) => void;
   call: StateCall;
@@ -30,7 +31,7 @@ export interface PannelProps {
   setPkg: (s: StatePkg) => void;
 };
 
-function Pannel({ pannel, graphType, setPannel, pkg, file, call, theme, setPkg, setFile, setGraphType, setCall, shared }: PannelProps) {
+function Pannel({ data, pannel, graphType, setPannel, pkg, file, call, theme, setPkg, setFile, setGraphType, setCall, shared }: PannelProps) {
   const getDirColor = (dir: Dir) => {
     if (graphType === GraphType.PKG && dir.pkgPtr && dir.pkgPtr.ref.id === pkg.entrance) return theme.palette.focus;
     const activePkg = data.pkgs.get(pkg.active);
@@ -368,7 +369,7 @@ function Pannel({ pannel, graphType, setPannel, pkg, file, call, theme, setPkg, 
   const handleSelectCallable = (callable: Callable) => {
     const id = callable.ref.id;
     setGraphType(GraphType.CALL);
-    const callableSet = data.getFileCallsByRoot(id, 24);
+    const callableSet = data.getCallablesByRoot(id, 24);
     setCall({ pkg: "", entrance: id, active: "", set: callableSet });
   };
 
