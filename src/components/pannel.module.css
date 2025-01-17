@@ -5,7 +5,7 @@
   min-width: 360px;
   max-width: 900px;
   height: 100%;
-  padding: 48px 24px 120px 24px;
+  padding: 24px 24px 120px 24px;
   overflow-y: scroll;
 }
 
@@ -23,6 +23,15 @@
 
 .pannel::-webkit-scrollbar-track {
   background-color: transparent;
+}
+
+.pannel ul {
+  margin: 0;
+  padding: 0;
+}
+
+.pannel .list {
+  padding: 12px 0 12px 0;
 }
 
 .pannel .dirlist {

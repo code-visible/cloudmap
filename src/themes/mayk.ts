@@ -24,8 +24,8 @@ const page: Page = {
 
 
 const search: Search = {
-  textColor: "",
-  textSize: 12,
+  textColor: colors.navy,
+  textSize: 18,
 };
 
 const directory: Directory = {

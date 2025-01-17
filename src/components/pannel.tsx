@@ -372,8 +372,8 @@ function Pannel({ data, pannel, graphType, setPannel, pkg, file, call, theme, se
 
   return (
     <div className={styles.pannel} style={{ backgroundColor: theme.directory.backgroundColor }}>
-      <Search keyword={pannel.search.keyword} setKeyword={handleSearch} />
-      <ul>
+      <Search keyword={pannel.search.keyword} setKeyword={handleSearch} theme={theme} />
+      <ul className={styles.list}>
         {
           renderDirectory(data.root)
         }

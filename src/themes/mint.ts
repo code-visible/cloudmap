@@ -31,8 +31,8 @@ const page: Page = {
 };
 
 const search: Search = {
-  textColor: "",
-  textSize: 12,
+  textColor: colors.text2,
+  textSize: 18,
 };
 
 const directory: Directory = {

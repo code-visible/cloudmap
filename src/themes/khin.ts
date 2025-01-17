@@ -20,8 +20,8 @@ const page: Page = {
 };
 
 const search: Search = {
-  textColor: "",
-  textSize: 12,
+  textColor: "#59576A",
+  textSize: 18,
 };
 
 const directory: Directory = {

@@ -26,8 +26,8 @@ const page: Page = {
 };
 
 const search: Search = {
-  textColor: "",
-  textSize: 12,
+  textColor: "#A8CDE0",
+  textSize: 18,
 };
 
 const directory: Directory = {
