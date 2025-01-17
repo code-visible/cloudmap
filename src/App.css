@@ -29,6 +29,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  user-select: none;
 }
 
 .theme-list {
@@ -38,6 +39,7 @@ body {
 }
 
 .theme-option {
+  cursor: pointer;
   border-width: 1px;
   border-style: solid;
   width: 26px;
