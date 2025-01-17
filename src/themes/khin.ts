@@ -1,23 +1,42 @@
 import { CSSProperties } from "react";
-import { GraphArrow, GraphPannel, GraphStyle, GraphText, Palette } from "./theme";
-
-const palette: Palette = {
-  highlight: "#339",
-  focus: "#117",
-  muted1: "#666",
-  muted2: "#999",
-  muted3: "#ccc",
-  arrow: "#ccc",
-  card: "#666",
-  seperator: "#000",
-  cardShadow: "rgba(150, 150, 150, .2)",
-  hover: "#000",
-};
+import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText, Header, Page, Search } from "./theme";
 
 const background: CSSProperties = {
   backgroundImage: "radial-gradient(#DBD9E7 2.5px, transparent 2.5px)",
   backgroundSize: "32px 32px",
   backgroundColor: "#EEEFFA",
+};
+
+const header: Header = {
+  textNormal: "#858494",
+  textFocus: "#59576A",
+  opacity: .5,
+  backgroundColor: "#EEEFFA",
+  titleColor: "#59576A",
+  titleSize: 20,
+};
+
+const page: Page = {
+  brand: "#EEEFFA",
+  seperator: "#ccc",
+  scrollbarColor: "",
+  scrollbarWidth: "",
+};
+
+const search: Search = {
+  textColor: "#59576A",
+  textSize: 18,
+};
+
+const directory: Directory = {
+  backgroundColor: "#EEEFFA",
+  dir: "#59576A",
+  file: "#858494",
+  unit: "#59576A",
+  active: "#8476FA",
+  muted: "#858494",
+  icon: "#858494",
+  hover: "#000B43",
 };
 
 const text: GraphText = {
@@ -97,6 +116,10 @@ const graph: GraphStyle = {
 }
 
 export default {
-  palette,
+  name: "khin",
+  page,
+  header,
+  search,
+  directory,
   graph,
 };

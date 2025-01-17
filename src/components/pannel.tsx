@@ -9,9 +9,9 @@ import {
   StateTheme
 } from '../state';
 import Search from './search';
+import { SourceMap } from '../resource/resource';
 
 import styles from './pannel.module.css';
-import { SourceMap } from '../resource/resource';
 
 export interface PannelProps {
   data: SourceMap;
@@ -31,43 +31,42 @@ export interface PannelProps {
   setPkg: (s: StatePkg) => void;
 };
 
-function Pannel({ data, pannel, graphType, setPannel, pkg, file, call, theme, setPkg, setFile, setGraphType, setCall, shared }: PannelProps) {
+function Pannel({ data, pannel, setPannel, pkg, file, call, theme, setPkg, setFile, setGraphType, setCall, shared }: PannelProps) {
   const getDirColor = (dir: Dir) => {
-    if (graphType === GraphType.PKG && dir.pkgPtr && dir.pkgPtr.ref.id === pkg.entrance) return theme.palette.focus;
+    // if (graphType === GraphType.PKG && dir.pkgPtr && dir.pkgPtr.ref.id === pkg.entrance) return theme.directory.focus;
     const activePkg = data.pkgs.get(pkg.active);
     if (shared.mutePannel) {
-      if (!dir.pkgPtr) return theme.palette.muted3;
+      if (!dir.pkgPtr) return theme.directory.muted;
       const pkgID = dir.pkgPtr.ref.id;
-      if (pkgID === pkg.active) return theme.palette.highlight;
-      if (pkg.set.has(pkgID) && activePkg && (activePkg.imports.has(dir.pkgPtr) || activePkg.exports.has(dir.pkgPtr))) return theme.palette.highlight;
-      return theme.palette.muted3;
+      if (pkgID === pkg.active) return theme.directory.active;
+      if (pkg.set.has(pkgID) && activePkg && (activePkg.imports.has(dir.pkgPtr) || activePkg.exports.has(dir.pkgPtr))) return theme.directory.active;
+      return theme.directory.muted;
     }
-    if (pannel.hover.typ === GraphType.PKG && pannel.hover.id === dir.path) return theme.palette.hover;
-    return theme.palette.muted1;
+    if (pannel.hover.typ === GraphType.PKG && pannel.hover.id === dir.path) return theme.directory.hover;
+    return theme.directory.dir;
   };
 
   const getFileColor = (f: File) => {
-    if (graphType === GraphType.FILE && f.ref.id === file.entrance) return theme.palette.focus;
+    // if (graphType === GraphType.FILE && f.ref.id === file.entrance) return theme.directory.focus;
     if (shared.mutePannel) {
       const fileID = f.ref.id;
-      if (fileID === file.active) return theme.palette.highlight;
-      return theme.palette.muted3;
+      if (fileID === file.active) return theme.directory.active;
+      return theme.directory.muted;
     }
-    if (pannel.hover.typ === GraphType.FILE && pannel.hover.id === f.ref.id) return theme.palette.hover;
-    return theme.palette.muted2;
+    if (pannel.hover.typ === GraphType.FILE && pannel.hover.id === f.ref.id) return theme.directory.hover;
+    return theme.directory.file;
   };
 
   const getCallableColor = (callable: Callable) => {
-    if (GraphType.CALL && callable.ref.id === file.entrance) return theme.palette.focus;
+    // if (GraphType.CALL && callable.ref.id === file.entrance) return theme.directory.focus;
     if (shared.mutePannel) {
       const fnID = callable.ref.id;
-      if (fnID === call.active) return theme.palette.highlight;
-      return theme.palette.muted3;
+      if (fnID === call.active) return theme.directory.active;
+      return theme.directory.muted;
     }
-    if (pannel.hover.typ === GraphType.CALL && pannel.hover.id === callable.ref.id) return theme.palette.hover;
-    if (callable.ref.private) return theme.palette.muted3;
-    // if (prefix) return theme.palette.muted2;
-    return theme.palette.muted1;
+    if (pannel.hover.typ === GraphType.CALL && pannel.hover.id === callable.ref.id) return theme.directory.hover;
+    if (callable.ref.private) return theme.directory.muted;
+    return theme.directory.unit;
   };
 
   const searchKeyword = (keyword: string) => {
@@ -188,15 +187,6 @@ function Pannel({ data, pannel, graphType, setPannel, pkg, file, call, theme, se
               callable.absPtr ? `(${callable.absPtr.ref.name}).${callable.ref.name}` : callable.ref.name
             }
           </div>
-          {
-            pannel.hover.typ === GraphType.CALL && pannel.hover.id === id ? (
-              <div
-                className={styles.enter}
-                style={{ color: theme.palette.muted1 }}
-                onClick={() => handleSelectCallable(callable)}
-              >🡲</div>
-            ) : null
-          }
         </div>
       </li>
     );
@@ -245,7 +235,7 @@ function Pannel({ data, pannel, graphType, setPannel, pkg, file, call, theme, se
             dir.pkgPtr && pannel.hover.typ === GraphType.PKG && pannel.hover.id === dir.path ? (
               <div
                 className={styles.enter}
-                style={{ color: theme.palette.muted1 }}
+                style={{ color: theme.directory.icon }}
                 onClick={() => handleSelectDir(dir)}
               >🡲</div>
             ) : null
@@ -295,7 +285,7 @@ function Pannel({ data, pannel, graphType, setPannel, pkg, file, call, theme, se
             pannel.hover.typ === GraphType.FILE && pannel.hover.id === file.ref.id ? (
               <div
                 className={styles.enter}
-                style={{ color: theme.palette.muted1 }}
+                style={{ color: theme.directory.icon }}
                 onClick={() => handleSelectFile(file)}
               >🡲</div>
             ) : null
@@ -381,9 +371,9 @@ function Pannel({ data, pannel, graphType, setPannel, pkg, file, call, theme, se
   };
 
   return (
-    <div className={styles.pannel}>
-      <Search keyword={pannel.search.keyword} setKeyword={handleSearch} />
-      <ul>
+    <div className={styles.pannel} style={{ backgroundColor: theme.directory.backgroundColor }}>
+      <Search keyword={pannel.search.keyword} setKeyword={handleSearch} theme={theme} />
+      <ul className={styles.list}>
         {
           renderDirectory(data.root)
         }

@@ -1,43 +1,72 @@
 import { CSSProperties } from "react";
-import { GraphArrow, GraphPannel, GraphStyle, GraphText, Palette } from "./theme";
+import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText, Header, Page, Search } from "./theme";
 
-const palette: Palette = {
-  highlight: "#339",
-  focus: "#117",
-  muted1: "#666",
-  muted2: "#999",
-  muted3: "#ccc",
-  arrow: "#ccc",
-  card: "#666",
-  seperator: "#000",
-  cardShadow: "rgba(150, 150, 150, .2)",
-  hover: "#000",
+const colors = {
+  black1: "#282C34",
+  black2: "#21252B",
+  black3: "#1B1E23",
+  line: "#534941",
+  line2: "#A668BB",
+  yellow: "#C9BD7A",
+  purple: "#4992DF",
+  red: "#AB4959",
+  comment: "#55515A"
+};
+
+const header: Header = {
+  textNormal: "#7DA5BF",
+  textFocus: "#A8CDE0",
+  opacity: .75,
+  backgroundColor: colors.black1,
+  titleColor: "#A8CDE0",
+  titleSize: 20,
+};
+
+const page: Page = {
+  brand: colors.black1,
+  seperator: colors.line,
+  scrollbarColor: "",
+  scrollbarWidth: "",
+};
+
+const search: Search = {
+  textColor: "#A8CDE0",
+  textSize: 18,
+};
+
+const directory: Directory = {
+  backgroundColor: colors.black1,
+  dir: "#A8CDE0",
+  file: "#7DA5BF",
+  unit: "#A8CDE0",
+  active: colors.yellow,
+  muted: colors.comment,
+  icon: "#7DA5BF",
+  hover: colors.purple,
 };
 
 const background: CSSProperties = {
-  // backgroundImage: "radial-gradient(#eee2e9 2px, transparent 2px)",
-  // backgroundSize: "36px 36px",
-  backgroundColor: "#000",
+  backgroundColor: colors.black1,
 };
 
 const text: GraphText = {
   header: {
     normal: {
-      color: "#A8ADA9",
+      color: "#A8CDE0",
       font: "bold 14px san-serf",
     },
     focus: {
-      color: "#A8ADA9",
+      color: "#A8CDE0",
       font: "bold 14px san-serf",
     },
   },
   body: {
     normal: {
-      color: "#969A97",
+      color: "#7DA5BF",
       font: "14px/2 san-serf",
     },
     focus: {
-      color: "#7CE486",
+      color: colors.yellow,
       font: "14px/2 san-serf",
     },
   },
@@ -45,46 +74,46 @@ const text: GraphText = {
 
 const pannel: GraphPannel = {
   muted: {
-    backgroundColor: "#1c1c1c",
+    backgroundColor: colors.black2,
     strokeWidth: 1,
-    strokeColor: "#333",
-    shadowColor: "rgba(150, 150, 150, .2)",
+    strokeColor: colors.comment,
+    shadowColor: "rgba(33, 37, 43, .6)",
     shadowBlur: 5,
   },
   normal: {
-    backgroundColor: "#1c1c1c",
+    backgroundColor: colors.black2,
     strokeWidth: 1,
-    strokeColor: "#666",
-    shadowColor: "rgba(150, 150, 150, .2)",
+    strokeColor: colors.comment,
+    shadowColor: "rgba(33, 37, 43, .6)",
     shadowBlur: 12,
   },
   focus: {
-    backgroundColor: "#1c1c1c",
-    strokeWidth: 1,
-    strokeColor: "#7CE486",
-    shadowColor: "rgba(255, 0, 255, .2)",
-    shadowBlur: 24,
+    backgroundColor: colors.black2,
+    strokeWidth: 2,
+    strokeColor: colors.yellow,
+    shadowColor: "rgba(33, 37, 43, .6)",
+    shadowBlur: 12,
   },
   active: {
-    backgroundColor: "#1c1c1c",
-    strokeWidth: 1,
-    strokeColor: "#7CE486",
-    shadowColor: "rgba(255, 0, 0, .2)",
-    shadowBlur: 24,
+    backgroundColor: colors.black2,
+    strokeWidth: 2,
+    strokeColor: colors.purple,
+    shadowColor: "rgba(33, 37, 43, .6)",
+    shadowBlur: 12,
   },
 };
 
 const arrow: GraphArrow = {
   muted: {
-    color: "#333",
-    endpointStrokeColor: "#333",
-    endpointBackgroundColor: "#333",
+    color: colors.line,
+    endpointStrokeColor: colors.line,
+    endpointBackgroundColor: colors.line,
     width: 1,
   },
   active: {
-    color: "#FFE86B",
-    endpointStrokeColor: "#FFE86B",
-    endpointBackgroundColor: "#666",
+    color: colors.line2,
+    endpointStrokeColor: colors.line2,
+    endpointBackgroundColor: colors.line2,
     width: 1,
   },
 };
@@ -97,6 +126,10 @@ const graph: GraphStyle = {
 }
 
 export default {
-  palette,
+  name: "chaya",
+  page,
+  header,
+  search,
+  directory,
   graph,
 };

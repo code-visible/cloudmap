@@ -1,7 +1,7 @@
 import { Callable, File, Pkg } from "../resource/node";
-import { GraphStyle, Palette } from "../themes/theme";
-import khin from "../themes/khin";
+import { Directory, GraphStyle, Header, Page, Search } from "../themes/theme";
 import { getNameFromPath } from "../utils/path";
+import mayk from "../themes/mayk";
 
 export const enum GraphType {
   PKG = 1,
@@ -152,7 +152,11 @@ export interface StatePkg {
 }
 
 export interface StateTheme {
-  palette: Palette;
+  name: string;
+  page: Page;
+  header: Header;
+  search: Search;
+  directory: Directory;
   graph: GraphStyle;
 }
 
@@ -250,8 +254,12 @@ export const InitialStateCall: StateCall = {
 };
 
 export const InitialStateTheme: StateTheme = {
-  palette: khin.palette,
-  graph: khin.graph,
+  name: mayk.name,
+  page: mayk.page,
+  header: mayk.header,
+  search: mayk.search,
+  directory: mayk.directory,
+  graph: mayk.graph,
 };
 
 export const InitialStatePannel: StatePannel = {

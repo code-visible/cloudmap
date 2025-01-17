@@ -19,10 +19,7 @@ import {
   StateShared,
   StateTheme
 } from './state';
-import mayk from './themes/mayk';
-import chaya from './themes/chaya';
-import khin from './themes/khin';
-import mint from './themes/mint';
+import { brands, themes } from './themes';
 
 import './App.css'
 
@@ -47,16 +44,37 @@ function App() {
 
   return (
     <div className='app'>
-      <div className='header'>
-        <div className='title'>
+      <div className='header'
+        style={{
+          borderBottomColor: theme.page.seperator,
+          backgroundColor: theme.header.backgroundColor,
+        }}
+      >
+        <div
+          style={{
+            color: theme.header.titleColor,
+            fontSize: theme.header.titleSize,
+          }}
+        >
           {data.name}
         </div>
         <div className='theme'>
-          <div>theme: </div>
-          <button onClick={() => setTheme({ graph: mayk.graph, palette: mayk.palette })}>mayk</button>
-          <button onClick={() => setTheme({ graph: khin.graph, palette: khin.palette })}>khin</button>
-          <button onClick={() => setTheme({ graph: chaya.graph, palette: chaya.palette })}>chaya</button>
-          <button onClick={() => setTheme({ graph: mint.graph, palette: mint.palette })}>mint</button>
+          <div className='theme-list' style={{ opacity: theme.name === "mayk" ? 1 : theme.header.opacity }}>
+            <button className='theme-option' style={{ backgroundColor: brands.mayk, borderColor: theme.graph.pannel.focus.strokeColor }} onClick={() => setTheme({ ...themes.mayk })}></button>
+            <div style={{ color: theme.name === "mayk" ? theme.header.textFocus : theme.header.textNormal }}>mayk</div>
+          </div>
+          <div className='theme-list' style={{ opacity: theme.name === "khin" ? 1 : theme.header.opacity }}>
+            <button className='theme-option' style={{ backgroundColor: brands.khin, borderColor: theme.graph.pannel.focus.strokeColor }} onClick={() => setTheme({ ...themes.khin })}></button>
+            <div style={{ color: theme.name === "khin" ? theme.header.textFocus : theme.header.textNormal }}>khin</div>
+          </div>
+          <div className='theme-list' style={{ opacity: theme.name === "chaya" ? 1 : theme.header.opacity }}>
+            <button className='theme-option' style={{ backgroundColor: brands.chaya, borderColor: theme.graph.pannel.focus.strokeColor }} onClick={() => setTheme({ ...themes.chaya })}></button>
+            <div style={{ color: theme.name === "chaya" ? theme.header.textFocus : theme.header.textNormal }}>chaya</div>
+          </div>
+          <div className='theme-list' style={{ opacity: theme.name === "mint" ? 1 : theme.header.opacity }}>
+            <button className='theme-option' style={{ backgroundColor: brands.mint, borderColor: theme.graph.pannel.focus.strokeColor }} onClick={() => setTheme({ ...themes.mint })}></button>
+            <div style={{ color: theme.name === "mint" ? theme.header.textFocus : theme.header.textNormal }}>mint</div>
+          </div>
         </div>
       </div>
       <div className='content'>
@@ -77,7 +95,7 @@ function App() {
           pkg={pkg}
           setPkg={setPkg}
         />
-        <div className='seperator'></div>
+        <div className='seperator' style={{ backgroundColor: theme.page.seperator }}></div>
         <Graph
           data={data}
           file={file}

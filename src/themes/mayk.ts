@@ -1,17 +1,46 @@
 import { CSSProperties } from "react";
-import { GraphArrow, GraphPannel, GraphStyle, GraphText, Palette } from "./theme";
+import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText, Header, Page, Search } from "./theme";
 
-const palette: Palette = {
-  highlight: "#339",
-  focus: "#117",
-  muted1: "#666",
-  muted2: "#999",
-  muted3: "#ccc",
-  arrow: "#ccc",
-  card: "#666",
-  seperator: "#000",
-  cardShadow: "rgba(150, 150, 150, .2)",
-  hover: "#000",
+const colors = {
+  baby: "#BFD7ED",
+  grotto: "#60A3D9",
+  royal: "#0074B7",
+  navy: "#003B73",
+  comp1: "#EFFEFA",
+  comp2: "#FAFBFF",
+};
+
+const header: Header = {
+  textNormal: colors.royal,
+  textFocus: colors.navy,
+  opacity: .35,
+  backgroundColor: "#fff",
+  titleColor: colors.navy,
+  titleSize: 20,
+};
+
+const page: Page = {
+  brand: "#fff",
+  seperator: colors.baby,
+  scrollbarColor: "",
+  scrollbarWidth: "",
+};
+
+
+const search: Search = {
+  textColor: colors.navy,
+  textSize: 18,
+};
+
+const directory: Directory = {
+  backgroundColor: "#fff",
+  dir: colors.navy,
+  file: colors.royal,
+  unit: colors.navy,
+  active: colors.navy,
+  muted: colors.baby,
+  icon: colors.royal,
+  hover: "#000B43",
 };
 
 const background: CSSProperties = {
@@ -23,21 +52,21 @@ const background: CSSProperties = {
 const text: GraphText = {
   header: {
     normal: {
-      color: "#000",
+      color: colors.navy,
       font: "bold 14px san-serf",
     },
     focus: {
-      color: "#000",
+      color: colors.navy,
       font: "bold 14px san-serf",
     },
   },
   body: {
     normal: {
-      color: palette.muted1,
+      color: colors.royal,
       font: "14px/2 san-serf",
     },
     focus: {
-      color: palette.focus,
+      color: colors.navy,
       font: "14px/2 san-serf",
     },
   },
@@ -47,44 +76,44 @@ const pannel: GraphPannel = {
   muted: {
     backgroundColor: "#fff",
     strokeWidth: 1,
-    strokeColor: palette.card,
-    shadowColor: "rgba(150, 150, 150, .2)",
+    strokeColor: colors.grotto,
+    shadowColor: "#fff",
     shadowBlur: 0,
   },
   normal: {
     backgroundColor: "#fff",
     strokeWidth: 1,
-    strokeColor: palette.card,
-    shadowColor: "rgba(150, 150, 150, .2)",
+    strokeColor: colors.grotto,
+    shadowColor: "#fff",
     shadowBlur: 0,
   },
   focus: {
-    backgroundColor: "#fafbfc",
+    backgroundColor: colors.comp2,
     strokeWidth: 1,
-    strokeColor: palette.focus,
-    shadowColor: "rgba(150, 150, 150, .2)",
+    strokeColor: colors.navy,
+    shadowColor: "#fff",
     shadowBlur: 0,
   },
   active: {
-    backgroundColor: "#fafbfc",
+    backgroundColor: colors.comp1,
     strokeWidth: 1,
-    strokeColor: palette.focus,
-    shadowColor: "rgba(150, 150, 150, .2)",
+    strokeColor: colors.navy,
+    shadowColor: "#fff",
     shadowBlur: 0,
   },
 };
 
 const arrow: GraphArrow = {
   muted: {
-    color: "#ccc",
+    color: colors.baby,
     width: 1,
-    endpointStrokeColor: "#aaa",
+    endpointStrokeColor: colors.baby,
     endpointBackgroundColor: "#fff",
   },
   active: {
-    color: palette.focus,
+    color: colors.royal,
     width: 1,
-    endpointStrokeColor: palette.focus,
+    endpointStrokeColor: colors.navy,
     endpointBackgroundColor: "#fff",
   },
 };
@@ -97,6 +126,10 @@ const graph: GraphStyle = {
 }
 
 export default {
-  palette,
+  name: "mayk",
+  page,
+  header,
+  search,
+  directory,
   graph,
 };

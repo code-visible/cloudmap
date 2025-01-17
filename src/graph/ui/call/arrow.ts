@@ -4,6 +4,7 @@ import { stateCall } from "./state";
 import { stateTheme } from "../theme/state";
 
 export const buildCallArrow = (startID: string, endID: string, points: number[][]): ShadowElement => {
+  const theme = stateTheme.graph.arrow;
   return {
     x: 0,
     y: 0,
@@ -11,8 +12,8 @@ export const buildCallArrow = (startID: string, endID: string, points: number[][
       {
         path: Curve.Multi(points, 12),
         opts: {
-          stroke: stateTheme.palette.arrow,
-          lineWidth: 1,
+          stroke: theme.muted.color,
+          lineWidth: theme.muted.width,
         }
       },
     ],
@@ -23,14 +24,14 @@ export const buildCallArrow = (startID: string, endID: string, points: number[][
       const edgeOpts = this.shapes![0].opts!;
       const triangleOpts = this.children![0].shapes![0].opts!;
       if (callable && file && ((callable.file === this.data.s && file.imports.has(this.data.e)) || (callable.file === this.data.e && file.exports.has(this.data.s)))) {
-        edgeOpts.stroke = stateTheme.palette.highlight;
-        triangleOpts.stroke = stateTheme.palette.highlight;
-        triangleOpts.fill = stateTheme.palette.highlight;
+        edgeOpts.stroke = theme.active.color;
+        triangleOpts.stroke = theme.active.endpointStrokeColor;
+        triangleOpts.fill = theme.active.endpointBackgroundColor;
         return;
       }
-      edgeOpts.stroke = stateTheme.palette.arrow;
-      triangleOpts.stroke = "#aaa";
-      triangleOpts.fill = "#fff";
+      edgeOpts.stroke = theme.muted.color;
+      triangleOpts.stroke = theme.muted.endpointStrokeColor;
+      triangleOpts.fill = theme.muted.endpointBackgroundColor;
     },
     children: [
       {

@@ -4,6 +4,7 @@ import { statePkg } from "./state";
 import { stateTheme } from "../theme/state";
 
 export const buildArrow = (startID: string, endID: string, points: number[][]): ShadowElement => {
+  const theme = stateTheme.graph.arrow;
   return {
     x: 0,
     y: 0,
@@ -11,14 +12,13 @@ export const buildArrow = (startID: string, endID: string, points: number[][]): 
       {
         path: Curve.Multi(points, 12),
         opts: {
-          stroke: stateTheme.graph.arrow.muted.color,
-          lineWidth: stateTheme.graph.arrow.muted.width,
+          stroke: theme.muted.color,
+          lineWidth: theme.muted.width,
         }
       },
     ],
     data: { s: startID, e: endID },
     update(_delta) {
-      const theme = stateTheme.graph.arrow;
       const edgeOpts = this.shapes![0].opts!;
       const triangleOpts = this.children![0].shapes![0].opts!;
       if (this.data.s === statePkg.state.active?.id || this.data.e === statePkg.state.active?.id) {
@@ -40,10 +40,10 @@ export const buildArrow = (startID: string, endID: string, points: number[][]): 
         shapes: [{
           path: Triangle.Equilateral(0, 0, 8),
           opts: {
-            stroke: "#666",
             lineWidth: 1,
-            fill: "#fff",
             rotation: 1.6,
+            stroke: theme.muted.endpointStrokeColor,
+            fill: theme.muted.endpointBackgroundColor,
           }
         },
         ]

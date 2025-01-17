@@ -5,6 +5,7 @@ import { buildCallableField } from "./callable";
 import { GraphCallable, GraphFile } from "../../../state";
 
 export const buildCallCard = (x: number, y: number, w: number, h: number, file: GraphFile, callables: GraphCallable[], highlight: boolean): ShadowElement => {
+  const theme = stateTheme.graph.pannel;
   return {
     x,
     y,
@@ -13,10 +14,11 @@ export const buildCallCard = (x: number, y: number, w: number, h: number, file: 
         path: Rectangle.RoundAligned(0, 0, w, h, 9),
         opts: {
           background: true,
-          stroke: highlight ? stateTheme.palette.focus : stateTheme.palette.card,
-          fill: highlight ? "#fafbfc" : "#fff",
           border: true,
-          shadowColor: stateTheme.graph.pannel.normal.shadowColor,
+          fill: highlight ? theme.focus.backgroundColor : theme.normal.backgroundColor,
+          stroke: highlight ? theme.focus.strokeColor : theme.normal.strokeColor,
+          lineWidth: theme.normal.strokeWidth,
+          shadowColor: theme.normal.shadowColor,
           shadowBlur: stateTheme.graph.pannel.normal.shadowBlur,
         }
       },

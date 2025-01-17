@@ -1,16 +1,35 @@
 import { CSSProperties } from "react";
 
-export interface Palette {
-  highlight: string;
-  focus: string;
-  muted1: string;
-  muted2: string;
-  muted3: string;
-  arrow: string;
-  card: string;
+export interface Page {
+  brand: string;
   seperator: string;
-  cardShadow: string;
+  scrollbarColor: string;
+  scrollbarWidth: string;
+}
+
+export interface Search {
+  textColor: string;
+  textSize: number;
+};
+
+export interface Header {
+  backgroundColor: string;
+  titleColor: string;
+  titleSize: number;
+  textNormal: string;
+  textFocus: string;
+  opacity: number;
+}
+
+export interface Directory {
+  backgroundColor: string;
+  active: string;
+  muted: string;
   hover: string;
+  dir: string;
+  file: string;
+  unit: string;
+  icon: string;
 };
 
 export interface PannelStyle {
