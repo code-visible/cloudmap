@@ -9,9 +9,9 @@ import {
   StateTheme
 } from '../state';
 import Search from './search';
+import { SourceMap } from '../resource/resource';
 
 import styles from './pannel.module.css';
-import { SourceMap } from '../resource/resource';
 
 export interface PannelProps {
   data: SourceMap;
