@@ -9,8 +9,8 @@ const background: CSSProperties = {
 
 const header: Header = {
   backgroundColor: "#EEEFFA",
-  titleColor: "",
-  titleSize: 12,
+  titleColor: "#59576A",
+  titleSize: 20,
 };
 
 const page: Page = {

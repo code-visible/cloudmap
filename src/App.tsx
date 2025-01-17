@@ -47,8 +47,18 @@ function App() {
 
   return (
     <div className='app'>
-      <div className='header' style={{ borderBottomColor: theme.page.seperator, backgroundColor: theme.header.backgroundColor }}>
-        <div className='title'>
+      <div className='header'
+        style={{
+          borderBottomColor: theme.page.seperator,
+          backgroundColor: theme.header.backgroundColor,
+        }}
+      >
+        <div
+          style={{
+            color: theme.header.titleColor,
+            fontSize: theme.header.titleSize,
+          }}
+        >
           {data.name}
         </div>
         <div className='theme'>

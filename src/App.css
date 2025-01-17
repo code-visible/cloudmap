@@ -24,10 +24,6 @@ body {
   border-bottom-style: solid;
 }
 
-.title {
-  font-size: 20px;
-}
-
 .theme {
   width: 180px;
   display: flex;

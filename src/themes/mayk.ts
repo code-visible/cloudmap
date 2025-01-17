@@ -12,8 +12,8 @@ const colors = {
 
 const header: Header = {
   backgroundColor: "#fff",
-  titleColor: "",
-  titleSize: 12,
+  titleColor: colors.navy,
+  titleSize: 20,
 };
 
 const page: Page = {

@@ -20,8 +20,8 @@ const colors = {
 
 const header: Header = {
   backgroundColor: "#ECE3CA",
-  titleColor: "",
-  titleSize: 12,
+  titleColor: colors.text2,
+  titleSize: 20,
 };
 
 const page: Page = {

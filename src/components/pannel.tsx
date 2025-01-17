@@ -31,7 +31,7 @@ export interface PannelProps {
   setPkg: (s: StatePkg) => void;
 };
 
-function Pannel({ data, pannel, graphType, setPannel, pkg, file, call, theme, setPkg, setFile, setGraphType, setCall, shared }: PannelProps) {
+function Pannel({ data, pannel, setPannel, pkg, file, call, theme, setPkg, setFile, setGraphType, setCall, shared }: PannelProps) {
   const getDirColor = (dir: Dir) => {
     // if (graphType === GraphType.PKG && dir.pkgPtr && dir.pkgPtr.ref.id === pkg.entrance) return theme.directory.focus;
     const activePkg = data.pkgs.get(pkg.active);
