@@ -14,12 +14,16 @@ const colors = {
 };
 
 const header: Header = {
+  textNormal: "#7DA5BF",
+  textFocus: "#A8CDE0",
+  opacity: .75,
   backgroundColor: colors.black1,
   titleColor: "#A8CDE0",
   titleSize: 20,
 };
 
 const page: Page = {
+  brand: colors.black1,
   seperator: colors.line,
   scrollbarColor: "",
   scrollbarWidth: "",
@@ -122,6 +126,7 @@ const graph: GraphStyle = {
 }
 
 export default {
+  name: "chaya",
   page,
   header,
   search,

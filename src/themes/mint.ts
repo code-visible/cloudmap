@@ -19,12 +19,16 @@ const colors = {
 };
 
 const header: Header = {
+  textNormal: colors.text1,
+  textFocus: colors.text2,
+  opacity: .45,
   backgroundColor: "#ECE3CA",
   titleColor: colors.text2,
   titleSize: 20,
 };
 
 const page: Page = {
+  brand: "#ECE3CA",
   seperator: colors.grid,
   scrollbarColor: "",
   scrollbarWidth: "",
@@ -127,6 +131,7 @@ const graph: GraphStyle = {
 }
 
 export default {
+  name: "mint",
   page,
   header,
   search,

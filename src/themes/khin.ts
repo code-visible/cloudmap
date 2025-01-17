@@ -8,12 +8,16 @@ const background: CSSProperties = {
 };
 
 const header: Header = {
+  textNormal: "#858494",
+  textFocus: "#59576A",
+  opacity: .5,
   backgroundColor: "#EEEFFA",
   titleColor: "#59576A",
   titleSize: 20,
 };
 
 const page: Page = {
+  brand: "#EEEFFA",
   seperator: "#ccc",
   scrollbarColor: "",
   scrollbarWidth: "",
@@ -112,6 +116,7 @@ const graph: GraphStyle = {
 }
 
 export default {
+  name: "khin",
   page,
   header,
   search,

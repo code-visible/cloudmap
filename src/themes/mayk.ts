@@ -11,12 +11,16 @@ const colors = {
 };
 
 const header: Header = {
+  textNormal: colors.royal,
+  textFocus: colors.navy,
+  opacity: .35,
   backgroundColor: "#fff",
   titleColor: colors.navy,
   titleSize: 20,
 };
 
 const page: Page = {
+  brand: "#fff",
   seperator: colors.baby,
   scrollbarColor: "",
   scrollbarWidth: "",
@@ -122,6 +126,7 @@ const graph: GraphStyle = {
 }
 
 export default {
+  name: "mayk",
   page,
   header,
   search,

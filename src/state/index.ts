@@ -152,6 +152,7 @@ export interface StatePkg {
 }
 
 export interface StateTheme {
+  name: string;
   page: Page;
   header: Header;
   search: Search;
@@ -253,6 +254,7 @@ export const InitialStateCall: StateCall = {
 };
 
 export const InitialStateTheme: StateTheme = {
+  name: mayk.name,
   page: mayk.page,
   header: mayk.header,
   search: mayk.search,

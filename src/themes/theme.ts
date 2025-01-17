@@ -1,6 +1,7 @@
 import { CSSProperties } from "react";
 
 export interface Page {
+  brand: string;
   seperator: string;
   scrollbarColor: string;
   scrollbarWidth: string;
@@ -15,6 +16,9 @@ export interface Header {
   backgroundColor: string;
   titleColor: string;
   titleSize: number;
+  textNormal: string;
+  textFocus: string;
+  opacity: number;
 }
 
 export interface Directory {

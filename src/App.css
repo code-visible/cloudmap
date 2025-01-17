@@ -25,10 +25,25 @@ body {
 }
 
 .theme {
-  width: 180px;
+  width: 200px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.theme-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.theme-option {
+  border-width: 1px;
+  border-style: solid;
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  margin-bottom: 3px;
 }
 
 .seperator {
