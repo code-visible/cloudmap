@@ -27,7 +27,7 @@ export const buildInfoCard = (): ShadowElement => {
     texts: [
       {
         x: 20,
-        y: 31,
+        y: 33,
         content: "",
         opts: {
           width: 256,
