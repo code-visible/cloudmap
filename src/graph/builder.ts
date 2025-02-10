@@ -3,7 +3,7 @@ import { GraphLayout } from "./layout";
 import { buildPkgCard } from "./ui/pkg/card";
 import { buildArrow } from "./ui/pkg/arrow";
 import { statePkg } from "./ui/pkg/state";
-import { buildInfoCard } from "./ui/pkg/info";
+import { buildInfoCard } from "./ui/pkg/tip";
 import { stateCall } from "./ui/call/state";
 import { buildCallCard } from "./ui/call/card";
 import { stateFile } from "./ui/file/state";

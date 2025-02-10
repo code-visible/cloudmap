@@ -1,38 +1,58 @@
-import type { MeshOptions, ShadowElement } from "@pattaya/depict/graph";
-import { Rectangle } from "@pattaya/pather";
+import type { ShadowElement } from "@pattaya/depict/graph";
 import { buildCardField } from "./cardfield";
 import { statePkg } from "./state";
 import { stateTheme } from "../theme/state";
 import { GraphMessageType } from "../../../message";
 import { GraphPkg, GraphType } from "../../../state";
-import { PannelStyle } from "../../../themes/theme";
+import { nodes } from "@pattaya/pattaya/components";
+import { rectContain } from "@pattaya/pattaya/core";
 
-const setOpts = (style: PannelStyle, opts: MeshOptions) => {
-  opts.stroke = style.strokeColor;
-  opts.lineWidth = style.strokeWidth;
-  opts.fill = style.backgroundColor;
-  opts.shadowColor = style.shadowColor;
-  opts.shadowBlur = style.shadowBlur;
+const palette = {
+  flat: "#FFFFFF",
+  baby: "#BFD7ED",
+  grotto: "#60A3D9",
+  royal: "#0074B7",
+  navy: "#003B73",
+  comp1: "#EFFEFA",
+  comp2: "#FAFBFF",
+};
+
+const cardStyle = {
+  muted: {
+    border: palette.grotto,
+    background: palette.flat,
+    shadow: "#fff",
+    shadowBlur: 0,
+  },
+  normal: {
+    border: palette.grotto,
+    background: palette.flat,
+    shadow: "#fff",
+    shadowBlur: 0,
+  },
+  focus: {
+    border: palette.navy,
+    background: palette.comp2,
+    shadow: "#fff",
+    shadowBlur: 0,
+  },
+  active: {
+    border: palette.navy,
+    background: palette.comp1,
+    shadow: "#fff",
+    shadowBlur: 0,
+  },
 };
 
 export const buildPkgCard = (x: number, y: number, pkg: GraphPkg): ShadowElement => {
   const width = 160;
   const height = 120;
+  const contain = rectContain(width, height, true);
   return {
-    x,
-    y,
-    shapes: [{
-      path: Rectangle.RoundAligned(0, 0, width, height, 9),
-      opts: {
-        background: true,
-        border: true,
-        fill: stateTheme.graph.pannel.normal.backgroundColor,
-        stroke: stateTheme.graph.pannel.normal.strokeColor,
-        lineWidth: stateTheme.graph.pannel.normal.strokeWidth,
-        shadowColor: stateTheme.graph.pannel.normal.shadowColor,
-        shadowBlur: stateTheme.graph.pannel.normal.shadowBlur,
-      }
-    }],
+    x: x,
+    y: y,
+    contain,
+    shapes: nodes.rectangle.shapes({ width, height, radius: 5, aligned: true }, cardStyle.normal),
     texts: [
       {
         x: 20,
@@ -53,24 +73,21 @@ export const buildPkgCard = (x: number, y: number, pkg: GraphPkg): ShadowElement
     ],
     data: { id: pkg.id, active: false },
     update(_delta) {
-      const theme = stateTheme.graph.pannel;
-      const opts = this.shapes![0].opts!;
       const active = statePkg.state.active;
       if (active) {
         if (this.data.id === active.id) {
-          setOpts(theme.focus, opts);
+          nodes.rectangle.applyStyle(this.shapes, cardStyle.focus);
           return;
         }
         if (active.exports.has(this.data.id) || active.imports.has(this.data.id)) {
-          setOpts(theme.active, opts);
+          nodes.rectangle.applyStyle(this.shapes, cardStyle.active);
           return;
         }
-        setOpts(theme.muted, opts);
+        nodes.rectangle.applyStyle(this.shapes, cardStyle.muted);
         return;
       }
-      setOpts(theme.normal, opts);
+      nodes.rectangle.applyStyle(this.shapes, cardStyle.normal);
     },
-    contain: (x, y) => x > 0 && x < width && y > 0 && y < height,
     onMouseenter(_render, x, y, _mx, _my) {
       this.data.active = true;
       statePkg.local.hoverX = x + this.x;
@@ -80,7 +97,6 @@ export const buildPkgCard = (x: number, y: number, pkg: GraphPkg): ShadowElement
         active: this.data.id,
       };
       postMessage({ type: GraphMessageType.UPDATE_PKG, msg: { graph: GraphType.PKG, data } });
-      return true;
     },
     onMouseleave(_render, _x, _y, _mx, _my) {
       this.data.active = false;
@@ -89,12 +105,10 @@ export const buildPkgCard = (x: number, y: number, pkg: GraphPkg): ShadowElement
         active: "",
       };
       postMessage({ type: GraphMessageType.UPDATE_PKG, msg: { graph: GraphType.PKG, data } });
-      return true;
     },
     onClick(_render, _x, _y, _mouseX, _mouseY) {
       this.data.active = false;
       postMessage({ type: GraphMessageType.UPDATE_PKG, msg: { graph: GraphType.PKG, data: { entrance: this.data.id, active: "" } } });
-      return true;
     },
   };
 };

@@ -1,10 +1,10 @@
 import { MeshOptions, ShadowElement } from "@pattaya/depict/graph";
-import { Circle } from "@pattaya/pather";
 import { stateTheme } from "../theme/state";
 import { stateFile } from "./state";
 import { GraphMessageType } from "../../../message";
 import { GraphFile, GraphType } from "../../../state";
 import { PannelStyle } from "../../../themes/theme";
+import { nodes } from "@pattaya/pattaya/components";
 
 const setOpts = (style: PannelStyle, opts: MeshOptions) => {
   opts.stroke = style.strokeColor;
@@ -21,7 +21,7 @@ export const buildFileNode = (x: number, y: number, r: number, file: GraphFile, 
     y,
     shapes: [
       {
-        path: Circle.Basic(0, 0, r),
+        path: nodes.circle.wireframe({ radius: r }),
         opts: {
           background: true,
           border: true,
@@ -40,6 +40,7 @@ export const buildFileNode = (x: number, y: number, r: number, file: GraphFile, 
         y: 4,
         content: file.name,
         opts: {
+          // textAlign: "center",
           width: 106,
           ellipsis: true,
           font: stateTheme.graph.text.body.normal.font,

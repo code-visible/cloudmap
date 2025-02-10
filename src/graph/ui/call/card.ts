@@ -1,28 +1,20 @@
 import { ShadowElement } from "@pattaya/depict/graph";
-import { Rectangle } from "@pattaya/pather";
 import { stateTheme } from "../theme/state";
 import { buildCallableField } from "./callable";
 import { GraphCallable, GraphFile } from "../../../state";
+import { nodes } from "@pattaya/pattaya/components";
 
 export const buildCallCard = (x: number, y: number, w: number, h: number, file: GraphFile, callables: GraphCallable[], highlight: boolean): ShadowElement => {
   const theme = stateTheme.graph.pannel;
   return {
     x,
     y,
-    shapes: [
-      {
-        path: Rectangle.RoundAligned(0, 0, w, h, 9),
-        opts: {
-          background: true,
-          border: true,
-          fill: highlight ? theme.focus.backgroundColor : theme.normal.backgroundColor,
-          stroke: highlight ? theme.focus.strokeColor : theme.normal.strokeColor,
-          lineWidth: theme.normal.strokeWidth,
-          shadowColor: theme.normal.shadowColor,
-          shadowBlur: stateTheme.graph.pannel.normal.shadowBlur,
-        }
-      },
-    ],
+    shapes: nodes.rectangle.shapes({ width: w, height: h, radius: 9, aligned: true }, {
+      background: highlight ? theme.focus.backgroundColor : theme.normal.backgroundColor,
+      border: highlight ? theme.focus.strokeColor : theme.normal.strokeColor,
+      shadow: theme.normal.shadowColor,
+      shadowBlur: stateTheme.graph.pannel.normal.shadowBlur,
+    }),
     texts: [
       {
         x: 20,

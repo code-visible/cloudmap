@@ -1,7 +1,7 @@
 import type { ShadowElement } from "@pattaya/depict/graph";
-import { Rectangle } from "@pattaya/pather";
 import { stateCall } from "./state";
 import { stateTheme } from "../theme/state";
+import { nodes } from "@pattaya/pattaya/components";
 
 export const buildCallTip = (): ShadowElement => {
   const width = 520;
@@ -13,7 +13,7 @@ export const buildCallTip = (): ShadowElement => {
     y: 0,
     shapes: [
       {
-        path: Rectangle.RoundAligned(0, 0, width, height, 3),
+        path: nodes.rectangle.wireframe({ width, height, radius: 3, aligned: true }),
         opts: {
           background: true,
           border: true,

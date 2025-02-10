@@ -1,29 +1,33 @@
 import type { ShadowElement } from "@pattaya/depict/graph";
-import { Rectangle, Triangle } from "@pattaya/pather";
+import { popup } from "@pattaya/pattaya/components";
 import { statePkg } from "./state";
 import { stateTheme } from "../theme/state";
+
+const palette = {
+  flat: "#FFFFFF",
+  baby: "#BFD7ED",
+  grotto: "#60A3D9",
+  royal: "#0074B7",
+  navy: "#003B73",
+  comp1: "#EFFEFA",
+  comp2: "#FAFBFF",
+};
+
+const popupStyle = {
+  border: palette.grotto,
+  background: palette.flat,
+  shadow: "#fff",
+  shadowBlur: 0,
+};
 
 export const buildInfoCard = (): ShadowElement => {
   const width = 320;
   const height = 56;
-  const pannelTheme = stateTheme.graph.pannel;
   const textTheme = stateTheme.graph.text;
   return {
     x: 0,
     y: 0,
-    shapes: [
-      {
-        path: Rectangle.RoundAligned(0, 0, width, height, 9),
-        opts: {
-          background: true,
-          border: true,
-          stroke: pannelTheme.normal.strokeColor,
-          fill: pannelTheme.normal.backgroundColor,
-          shadowColor: pannelTheme.normal.shadowColor,
-          shadowBlur: pannelTheme.normal.shadowBlur,
-        }
-      },
-    ],
+    shapes: popup.blueprint.shapes({ width, height, triangleHeight: 12, triangleWidth: 16, radius: 9, aligned: true }, popupStyle),
     texts: [
       {
         x: 20,
@@ -58,33 +62,6 @@ export const buildInfoCard = (): ShadowElement => {
       //     fill: "#000",
       //   },
       // },
-    ],
-    children: [
-      {
-        x: 160,
-        y: 56,
-        shapes: [
-          {
-            path: Triangle.Isosceles(0, 0, 16, 12),
-            opts: {
-              stroke: pannelTheme.normal.strokeColor,
-              fill: pannelTheme.normal.backgroundColor,
-              border: true,
-              rotation: 3.142,
-              shadowColor: pannelTheme.normal.shadowColor,
-              shadowBlur: 6,
-            }
-          },
-          {
-            y: -6,
-            path: Rectangle.Basic(0, 0, 32, 8),
-            opts: {
-              fill: pannelTheme.normal.backgroundColor,
-              border: false,
-            }
-          }
-        ]
-      }
     ],
     hidden: true,
     update(_delta) {
