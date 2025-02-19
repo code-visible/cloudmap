@@ -3,31 +3,15 @@ import { popup } from "@pattaya/pattaya/components";
 import { stateFile } from "./state";
 import { stateTheme } from "../theme/state";
 
-const palette = {
-  flat: "#FFFFFF",
-  baby: "#BFD7ED",
-  grotto: "#60A3D9",
-  royal: "#0074B7",
-  navy: "#003B73",
-  comp1: "#EFFEFA",
-  comp2: "#FAFBFF",
-};
-
-const popupStyle = {
-  border: palette.grotto,
-  background: palette.flat,
-  shadow: "#fff",
-  shadowBlur: 0,
-};
-
 export const buildFileTip = (): ShadowElement => {
   const width = 320;
   const height = 96;
   const textTheme = stateTheme.graph.text;
+  const styles = stateTheme.graph.pannel;
   return {
     x: 0,
     y: 0,
-    shapes: popup.blueprint.shapes({ width, height, triangleHeight: 12, triangleWidth: 16, radius: 9, aligned: true }, popupStyle),
+    shapes: popup.blueprint.shapes({ width, height, triangleHeight: 12, triangleWidth: 16, radius: 9, aligned: true }, styles.normal),
     texts: [
       {
         x: 20,

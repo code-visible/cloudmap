@@ -7,44 +7,8 @@ import { GraphPkg, GraphType } from "../../../state";
 import { nodes } from "@pattaya/pattaya/components";
 import { rectContain } from "@pattaya/pattaya/core";
 
-const palette = {
-  flat: "#FFFFFF",
-  baby: "#BFD7ED",
-  grotto: "#60A3D9",
-  royal: "#0074B7",
-  navy: "#003B73",
-  comp1: "#EFFEFA",
-  comp2: "#FAFBFF",
-};
-
-const cardStyle = {
-  muted: {
-    border: palette.grotto,
-    background: palette.flat,
-    shadow: "#fff",
-    shadowBlur: 0,
-  },
-  normal: {
-    border: palette.grotto,
-    background: palette.flat,
-    shadow: "#fff",
-    shadowBlur: 0,
-  },
-  focus: {
-    border: palette.navy,
-    background: palette.comp2,
-    shadow: "#fff",
-    shadowBlur: 0,
-  },
-  active: {
-    border: palette.navy,
-    background: palette.comp1,
-    shadow: "#fff",
-    shadowBlur: 0,
-  },
-};
-
 export const buildPkgCard = (x: number, y: number, pkg: GraphPkg): ShadowElement => {
+  const theme = stateTheme.graph.pannel;
   const width = 160;
   const height = 120;
   const contain = rectContain(width, height, true);
@@ -52,7 +16,7 @@ export const buildPkgCard = (x: number, y: number, pkg: GraphPkg): ShadowElement
     x: x,
     y: y,
     contain,
-    shapes: nodes.rectangle.shapes({ width, height, radius: 5, aligned: true }, cardStyle.normal),
+    shapes: nodes.rectangle.shapes({ width, height, radius: 5, aligned: true }, theme.normal),
     texts: [
       {
         x: 20,
@@ -76,17 +40,17 @@ export const buildPkgCard = (x: number, y: number, pkg: GraphPkg): ShadowElement
       const active = statePkg.state.active;
       if (active) {
         if (this.data.id === active.id) {
-          nodes.rectangle.applyStyle(this.shapes, cardStyle.focus);
+          nodes.rectangle.applyStyle(this.shapes, theme.focus);
           return;
         }
         if (active.exports.has(this.data.id) || active.imports.has(this.data.id)) {
-          nodes.rectangle.applyStyle(this.shapes, cardStyle.active);
+          nodes.rectangle.applyStyle(this.shapes, theme.active);
           return;
         }
-        nodes.rectangle.applyStyle(this.shapes, cardStyle.muted);
+        nodes.rectangle.applyStyle(this.shapes, theme.muted);
         return;
       }
-      nodes.rectangle.applyStyle(this.shapes, cardStyle.normal);
+      nodes.rectangle.applyStyle(this.shapes, theme.normal);
     },
     onMouseenter(_render, x, y, _mx, _my) {
       this.data.active = true;

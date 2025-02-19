@@ -10,10 +10,10 @@ export const buildCallCard = (x: number, y: number, w: number, h: number, file: 
     x,
     y,
     shapes: nodes.rectangle.shapes({ width: w, height: h, radius: 9, aligned: true }, {
-      background: highlight ? theme.focus.backgroundColor : theme.normal.backgroundColor,
-      border: highlight ? theme.focus.strokeColor : theme.normal.strokeColor,
-      shadow: theme.normal.shadowColor,
-      shadowBlur: stateTheme.graph.pannel.normal.shadowBlur,
+      background: highlight ? theme.focus.background : theme.normal.background,
+      border: highlight ? theme.focus.border : theme.normal.border,
+      shadow: theme.normal.shadow,
+      shadowBlur: theme.normal.shadowBlur,
     }),
     texts: [
       {
