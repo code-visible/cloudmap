@@ -1,61 +1,29 @@
 import type { ShadowElement } from "@pattaya/depict/graph";
-import { Line, Triangle } from "@pattaya/pather";
+import { line, edge } from "@pattaya/pattaya/components";
 import { stateFile } from "./state";
 import { stateTheme } from "../theme/state";
 
 export const buildLineArrow = (startID: string, endID: string, x0: number, y0: number, x1: number, y1: number): ShadowElement => {
-  const deltaX = x1 - x0;
-  const deltaY = y1 - y0;
-  const angle = Math.atan2(deltaY, deltaX);
+  const theme = stateTheme.graph.arrow;
+  const angle = line.basic.end({ start: { x: x0, y: y0 }, end: { x: x1, y: y1 } }).rotation;
   x0 += Math.cos(angle) * 36;
   y0 += Math.sin(angle) * 36;
   x1 -= Math.cos(angle) * 36;
   y1 -= Math.sin(angle) * 36;
-
-  const theme = stateTheme.graph.arrow;
+  console.log(theme.muted)
+  const arrow = edge.line.fragments({ start: { x: x0, y: y0 }, end: { x: x1, y: y1 }, endDecoration: edge.ArrowType.Basic }, theme.muted);
   return {
     x: 0,
     y: 0,
-    shapes: [
-      {
-        path: Line.Basic(x0, y0, x1, y1),
-        opts: {
-          stroke: theme.muted.color,
-          lineWidth: theme.muted.width,
-        }
-      },
-    ],
+    shapes: [],
     data: { s: startID, e: endID },
     update(_delta) {
-      const edgeOpts = this.shapes![0].opts!;
-      const triangleOpts = this.children![0].shapes![0].opts!;
       if (this.data.s === stateFile.state.active?.id || this.data.e === stateFile.state.active?.id) {
-        edgeOpts.stroke = theme.active.color;
-        edgeOpts.lineWidth = theme.active.width;
-        triangleOpts.stroke = theme.active.endpointStrokeColor;
-        triangleOpts.fill = theme.active.endpointBackgroundColor;
+        edge.line.applyStyles(arrow, edge.ArrowType.Basic, theme.active);
       } else {
-        edgeOpts.stroke = theme.muted.color;
-        edgeOpts.lineWidth = theme.muted.width;
-        triangleOpts.stroke = theme.muted.endpointStrokeColor;
-        triangleOpts.fill = theme.muted.endpointBackgroundColor;
+        edge.line.applyStyles(arrow, edge.ArrowType.Basic, theme.muted);
       }
     },
-    children: [
-      {
-        x: x1,
-        y: y1,
-        shapes: [{
-          path: Triangle.Equilateral(0, 0, 8),
-          opts: {
-            lineWidth: 1,
-            rotation: angle + 1.58,
-            stroke: theme.muted.endpointStrokeColor,
-            fill: theme.muted.endpointBackgroundColor,
-          }
-        },
-        ]
-      },
-    ],
+    children: arrow.elements,
   };
 };

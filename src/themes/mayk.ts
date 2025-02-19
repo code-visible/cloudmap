@@ -1,14 +1,8 @@
 import { CSSProperties } from "react";
 import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText, Header, Page, Search } from "./theme";
+import { mayk } from "@pattaya/pattaya/themes";
 
-const colors = {
-  baby: "#BFD7ED",
-  grotto: "#60A3D9",
-  royal: "#0074B7",
-  navy: "#003B73",
-  comp1: "#EFFEFA",
-  comp2: "#FAFBFF",
-};
+const colors = mayk.palette.default;
 
 const header: Header = {
   textNormal: colors.royal,
@@ -62,61 +56,19 @@ const text: GraphText = {
   },
   body: {
     normal: {
-      color: colors.royal,
+      color: mayk.text.normal.color,
       font: "14px/2 san-serf",
     },
     focus: {
-      color: colors.navy,
+      color: mayk.text.focus.color,
       font: "14px/2 san-serf",
     },
   },
 };
 
-const pannel: GraphPannel = {
-  muted: {
-    backgroundColor: "#fff",
-    strokeWidth: 1,
-    strokeColor: colors.grotto,
-    shadowColor: "#fff",
-    shadowBlur: 0,
-  },
-  normal: {
-    backgroundColor: "#fff",
-    strokeWidth: 1,
-    strokeColor: colors.grotto,
-    shadowColor: "#fff",
-    shadowBlur: 0,
-  },
-  focus: {
-    backgroundColor: colors.comp2,
-    strokeWidth: 1,
-    strokeColor: colors.navy,
-    shadowColor: "#fff",
-    shadowBlur: 0,
-  },
-  active: {
-    backgroundColor: colors.comp1,
-    strokeWidth: 1,
-    strokeColor: colors.navy,
-    shadowColor: "#fff",
-    shadowBlur: 0,
-  },
-};
+const pannel: GraphPannel = mayk.nodes;
 
-const arrow: GraphArrow = {
-  muted: {
-    color: colors.baby,
-    width: 1,
-    endpointStrokeColor: colors.baby,
-    endpointBackgroundColor: "#fff",
-  },
-  active: {
-    color: colors.royal,
-    width: 1,
-    endpointStrokeColor: colors.navy,
-    endpointBackgroundColor: "#fff",
-  },
-};
+const arrow: GraphArrow = mayk.edge;
 
 const graph: GraphStyle = {
   background,

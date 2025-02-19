@@ -1,29 +1,17 @@
 import type { ShadowElement } from "@pattaya/depict/graph";
-import { Rectangle } from "@pattaya/pather";
 import { stateCall } from "./state";
 import { stateTheme } from "../theme/state";
+import { nodes } from "@pattaya/pattaya/components";
 
 export const buildCallTip = (): ShadowElement => {
   const width = 520;
   const height = 40;
-  const pannelTheme = stateTheme.graph.pannel;
+  const styles = stateTheme.graph.pannel;
   const textTheme = stateTheme.graph.text;
   return {
     x: 0,
     y: 0,
-    shapes: [
-      {
-        path: Rectangle.RoundAligned(0, 0, width, height, 3),
-        opts: {
-          background: true,
-          border: true,
-          stroke: pannelTheme.normal.strokeColor,
-          fill: pannelTheme.normal.backgroundColor,
-          shadowColor: pannelTheme.normal.shadowColor,
-          shadowBlur: pannelTheme.normal.shadowBlur,
-        }
-      },
-    ],
+    shapes: nodes.rectangle.shapes({ width, height, radius: 3, aligned: true }, styles.normal),
     texts: [
       {
         x: 20,

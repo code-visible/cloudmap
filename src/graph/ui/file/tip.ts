@@ -1,29 +1,17 @@
 import type { ShadowElement } from "@pattaya/depict/graph";
-import { Rectangle, Triangle } from "@pattaya/pather";
+import { popup } from "@pattaya/pattaya/components";
 import { stateFile } from "./state";
 import { stateTheme } from "../theme/state";
 
 export const buildFileTip = (): ShadowElement => {
   const width = 320;
   const height = 96;
-  const pannelTheme = stateTheme.graph.pannel;
   const textTheme = stateTheme.graph.text;
+  const styles = stateTheme.graph.pannel;
   return {
     x: 0,
     y: 0,
-    shapes: [
-      {
-        path: Rectangle.RoundAligned(0, 0, width, height, 9),
-        opts: {
-          background: true,
-          border: true,
-          stroke: pannelTheme.normal.strokeColor,
-          fill: pannelTheme.normal.backgroundColor,
-          shadowColor: pannelTheme.normal.shadowColor,
-          shadowBlur: pannelTheme.normal.shadowBlur,
-        }
-      },
-    ],
+    shapes: popup.blueprint.shapes({ width, height, triangleHeight: 12, triangleWidth: 16, radius: 9, aligned: true }, styles.normal),
     texts: [
       {
         x: 20,
@@ -124,33 +112,6 @@ export const buildFileTip = (): ShadowElement => {
       //     fill: "#000",
       //   },
       // },
-    ],
-    children: [
-      {
-        x: 160,
-        y: 98,
-        shapes: [
-          {
-            path: Triangle.Isosceles(0, 0, 16, 12),
-            opts: {
-              stroke: pannelTheme.normal.strokeColor,
-              fill: pannelTheme.normal.backgroundColor,
-              border: true,
-              rotation: 3.142,
-              shadowColor: pannelTheme.normal.shadowColor,
-              shadowBlur: 6,
-            }
-          },
-          {
-            y: -6,
-            path: Rectangle.Basic(0, 0, 32, 8),
-            opts: {
-              fill: pannelTheme.normal.backgroundColor,
-              border: false,
-            }
-          }
-        ]
-      }
     ],
     hidden: true,
     update(_delta) {

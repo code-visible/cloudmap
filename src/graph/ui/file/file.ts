@@ -1,45 +1,28 @@
-import { MeshOptions, ShadowElement } from "@pattaya/depict/graph";
-import { Circle } from "@pattaya/pather";
+import { ShadowElement } from "@pattaya/depict/graph";
 import { stateTheme } from "../theme/state";
 import { stateFile } from "./state";
 import { GraphMessageType } from "../../../message";
 import { GraphFile, GraphType } from "../../../state";
-import { PannelStyle } from "../../../themes/theme";
-
-const setOpts = (style: PannelStyle, opts: MeshOptions) => {
-  opts.stroke = style.strokeColor;
-  opts.lineWidth = style.strokeWidth;
-  opts.fill = style.backgroundColor;
-  opts.shadowColor = style.shadowColor;
-  opts.shadowBlur = style.shadowBlur;
-};
+import { nodes } from "@pattaya/pattaya/components";
 
 export const buildFileNode = (x: number, y: number, r: number, file: GraphFile, highlight: boolean): ShadowElement => {
   const theme = stateTheme.graph.pannel;
   return {
     x,
     y,
-    shapes: [
-      {
-        path: Circle.Basic(0, 0, r),
-        opts: {
-          background: true,
-          border: true,
-          shadowBlur: 0,
-          fill: highlight ? theme.focus.backgroundColor : theme.normal.backgroundColor,
-          stroke: highlight ? theme.focus.strokeColor : theme.normal.strokeColor,
-          lineWidth: theme.normal.strokeWidth,
-          shadowColor: theme.normal.shadowColor,
-          // shadowBlur: stateTheme.graph.pannel.normal.shadowBlur,
-        }
-      },
-    ],
+    shapes: nodes.circle.shapes({ radius: r }, {
+      shadowBlur: 0,
+      background: highlight ? theme.focus.background : theme.normal.background,
+      border: highlight ? theme.focus.border : theme.normal.border,
+      shadow: theme.normal.shadow,
+    }),
     texts: [
       {
         x: -28,
         y: 4,
         content: file.name,
         opts: {
+          // textAlign: "center",
           width: 106,
           ellipsis: true,
           font: stateTheme.graph.text.body.normal.font,
@@ -48,22 +31,20 @@ export const buildFileNode = (x: number, y: number, r: number, file: GraphFile, 
       },
     ],
     update(_delta) {
-      const theme = stateTheme.graph.pannel;
-      const opts = this.shapes![0].opts!;
       const active = stateFile.state.active;
       if (active) {
         if (this.data.id === active.id) {
-          setOpts(theme.focus, opts);
+          nodes.circle.applyStyle(this.shapes, theme.focus);
           return;
         }
         if (active.exports.has(this.data.id) || active.imports.has(this.data.id)) {
-          setOpts(theme.active, opts);
+          nodes.circle.applyStyle(this.shapes, theme.active);
           return;
         }
-        setOpts(theme.muted, opts);
+        nodes.circle.applyStyle(this.shapes, theme.muted);
         return;
       }
-      setOpts(theme.normal, opts);
+      nodes.circle.applyStyle(this.shapes, theme.normal);
     },
     data: { id: file.id, active: false },
     contain: (x, y) => x > -r && x < r && y > -r && y < r,
