@@ -22,7 +22,7 @@ const header: Header = {
   textNormal: colors.text1,
   textFocus: colors.text2,
   opacity: .45,
-  backgroundColor: "#ECE3CA",
+  background: "#ECE3CA",
   titleColor: colors.text2,
   titleSize: 20,
 };
@@ -40,7 +40,7 @@ const search: Search = {
 };
 
 const directory: Directory = {
-  backgroundColor: "#ECE3CA",
+  background: "#ECE3CA",
   dir: colors.text2,
   file: colors.text1,
   unit: colors.text2,
@@ -51,7 +51,7 @@ const directory: Directory = {
 };
 
 const background: CSSProperties = {
-  backgroundColor: "#ECE3CA",
+  background: "#ECE3CA",
 };
 
 const text: GraphText = {
@@ -79,31 +79,27 @@ const text: GraphText = {
 
 const pannel: GraphPannel = {
   muted: {
-    backgroundColor: colors.grid,
-    strokeWidth: 1,
-    strokeColor: colors.grid,
-    shadowColor: "#fff",
+    background: colors.grid,
+    border: colors.grid,
+    shadow: "#fff",
     shadowBlur: 0,
   },
   normal: {
-    backgroundColor: colors.grid,
-    strokeWidth: 1,
-    strokeColor: colors.grid,
-    shadowColor: "#fff",
+    background: colors.grid,
+    border: colors.grid,
+    shadow: "#fff",
     shadowBlur: 0,
   },
   focus: {
-    backgroundColor: colors.focus,
-    strokeWidth: 1,
-    strokeColor: colors.focus,
-    shadowColor: "#fff",
+    background: colors.focus,
+    border: colors.focus,
+    shadow: "#fff",
     shadowBlur: 0,
   },
   active: {
-    backgroundColor: colors.focus,
-    strokeWidth: 1,
-    strokeColor: colors.focus,
-    shadowColor: "#fff",
+    background: colors.focus,
+    border: colors.focus,
+    shadow: "#fff",
     shadowBlur: 0,
   },
 };
@@ -113,13 +109,13 @@ const arrow: GraphArrow = {
     color: colors.grid,
     width: 1,
     endpointStrokeColor: colors.grid,
-    endpointBackgroundColor: colors.base,
+    endpointbackground: colors.base,
   },
   active: {
     color: "#0074B7",
     width: 1,
     endpointStrokeColor: colors.navy,
-    endpointBackgroundColor: colors.base,
+    endpointbackground: colors.base,
   },
 };
 

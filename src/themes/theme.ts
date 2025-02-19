@@ -1,3 +1,4 @@
+import { edge, nodes } from "@pattaya/pattaya/components";
 import { CSSProperties } from "react";
 
 export interface Page {
@@ -71,15 +72,15 @@ export interface GraphText {
 };
 
 export interface GraphPannel {
-  muted: PannelStyle;
-  normal: PannelStyle;
-  focus: PannelStyle;
-  active: PannelStyle;
+  muted: nodes.NodeStyles;
+  normal: nodes.NodeStyles;
+  focus: nodes.NodeStyles;
+  active: nodes.NodeStyles;
 };
 
 export interface GraphArrow {
-  muted: ArrowStyle;
-  active: ArrowStyle;
+  muted: edge.EdgeStyles;
+  active: edge.EdgeStyles;
 };
 
 export interface GraphStyle {

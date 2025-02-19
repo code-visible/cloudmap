@@ -1,17 +1,8 @@
 import { CSSProperties } from "react";
 import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText, Header, Page, Search } from "./theme";
+import { chaya } from "@pattaya/pattaya/themes";
 
-const colors = {
-  black1: "#282C34",
-  black2: "#21252B",
-  black3: "#1B1E23",
-  line: "#534941",
-  line2: "#A668BB",
-  yellow: "#C9BD7A",
-  purple: "#4992DF",
-  red: "#AB4959",
-  comment: "#55515A"
-};
+const colors = chaya.palette.default;
 
 const header: Header = {
   textNormal: "#7DA5BF",
@@ -62,61 +53,19 @@ const text: GraphText = {
   },
   body: {
     normal: {
-      color: "#7DA5BF",
+      color: chaya.text.normal.color,
       font: "14px/2 san-serf",
     },
     focus: {
-      color: colors.yellow,
+      color: chaya.text.focus.color,
       font: "14px/2 san-serf",
     },
   },
 };
 
-const pannel: GraphPannel = {
-  muted: {
-    backgroundColor: colors.black2,
-    strokeWidth: 1,
-    strokeColor: colors.comment,
-    shadowColor: "rgba(33, 37, 43, .6)",
-    shadowBlur: 5,
-  },
-  normal: {
-    backgroundColor: colors.black2,
-    strokeWidth: 1,
-    strokeColor: colors.comment,
-    shadowColor: "rgba(33, 37, 43, .6)",
-    shadowBlur: 12,
-  },
-  focus: {
-    backgroundColor: colors.black2,
-    strokeWidth: 2,
-    strokeColor: colors.yellow,
-    shadowColor: "rgba(33, 37, 43, .6)",
-    shadowBlur: 12,
-  },
-  active: {
-    backgroundColor: colors.black2,
-    strokeWidth: 2,
-    strokeColor: colors.purple,
-    shadowColor: "rgba(33, 37, 43, .6)",
-    shadowBlur: 12,
-  },
-};
+const pannel: GraphPannel = chaya.nodes;
 
-const arrow: GraphArrow = {
-  muted: {
-    color: colors.line,
-    endpointStrokeColor: colors.line,
-    endpointBackgroundColor: colors.line,
-    width: 1,
-  },
-  active: {
-    color: colors.line2,
-    endpointStrokeColor: colors.line2,
-    endpointBackgroundColor: colors.line2,
-    width: 1,
-  },
-};
+const arrow: GraphArrow = chaya.edge;
 
 const graph: GraphStyle = {
   background,
