@@ -23,5 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 bun.lockb
+bun.lock
 
 src/testdata
