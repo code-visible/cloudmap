@@ -1,8 +1,8 @@
-import { CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText, Header, Page, Search } from "./theme";
-import { chaya } from "@pattaya/pattaya/themes";
+import chaya from "@pattaya/pattaya/chaya";
 
-const colors = chaya.palette.default;
+const colors = chaya.palette;
 
 const header: Header = {
   textNormal: "#7DA5BF",
@@ -53,19 +53,19 @@ const text: GraphText = {
   },
   body: {
     normal: {
-      color: chaya.text.normal.color,
+      color: chaya.theme.text.normal.color,
       font: "14px/2 san-serf",
     },
     focus: {
-      color: chaya.text.focus.color,
+      color: chaya.theme.text.focus.color,
       font: "14px/2 san-serf",
     },
   },
 };
 
-const pannel: GraphPannel = chaya.nodes;
+const pannel: GraphPannel = chaya.theme.nodes;
 
-const arrow: GraphArrow = chaya.edge;
+const arrow: GraphArrow = chaya.theme.edge;
 
 const graph: GraphStyle = {
   background,

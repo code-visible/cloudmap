@@ -1,4 +1,4 @@
-import { CanvasEvent, Graph, ShadowElement } from "@pattaya/depict/graph";
+import { CanvasEvent, Graph, type ShadowElement } from "@challenai/depict/graph";
 import { GraphType, StateGraphCall, StateGraphFile, StateGraphPkg, StateTheme } from "../state";
 import { GraphBuilder } from "./builder";
 import { statePkg } from "./ui/pkg/state";

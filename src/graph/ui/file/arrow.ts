@@ -1,4 +1,4 @@
-import type { ShadowElement } from "@pattaya/depict/graph";
+import type { ShadowElement } from "@challenai/depict/graph";
 import { line, edge } from "@pattaya/pattaya/components";
 import { stateFile } from "./state";
 import { stateTheme } from "../theme/state";

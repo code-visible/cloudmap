@@ -39,6 +39,8 @@ function App() {
     }).then((d) => {
       data.parseSource(d as Source);
       setData(data);
+    }).catch((err) => {
+      console.log(err);
     });
   }, []);
 

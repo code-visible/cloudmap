@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Depict } from "@pattaya/depict";
+import { Depict } from "@challenai/depict";
 import { GraphFileCall, GraphType, StateCall, StateFile, StateGraphCall, StateGraphFile, StateGraphPkg, StatePkg, StateShared, StateTheme, toGraphCallable, toGraphFile, toGraphPkg } from '../state';
 import { GraphMessageType } from "../message";
 import { SourceMap } from "../resource/resource";

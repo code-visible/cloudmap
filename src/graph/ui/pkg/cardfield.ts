@@ -1,4 +1,4 @@
-import type { ShadowElement } from "@pattaya/depict/graph";
+import type { ShadowElement } from "@challenai/depict/graph";
 import { GraphType } from "../../../state";
 import { GraphMessageType } from "../../../message";
 import { FileCall } from "../../../resource/node";

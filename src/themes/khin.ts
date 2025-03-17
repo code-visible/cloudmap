@@ -1,6 +1,6 @@
-import { CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText, Header, Page, Search } from "./theme";
-import { khin } from "@pattaya/pattaya/themes";
+import khin from "@pattaya/pattaya/khin";
 
 const background: CSSProperties = {
   backgroundImage: "radial-gradient(#DBD9E7 2.5px, transparent 2.5px)",
@@ -53,19 +53,19 @@ const text: GraphText = {
   },
   body: {
     normal: {
-      color: khin.text.normal.color,
+      color: khin.theme.text.normal.color,
       font: "14px/2 san-serf",
     },
     focus: {
-      color: khin.text.focus.color,
+      color: khin.theme.text.focus.color,
       font: "14px/2 san-serf",
     },
   },
 };
 
-const pannel: GraphPannel = khin.nodes;
+const pannel: GraphPannel = khin.theme.nodes;
 
-const arrow: GraphArrow = khin.edge;
+const arrow: GraphArrow = khin.theme.edge;
 
 const graph: GraphStyle = {
   background,
