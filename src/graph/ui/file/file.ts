@@ -1,4 +1,4 @@
-import { ShadowElement } from "@pattaya/depict/graph";
+import { ShadowElement } from "@challenai/depict/graph";
 import { stateTheme } from "../theme/state";
 import { stateFile } from "./state";
 import { GraphMessageType } from "../../../message";

@@ -1,13 +1,13 @@
 {
-  "name": "graphy",
+  "name": "codevisible",
   "private": false,
   "version": "0.0.2",
   "type": "module",
-  "description": "graphy is a code visible tool",
+  "description": "code visible tool",
   "author": "Challen Ai <fengyiai@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/code-visible/graphy.git"
+    "url": "git+https://github.com/code-visible/codevisible.git"
   },
   "license": "GPL-3.0-only",
   "scripts": {
@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "@dagrejs/dagre": "^1.1.4",
-    "@pattaya/depict": "^0.6.1",
-    "@pattaya/pattaya": "^0.1.2",
+    "@challenai/depict": "^0.7.0",
+    "@pattaya/pattaya": "^0.2.1",
     "impressionist": "^1.0.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

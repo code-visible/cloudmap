@@ -1,8 +1,8 @@
-import { CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText, Header, Page, Search } from "./theme";
-import { mayk } from "@pattaya/pattaya/themes";
+import mayk from "@pattaya/pattaya/mayk";
 
-const colors = mayk.palette.default;
+const colors = mayk.palette;
 
 const header: Header = {
   textNormal: colors.royal,
@@ -56,19 +56,19 @@ const text: GraphText = {
   },
   body: {
     normal: {
-      color: mayk.text.normal.color,
+      color: mayk.theme.text.normal.color,
       font: "14px/2 san-serf",
     },
     focus: {
-      color: mayk.text.focus.color,
+      color: mayk.theme.text.focus.color,
       font: "14px/2 san-serf",
     },
   },
 };
 
-const pannel: GraphPannel = mayk.nodes;
+const pannel: GraphPannel = mayk.theme.nodes;
 
-const arrow: GraphArrow = mayk.edge;
+const arrow: GraphArrow = mayk.theme.edge;
 
 const graph: GraphStyle = {
   background,

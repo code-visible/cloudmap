@@ -1,4 +1,4 @@
-import { CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import { Directory, GraphArrow, GraphPannel, GraphStyle, GraphText, Header, Page, Search } from "./theme";
 
 // TODO: fix renderer
@@ -22,7 +22,7 @@ const header: Header = {
   textNormal: colors.text1,
   textFocus: colors.text2,
   opacity: .45,
-  background: "#ECE3CA",
+  backgroundColor: "#ECE3CA",
   titleColor: colors.text2,
   titleSize: 20,
 };
@@ -40,7 +40,7 @@ const search: Search = {
 };
 
 const directory: Directory = {
-  background: "#ECE3CA",
+  backgroundColor: "#ECE3CA",
   dir: colors.text2,
   file: colors.text1,
   unit: colors.text2,

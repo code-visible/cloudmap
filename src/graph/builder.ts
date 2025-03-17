@@ -1,4 +1,4 @@
-import { ShadowElement } from "@pattaya/depict/graph";
+import type { ShadowElement } from "@challenai/depict/graph";
 import { GraphLayout } from "./layout";
 import { buildPkgCard } from "./ui/pkg/card";
 import { buildArrow } from "./ui/pkg/arrow";

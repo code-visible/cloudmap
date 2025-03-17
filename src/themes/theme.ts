@@ -1,5 +1,5 @@
 import { edge, nodes } from "@pattaya/pattaya/components";
-import { CSSProperties } from "react";
+import type { CSSProperties } from "react";
 
 export interface Page {
   brand: string;

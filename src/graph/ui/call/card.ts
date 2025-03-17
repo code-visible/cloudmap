@@ -1,4 +1,4 @@
-import { ShadowElement } from "@pattaya/depict/graph";
+import { ShadowElement } from "@challenai/depict/graph";
 import { stateTheme } from "../theme/state";
 import { buildCallableField } from "./callable";
 import { GraphCallable, GraphFile } from "../../../state";
