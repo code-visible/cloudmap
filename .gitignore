@@ -26,3 +26,4 @@ bun.lockb
 bun.lock
 
 src/testdata
+public/data.json
