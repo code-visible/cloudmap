@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
-import Pannel from './components/pannel';
+import { useEffect, useState } from 'react';
 import Graph from './components/graph';
-import { SourceMap } from './resource/resource';
+import Pannel from './components/pannel';
 import type { Source } from './protocol/map';
+import { SourceMap } from './resource/resource';
 import {
   GraphType,
   InitialStateCall,
@@ -21,7 +21,7 @@ import {
 } from './state';
 import { brands, themes } from './themes';
 
-import './App.css'
+import './App.css';
 
 function App() {
   const [data, setData] = useState<SourceMap>(new SourceMap());
@@ -62,19 +62,19 @@ function App() {
         </div>
         <div className='theme'>
           <div className='theme-list' style={{ opacity: theme.name === "mayk" ? 1 : theme.header.opacity }}>
-            <button className='theme-option' style={{ backgroundColor: brands.mayk, borderColor: theme.graph.pannel.focus.strokeColor }} onClick={() => setTheme({ ...themes.mayk })}></button>
+            <button className='theme-option' style={{ backgroundColor: brands.mayk, borderColor: theme.graph.pannel.focus.border }} onClick={() => setTheme({ ...themes.mayk })}></button>
             <div style={{ color: theme.name === "mayk" ? theme.header.textFocus : theme.header.textNormal }}>mayk</div>
           </div>
           <div className='theme-list' style={{ opacity: theme.name === "khin" ? 1 : theme.header.opacity }}>
-            <button className='theme-option' style={{ backgroundColor: brands.khin, borderColor: theme.graph.pannel.focus.strokeColor }} onClick={() => setTheme({ ...themes.khin })}></button>
+            <button className='theme-option' style={{ backgroundColor: brands.khin, borderColor: theme.graph.pannel.focus.border }} onClick={() => setTheme({ ...themes.khin })}></button>
             <div style={{ color: theme.name === "khin" ? theme.header.textFocus : theme.header.textNormal }}>khin</div>
           </div>
           <div className='theme-list' style={{ opacity: theme.name === "chaya" ? 1 : theme.header.opacity }}>
-            <button className='theme-option' style={{ backgroundColor: brands.chaya, borderColor: theme.graph.pannel.focus.strokeColor }} onClick={() => setTheme({ ...themes.chaya })}></button>
+            <button className='theme-option' style={{ backgroundColor: brands.chaya, borderColor: theme.graph.pannel.focus.border }} onClick={() => setTheme({ ...themes.chaya })}></button>
             <div style={{ color: theme.name === "chaya" ? theme.header.textFocus : theme.header.textNormal }}>chaya</div>
           </div>
           <div className='theme-list' style={{ opacity: theme.name === "mint" ? 1 : theme.header.opacity }}>
-            <button className='theme-option' style={{ backgroundColor: brands.mint, borderColor: theme.graph.pannel.focus.strokeColor }} onClick={() => setTheme({ ...themes.mint })}></button>
+            <button className='theme-option' style={{ backgroundColor: brands.mint, borderColor: theme.graph.pannel.focus.border }} onClick={() => setTheme({ ...themes.mint })}></button>
             <div style={{ color: theme.name === "mint" ? theme.header.textFocus : theme.header.textNormal }}>mint</div>
           </div>
         </div>
