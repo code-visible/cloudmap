@@ -10,27 +10,30 @@ export interface Dir {
   path: string;
   parent?: Dir;
   children: Set<Dir>;
-  pkgPtr?: Pkg,
+  pkgPtr?: Pkg;
   files: Set<File>;
 }
 
 export interface Pkg {
-  path: string,
-  imports: Set<Pkg>,
-  exports: Set<Pkg>,
-  files: Set<File>,
-  callables: Set<Callable>,
-  abstracts: Set<Abstract>,
-  ref: SourcePkg,
+  name: string;
+  fullname: string;
+  path: string;
+  imports: Set<Pkg>;
+  exports: Set<Pkg>;
+  files: Set<File>;
+  callables: Set<Callable>;
+  abstracts: Set<Abstract>;
+  ref: SourcePkg;
 };
 
 export interface File {
-  pkg: Pkg,
-  imports: Set<File>,
-  exports: Set<File>,
-  callables: Set<Callable>,
-  abstracts: Set<Abstract>,
-  ref: SourceFile,
+  name: string;
+  pkg: Pkg;
+  imports: Set<File>;
+  exports: Set<File>;
+  callables: Set<Callable>;
+  abstracts: Set<Abstract>;
+  ref: SourceFile;
 };
 
 export interface Abstract {

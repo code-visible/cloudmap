@@ -8,11 +8,10 @@ import { SourceFile } from "../protocol/file";
 import { Source } from "../protocol/map";
 import { SourcePkg } from "../protocol/pkg";
 import { getNameFromPath, getPrefixPathFromPath, normalizePath } from "../utils/path";
-import { Abstract, Call, File, Callable, Dep, Pkg, Dir, FileCall } from "./node";
+import { Abstract, Call, Callable, Dep, Dir, File, FileCall, Pkg } from "./node";
 
 export class SourceMap {
   name: string;
-  directory: string;
   // lang: string;
   // packageOriented: boolean;
   root: Dir;
@@ -27,7 +26,6 @@ export class SourceMap {
 
   constructor() {
     this.name = "";
-    this.directory = "";
     this.dirs = new Map();
     this.pkgs = new Map();
     this.files = new Map();
@@ -48,7 +46,6 @@ export class SourceMap {
 
   reset() {
     this.name = "";
-    this.directory = "";
     this.dirs = new Map();
     this.pkgs = new Map();
     this.files = new Map();
@@ -70,8 +67,7 @@ export class SourceMap {
   parseSource(data: Source) {
     this.reset();
     this.name = data.name;
-    this.directory = data.directory;
-    this.language = getLanguageOptions(data.language);
+    this.language = getLanguageOptions(data.lang);
     for (const el of data.pkgs) {
       this.pkgs.set(el.id, this.parsePkg(el));
     }
