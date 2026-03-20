@@ -8,7 +8,7 @@ Code Visible is designed to help you master the core source code architecture of
 
 The premium open source version is still in active development, the simplified online veriosn including hundreds of parsed repositories can be find here:
 
-[https://code.depict.wiki](https://code.depict.wiki/).
+[https://code.challenai.com](https://code.challenai.com/).
 
 The online version disable the function and abstracts(class, interface...) to save more space for more possible repositories, you can download the binary executable to parse the project yourself.
 
