@@ -12,7 +12,12 @@ import { Abstract, Call, Callable, Dep, Dir, File, FileCall, Pkg } from "./node"
 
 export class SourceMap {
   name: string;
-  // lang: string;
+  lang: string;
+  parser: string;
+  timestamp: string;
+  repository: string;
+  typ: string;
+  version: string;
   // packageOriented: boolean;
   root: Dir;
   dirs: Map<string, Dir>;
@@ -26,6 +31,8 @@ export class SourceMap {
 
   constructor() {
     this.name = "";
+    this.lang = "";
+    // this.parser = 
     this.dirs = new Map();
     this.pkgs = new Map();
     this.files = new Map();
@@ -117,6 +124,8 @@ export class SourceMap {
 
   private parsePkg(el: SourcePkg): Pkg {
     const pkg: Pkg = {
+      name: el.name,
+      fullname: el.fullName,
       path: el.path === "." ? "project" : normalizePath(el.path),
       imports: new Set(),
       exports: new Set(),
