@@ -6,24 +6,24 @@ Code Visible is designed to help you master the core source code architecture of
 
 ## Current Status
 
-The premium open source version is still in active development, the simplified online veriosn including hundreds of parsed repositories can be find here:
+The premium open source version is still in active development. The simplified online version, which includes hundreds of parsed repositories, can be found here:
 
 [https://code.challenai.com](https://code.challenai.com/).
 
-The online version disable the function and abstracts(class, interface...) to save more space for more possible repositories, you can download the binary executable to parse the project yourself.
+The online version disables functions and abstracts (classes, interfaces, etc.) to save space for more possible repositories. You can download the binary executable to parse the project yourself.
 
-The project is still in early period, the lastest version is v0.1.2-beta.
+The project is still in its early stages, and the latest version is v0.1.2-beta.
 
 ## Parser Feature Requirements
 
-- Fault Tolerant – Failure first design, try the best to parse the project even while it's broken or not correctly configured.
-- Optimized for Speed – 80% libraries should be parsed in 1 secound.
-- Easy to Use – Double click to run, it's a binary.
-- Environment Free – No dependencies and software should be installed. No matter it's Python, pip or Node.js.
+- Fault Tolerant – Failure-first design, trying its best to parse the project even when it's broken or not correctly configured.
+- Optimized for Speed – 80% of libraries should be parsed in 1 second.
+- Easy to Use – Double-click to run; it's a binary.
+- Environment Free – No dependencies or software should be installed, regardless of whether it's Python, pip, or Node.js.
 
 ## Language Parser
 
-Currently supported or developing language and parsers.
+Currently supported or in-development languages and parsers.
 
 | Parser    | Language   | Repository                                                    | Supported Features |
 | --------- | ---------- | ------------------------------------------------------------- | ------------------ |
